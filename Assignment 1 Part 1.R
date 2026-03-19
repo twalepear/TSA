@@ -21,9 +21,7 @@ BirthAndFertility <- data |>
   )
 
 BirthAndFertility <- BirthAndFertility |>
-  mutate(Year = year(Year)) |>
-  as_tsibble(key = c(`Total Fertility Rate (TFR)`, `Total Live-Births`),
-             index = Year)
+  as_tsibble(index = Year)
 
 # Preliminary (exploratory analysis) {then choosing and fitting models, then using & evaluating a forecasting model}
 # patterns?
