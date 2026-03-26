@@ -49,4 +49,9 @@ autoplot(BirthAndFertility,`Total Live-Births`)+
 
 # evidence of the presence of business cycles?
 # outliers that need to be explained by experts?
+
 # strength of relationships among variables?
+BirthAndFertility |>
+  ggplot(aes(x = `Total Fertility Rate (TFR)`, y = `Total Live-Births`)) +
+  geom_point() +
+  labs(title = "Total Fertility Rate (TFR) vs Total Live-Births (TLB)")
