@@ -35,12 +35,14 @@ is_tsibble(BirthAndFertility)
 # Preliminary (exploratory analysis) {then choosing and fitting models, then using & evaluating a forecasting model}
 
 # plot the Total Fertility Rate (TFR) and Total Live-Births (TLB)
-autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`)
+autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
+  labs(title = "Initial Plot of Total Fertility Rate (TFR)")
 # obvious decreasing trend
 # cannot determine seasonality from yearly data
 # there might be cyclic but will have to take away trend to find out
 
-autoplot(BirthAndFertility,`Total Live-Births`)
+autoplot(BirthAndFertility,`Total Live-Births`)+
+  labs(title = "Initial Plot of Total Live-Births")
 # there is a decreasing trend from 1960 to 2024
 # cannot determine seasonality from yearly data
 # there might also be cyclic but will have to take away trend to find out
