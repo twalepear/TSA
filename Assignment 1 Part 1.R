@@ -36,11 +36,15 @@ is_tsibble(BirthAndFertility)
 
 # plot the Total Fertility Rate (TFR) and Total Live-Births (TLB)
 autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`)
-autoplot(BirthAndFertility,`Total Live-Births`)
+# obvious decreasing trend
+# cannot determine seasonality from yearly data
+# there might be cyclic but will have to take away trend to find out
 
-# patterns?
-# significant trend?
-# seasonality important?
+autoplot(BirthAndFertility,`Total Live-Births`)
+# there is a decreasing trend from 1960 to 2024
+# cannot determine seasonality from yearly data
+# there might also be cyclic but will have to take away trend to find out
+
 # evidence of the presence of business cycles?
 # outliers that need to be explained by experts?
 # strength of relationships among variables?
