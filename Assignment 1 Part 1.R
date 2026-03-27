@@ -56,3 +56,5 @@ BirthAndFertility |>
   geom_point() +
   geom_smooth() +
   labs(title = "Total Fertility Rate (TFR) vs Total Live-Births (TLB)")
+# there seems to be a nonlinear positive relationship between TFR and TLB but need to do further analysis
+# noting that higher fertility rates will increase birth rates
