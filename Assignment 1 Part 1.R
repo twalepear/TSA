@@ -54,4 +54,5 @@ autoplot(BirthAndFertility,`Total Live-Births`)+
 BirthAndFertility |>
   ggplot(aes(x = `Total Fertility Rate (TFR)`, y = `Total Live-Births`)) +
   geom_point() +
+  geom_smooth() +
   labs(title = "Total Fertility Rate (TFR) vs Total Live-Births (TLB)")
