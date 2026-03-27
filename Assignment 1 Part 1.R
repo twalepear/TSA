@@ -61,9 +61,9 @@ BirthAndFertility |>
 
 # lag plots
 BirthAndFertility |>
-  gg_lag(`Total Fertility Rate (TFR)`) +
+  gg_lag(`Total Fertility Rate (TFR)`, geom = 'point') +
   labs(title = "Lag Plot of Total Fertility Rate (TFR)")
 
 BirthAndFertility |>
-  gg_lag(`Total Live-Births`) +
+  gg_lag(`Total Live-Births`, geom = 'point') +
   labs(title = "Lag Plot of Total Live-Births (TLB)")
