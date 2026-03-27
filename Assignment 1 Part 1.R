@@ -57,4 +57,13 @@ BirthAndFertility |>
   geom_smooth() +
   labs(title = "Total Fertility Rate (TFR) vs Total Live-Births (TLB)")
 # there seems to be a nonlinear positive relationship between TFR and TLB but need to do further analysis
-# noting that higher fertility rates will increase birth rates
+# noting that higher fertility rates will increase births
+
+# lag plots
+BirthAndFertility |>
+  gg_lag(`Total Fertility Rate (TFR)`) +
+  labs(title = "Lag Plot of Total Fertility Rate (TFR)")
+
+BirthAndFertility |>
+  gg_lag(`Total Live-Births`) +
+  labs(title = "Lag Plot of Total Live-Births (TLB)")
