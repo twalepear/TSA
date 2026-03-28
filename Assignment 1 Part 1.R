@@ -96,17 +96,23 @@ BirthAndFertility |>
 
 # Box-Cox transformation
 lambdatfr <- BirthAndFertility |>
-  features(`Total Fertility Rate (TFR)`, features = guerrero) |> # Guerroro method
-  pull(lambda_guerrero) # Box-Cox transformation parameter
+  features(`Total Fertility Rate (TFR)`, features = guerrero) |> # Guerrero method
+  pull(lambda_guerrero) # Box-Cox transformation parameter = -0.44514
+# as lambda is below zero but halfway to -1 suggests moderate transformation required
 BirthAndFertility |>
   autoplot(box_cox(`Total Fertility Rate (TFR)`, lambdatfr)) +
   labs(title = latex2exp::TeX(paste0(
     "Transformed Total Fertility Rate (TFR) with $\\lambda$ = ", round(lambdatfr,2))))
+# decreasing trend still obvious
+# still signs there might also be cyclic but still will have to take away trend to find out
 
 lambdatlb <- BirthAndFertility |>
-  features(`Total Live-Births`, features = guerrero) |> # Guerroro method
-  pull(lambda_guerrero) # Box-Cox transformation parameter
+  features(`Total Live-Births`, features = guerrero) |> # Guerrero method
+  pull(lambda_guerrero) # Box-Cox transformation parameter = -0.89992
+# as lambda is below zero but close to -1 suggests strong transformation required
 BirthAndFertility |>
   autoplot(box_cox(`Total Live-Births`, lambdatlb)) +
   labs(title = latex2exp::TeX(paste0(
     "Transformed Total Live-Births (TLB) with $\\lambda$ = ", round(lambdatlb,2))))
+# the decreasing trend from 1960 to 2024 is less prominent
+# might still be cyclic but still will have to take away trend to find out
