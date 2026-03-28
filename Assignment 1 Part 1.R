@@ -88,7 +88,7 @@ BirthAndFertility |>
 
 BirthAndFertility |>
   ACF(`Total Fertility Rate (TFR)`, lag_max = 24) |>
-  autoplot() +
+  autoplot() +le
   labs(title = "ACF Plot for Total Fertility Rate (TFR)")
 # lags 1-10 are significant suggests strong persistence
 # slow decrease in the ACF as the lags increase indicates a trend
@@ -98,7 +98,15 @@ BirthAndFertility |>
 lambdatfr <- BirthAndFertility |>
   features(`Total Fertility Rate (TFR)`, features = guerrero) |> # Guerroro method
   pull(lambda_guerrero) # Box-Cox transformation parameter
+BirthAndFertility |>
+  autoplot(box_cox(`Total Fertility Rate (TFR)`, lambdatfr)) +
+  labs(title = latex2exp::TeX(paste0(
+    "Transformed Total Fertility Rate (TFR) with $\\lambda$ = ", round(lambdatfr,2))))
 
 lambdatlb <- BirthAndFertility |>
   features(`Total Live-Births`, features = guerrero) |> # Guerroro method
   pull(lambda_guerrero) # Box-Cox transformation parameter
+BirthAndFertility |>
+  autoplot(box_cox(`Total Live-Births`, lambdatlb)) +
+  labs(title = latex2exp::TeX(paste0(
+    "Transformed Total Live-Births (TLB) with $\\lambda$ = ", round(lambdatlb,2))))
