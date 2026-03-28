@@ -75,7 +75,12 @@ BirthAndFertility |>
   ACF(`Total Fertility Rate (TFR)`, lag_max = 9) |>
   autoplot() +
   labs(title = "ACF Plot for Total Fertility Rate (TFR)")
+# lags 1-9 are significant so more lags should be checked
+# slow decrease in the ACF as the lags increase indicates a trend
 
-BirthAndFertility |> ACF(`Total Live-Births`, lag_max = 9)
+BirthAndFertility |>
+  ACF(`Total Live-Births`, lag_max = 9)
   autoplot() +
   labs(title = "ACF Plot for Total Live-Births (TLB)")
+# lags 1-6 are significant suggests short-term dependence
+# slow decrease in the ACF as the lags increase indicates a trend
