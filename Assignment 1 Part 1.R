@@ -71,6 +71,11 @@ BirthAndFertility |>
 # stronger positive relationships at lags 1 and 2 as well
 
 # autocorrelation
-BirthAndFertility |> ACF(`Total Fertility Rate (TFR)`, lag_max = 9)
+BirthAndFertility |>
+  ACF(`Total Fertility Rate (TFR)`, lag_max = 9) |>
+  autoplot() +
+  labs(title = "ACF Plot for Total Fertility Rate (TFR)")
 
 BirthAndFertility |> ACF(`Total Live-Births`, lag_max = 9)
+  autoplot() +
+  labs(title = "ACF Plot for Total Live-Births (TLB)")
