@@ -93,3 +93,12 @@ BirthAndFertility |>
 # lags 1-10 are significant suggests strong persistence
 # slow decrease in the ACF as the lags increase indicates a trend
 # as there are more than one large spike outside the dotted bounds, this series is probably not white noise
+
+# Box-Cox transformation
+lambdatfr <- BirthAndFertility |>
+  features(`Total Fertility Rate (TFR)`, features = guerrero) |> # Guerroro method
+  pull(lambda_guerrero) # Box-Cox transformation parameter
+
+lambdatlb <- BirthAndFertility |>
+  features(`Total Live-Births`, features = guerrero) |> # Guerroro method
+  pull(lambda_guerrero) # Box-Cox transformation parameter
