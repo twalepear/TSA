@@ -69,3 +69,8 @@ BirthAndFertility |>
   gg_lag(`Total Live-Births`, geom = 'point') +
   labs(title = "Lag Plot of Total Live-Births (TLB)")
 # stronger positive relationships at lags 1 and 2 as well
+
+# autocorrelation
+BirthAndFertility |> ACF(`Total Fertility Rate (TFR)`, lag_max = 9)
+
+BirthAndFertility |> ACF(`Total Live-Births`, lag_max = 9)
