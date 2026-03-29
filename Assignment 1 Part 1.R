@@ -127,7 +127,7 @@ components(dcmptfr) |>
 
 dcmptlb <- BirthAndFertility |>
   model(stl = STL(`Total Live-Births`))
-components(dcmptfr) |>
+components(dcmptlb) |>
   as_tsibble() |>
   autoplot(`Total Live-Births`), colour = "grey") + # raw data
   geom_line(aes(y=trend), colour = "#D55E00") # trend-cycle component
