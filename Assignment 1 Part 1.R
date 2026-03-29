@@ -123,11 +123,13 @@ dcmptfr <- BirthAndFertility |>
 components(dcmptfr) |>
   as_tsibble() |>
   autoplot(`Total Fertility Rate (TFR)`), colour = "grey") + # raw data
-  geom_line(aes(y=trend), colour = "#D55E00") # trend-cycle component
+  geom_line(aes(y=trend), colour = "#D55E00") + # trend-cycle component
+  labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TFR")
 
 dcmptlb <- BirthAndFertility |>
   model(stl = STL(`Total Live-Births`))
 components(dcmptlb) |>
   as_tsibble() |>
   autoplot(`Total Live-Births`), colour = "grey") + # raw data
-  geom_line(aes(y=trend), colour = "#D55E00") # trend-cycle component
+  geom_line(aes(y=trend), colour = "#D55E00") + # trend-cycle component
+  labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TLB")
