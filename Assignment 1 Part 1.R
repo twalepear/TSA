@@ -116,3 +116,10 @@ BirthAndFertility |>
     "Transformed Total Live-Births (TLB) with $\\lambda$ = ", round(lambdatlb,2))))
 # the decreasing trend from 1960 to 2024 is less prominent
 # might still be cyclic but still will have to take away trend to find out
+
+# STL decomposition method
+dcmptfr <- BirthAndFertility |>
+  model(stl = STL(`Total Fertility Rate (TFR)`))
+
+dcmptlb <- BirthAndFertility |>
+  model(stl = STL(`Total Live-Births`))
