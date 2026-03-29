@@ -120,6 +120,14 @@ BirthAndFertility |>
 # STL decomposition method
 dcmptfr <- BirthAndFertility |>
   model(stl = STL(`Total Fertility Rate (TFR)`))
+components(dcmptfr) |>
+  as_tsibble() |>
+  autoplot(`Total Fertility Rate (TFR)`), colour = "grey") + # raw data
+  geom_line(aes(y=trend), colour = "#D55E00") # trend-cycle component
 
 dcmptlb <- BirthAndFertility |>
   model(stl = STL(`Total Live-Births`))
+components(dcmptfr) |>
+  as_tsibble() |>
+  autoplot(`Total Live-Births`), colour = "grey") + # raw data
+  geom_line(aes(y=trend), colour = "#D55E00") # trend-cycle component
