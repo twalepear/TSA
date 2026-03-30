@@ -138,5 +138,9 @@ components(dcmptlb) |>
 
 # STL decomposition
 components(dcmptfr) |> autoplot()
+# decreasing trend as mentioned earlier
 
 components(dcmptlb) |> autoplot()
+# overall decreasing trend but there was an increase from 1980 with a peak in 1991 before decreasing again
+
+# the remainder of both decompositions resemble each other with sharp dip around 1986 and spike 1988
