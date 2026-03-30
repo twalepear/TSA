@@ -125,6 +125,7 @@ components(dcmptfr) |>
   autoplot(`Total Fertility Rate (TFR)`), colour = "grey") + # raw data
   geom_line(aes(y=trend), colour = "#D55E00") + # trend-cycle component
   labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TFR")
+# little variability to the raw data, more smooth
 
 dcmptlb <- BirthAndFertility |>
   model(stl = STL(`Total Live-Births`))
@@ -133,3 +134,5 @@ components(dcmptlb) |>
   autoplot(`Total Live-Births`), colour = "grey") + # raw data
   geom_line(aes(y=trend), colour = "#D55E00") + # trend-cycle component
   labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TLB")
+# more variability to the raw data, bigger changes
+
