@@ -117,7 +117,7 @@ BirthAndFertility |>
 # the decreasing trend from 1960 to 2024 is less prominent
 # might still be cyclic but still will have to take away trend to find out
 
-# STL decomposition method
+# STL decomposition method: trend
 dcmptfr <- BirthAndFertility |>
   model(stl = STL(`Total Fertility Rate (TFR)`))
 components(dcmptfr) |>
@@ -136,3 +136,7 @@ components(dcmptlb) |>
   labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TLB")
 # more variability to the raw data, bigger changes
 
+# STL decomposition
+components(dcmptfr) |> autoplot()
+
+components(dcmptlb) |> autoplot()
