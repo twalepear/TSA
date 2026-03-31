@@ -172,3 +172,10 @@ BirthAndFertility_MA_TLB7 |>
   geom_line(aes(y = `7-MA_TLB`), colour = "#D55E00") +
   labs(title = "Total Live-Births (black) and 7-MA estimate of trend-cycle (orange)")
 # the curve is smoother at the cost of the ends
+
+# cannot do classical decomposition as data is yearly and need at least 2 periods
+# BirthAndFertility |>
+#   model(classical_decomposition(`Total Fertility Rate (TFR)`, type = "additive"))
+#   components() |>
+#   autoplot(`Total Fertility Rate (TFR)`) +
+#   labs(title = "Classical additive decomposition of Total Fertility Rate")
