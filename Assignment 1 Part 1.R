@@ -163,3 +163,12 @@ BirthAndFertility_MA_TLB |>
   geom_line(aes(y = `5-MA_TLB`), colour = "#D55E00") +
   labs(title = "Total Live-Births (black) and 5-MA estimate of trend-cycle (orange)")
 # can see smooth curve but due to the roughness of the data should increase the average for a smoother curve
+
+BirthAndFertility_MA_TLB7 <- BirthAndFertility |>
+  mutate(`7-MA_TLB` = slider::slide_dbl(`Total Live-Births`, mean,
+                                  .before = 3, .after = 3, .complete = TRUE))
+BirthAndFertility_MA_TLB7 |>
+  autoplot(`Total Live-Births`) +
+  geom_line(aes(y = `7-MA_TLB`), colour = "#D55E00") +
+  labs(title = "Total Live-Births (black) and 7-MA estimate of trend-cycle (orange)")
+# the curve is smoother at the cost of the ends
