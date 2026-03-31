@@ -179,3 +179,5 @@ BirthAndFertility_MA_TLB7 |>
 #   components() |>
 #   autoplot(`Total Fertility Rate (TFR)`) +
 #   labs(title = "Classical additive decomposition of Total Fertility Rate")
+
+# also cannot use the X-11 method for the same reason as classical decomposition
