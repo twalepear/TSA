@@ -88,7 +88,7 @@ BirthAndFertility |>
 
 BirthAndFertility |>
   ACF(`Total Fertility Rate (TFR)`, lag_max = 24) |>
-  autoplot() +le
+  autoplot() +
   labs(title = "ACF Plot for Total Fertility Rate (TFR)")
 # lags 1-10 are significant suggests strong persistence
 # slow decrease in the ACF as the lags increase indicates a trend
@@ -123,7 +123,7 @@ dcmptfr <- BirthAndFertility |>
 components(dcmptfr) |>
   as_tsibble() |>
   autoplot(`Total Fertility Rate (TFR)`), colour = "grey") + # raw data
-  geom_line(aes(y=trend), colour = "#D55E00") + # trend-cycle component
+  geom_line(aes(y = trend), colour = "#D55E00") + # trend-cycle component
   labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TFR")
 # little variability to the raw data, more smooth
 
@@ -132,7 +132,7 @@ dcmptlb <- BirthAndFertility |>
 components(dcmptlb) |>
   as_tsibble() |>
   autoplot(`Total Live-Births`), colour = "grey") + # raw data
-  geom_line(aes(y=trend), colour = "#D55E00") + # trend-cycle component
+  geom_line(aes(y = trend), colour = "#D55E00") + # trend-cycle component
   labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TLB")
 # more variability to the raw data, bigger changes
 
@@ -144,3 +144,20 @@ components(dcmptlb) |> autoplot()
 # overall decreasing trend but there was an increase from 1980 with a peak in 1991 before decreasing again
 
 # the remainder of both decompositions resemble each other with sharp dip around 1986 and spike 1988
+
+# moving average
+BirthAndFertility_MA_TFR <- BirthAndFertility |>
+  mutate(`5-MA_TFR` = slider::slide_dbl(`Total Fertility Rate (TFR)`, mean,
+                                  .before = 2, .after = 2, .complete = TRUE))
+BirthAndFertility_MA_TFR |>
+  autoplot(`Total Fertility Rate (TFR)`) +
+  geom_line(aes(y = `5-MA_TFR`), colour = "#D55E00") +
+  labs(title = "Total Fertility Rate (black) and 5-MA estimate of trend-cycle (orange)")
+
+BirthAndFertility_MA_TLB <- BirthAndFertility |>
+  mutate(`5-MA_TLB` = slider::slide_dbl(`Total Live-Births`, mean,
+                                  .before = 2, .after = 2, .complete = TRUE))
+BirthAndFertility_MA_TLB |>
+  autoplot(`Total Live-Births`) +
+  geom_line(aes(y = `5-MA_TLB`), colour = "#D55E00") +
+  labs(title = "Total Live-Births (black) and 5-MA estimate of trend-cycle (orange)")
