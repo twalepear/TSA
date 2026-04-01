@@ -1,0 +1,377 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={1.1 Exploratory Data Analysis (EDA)},
+  pdfauthor={Thoa Le},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{1.1 Exploratory Data Analysis (EDA)}
+\author{Thoa Le}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(fpp3) }\CommentTok{\# time series analysis package}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## -- Attaching packages -------------------------------------------- fpp3 1.0.3 --
+\end{verbatim}
+
+\begin{verbatim}
+## v tibble      3.3.0     v tsibble     1.2.0
+## v dplyr       1.1.4     v tsibbledata 0.4.1
+## v tidyr       1.3.1     v ggtime      0.2.0
+## v lubridate   1.9.5     v feasts      0.5.0
+## v ggplot2     4.0.0     v fable       0.5.0
+\end{verbatim}
+
+\begin{verbatim}
+## -- Conflicts ------------------------------------------------- fpp3_conflicts --
+## x lubridate::date()    masks base::date()
+## x dplyr::filter()      masks stats::filter()
+## x tsibble::intersect() masks base::intersect()
+## x tsibble::interval()  masks lubridate::interval()
+## x dplyr::lag()         masks stats::lag()
+## x tsibble::setdiff()   masks base::setdiff()
+## x tsibble::union()     masks base::union()
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(tsibble) }\CommentTok{\# tsibble objects}
+\FunctionTok{library}\NormalTok{(lubridate) }\CommentTok{\# for data to work with dates and times}
+\FunctionTok{library}\NormalTok{(feasts)}
+\CommentTok{\#library(latex2exp)}
+
+\CommentTok{\# read in the data}
+\NormalTok{data }\OtherTok{\textless{}{-}}\NormalTok{ readr}\SpecialCharTok{::}\FunctionTok{read\_csv}\NormalTok{(}\StringTok{"BirthsAndFertilityRatesAnnual.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rows: 17 Columns: 67
+\end{verbatim}
+
+\begin{verbatim}
+## -- Column specification --------------------------------------------------------
+## Delimiter: ","
+## chr (22): DataSeries, 2025, 1979, 1978, 1977, 1976, 1975, 1974, 1973, 1972, ...
+## dbl (45): 2024, 2023, 2022, 2021, 2020, 2019, 2018, 2017, 2016, 2015, 2014, ...
+## 
+## i Use `spec()` to retrieve the full column specification for this data.
+## i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+\end{verbatim}
+
+\section{obtaining the data
+specified}\label{obtaining-the-data-specified}
+
+BirthAndFertility \textless- data \textbar\textgreater{} pivot\_longer(
+\# change rows to column cols = \texttt{1960}:\texttt{2025}, names\_to =
+``Year'', values\_to = ``Value'', \# naming it to remember that it needs
+to be values values\_transform = list(Value = as.numeric) )
+\textbar\textgreater{} filter(DataSeries \%in\% c(``Total Fertility Rate
+(TFR)'', ``Total Live-Births'')) \textbar\textgreater{} mutate(Year =
+as.integer(Year)) \textbar\textgreater{} filter(Year != 2025)
+\textbar\textgreater{} \# assignment specified until 2024 pivot\_wider(
+\# taking TFR and Total Live-Births into 2 separate columns according to
+year names\_from = DataSeries, values\_from = Value )
+
+\section{created a tsibble}\label{created-a-tsibble}
+
+BirthAndFertility \textless- as\_tsibble(BirthAndFertility, index =
+Year)
+
+\section{checking it is a tsibble}\label{checking-it-is-a-tsibble}
+
+ts\_BirthAndFertility is\_tsibble(BirthAndFertility)
+
+\section{Preliminary (exploratory analysis) \{then choosing and fitting
+models, then using \& evaluating a forecasting
+model\}}\label{preliminary-exploratory-analysis-then-choosing-and-fitting-models-then-using-evaluating-a-forecasting-model}
+
+\section{plot the Total Fertility Rate (TFR) and Total Live-Births
+(TLB)}\label{plot-the-total-fertility-rate-tfr-and-total-live-births-tlb}
+
+autoplot(BirthAndFertility, \texttt{Total\ Fertility\ Rate\ (TFR)}) +
+labs(title = ``Initial Plot of Total Fertility Rate (TFR)'') \# obvious
+decreasing trend \# cannot determine seasonality from yearly data \#
+there might be cyclic but will have to take away trend to find out
+
+autoplot(BirthAndFertility,\texttt{Total\ Live-Births})+ labs(title =
+``Initial Plot of Total Live-Births'') \# there is a decreasing trend
+from 1960 to 2024 \# cannot determine seasonality from yearly data \#
+there might also be cyclic but will have to take away trend to find out
+
+\section{evidence of the presence of business
+cycles?}\label{evidence-of-the-presence-of-business-cycles}
+
+\section{outliers that need to be explained by
+experts?}\label{outliers-that-need-to-be-explained-by-experts}
+
+\section{strength of relationships among
+variables?}\label{strength-of-relationships-among-variables}
+
+BirthAndFertility \textbar\textgreater{} ggplot(aes(x =
+\texttt{Total\ Fertility\ Rate\ (TFR)}, y =
+\texttt{Total\ Live-Births})) + geom\_point() + geom\_smooth() +
+labs(title = ``Total Fertility Rate (TFR) vs Total Live-Births (TLB)'')
+\# there seems to be a nonlinear positive relationship between TFR and
+TLB but need to do further analysis \# noting that higher fertility
+rates will increase births
+
+\section{lag plots}\label{lag-plots}
+
+BirthAndFertility \textbar\textgreater{}
+gg\_lag(\texttt{Total\ Fertility\ Rate\ (TFR)}, geom = `point') +
+labs(title = ``Lag Plot of Total Fertility Rate (TFR)'') \# stronger
+positive relationships at lags 1 and 2
+
+BirthAndFertility \textbar\textgreater{}
+gg\_lag(\texttt{Total\ Live-Births}, geom = `point') + labs(title =
+``Lag Plot of Total Live-Births (TLB)'') \# stronger positive
+relationships at lags 1 and 2 as well
+
+\section{autocorrelation}\label{autocorrelation}
+
+BirthAndFertility \textbar\textgreater{}
+ACF(\texttt{Total\ Fertility\ Rate\ (TFR)}, lag\_max = 9)
+\textbar\textgreater{} autoplot() + labs(title = ``ACF Plot for Total
+Fertility Rate (TFR)'') \# lags 1-9 are significant so more lags should
+be checked \# slow decrease in the ACF as the lags increase indicates a
+trend
+
+BirthAndFertility \textbar\textgreater{}
+ACF(\texttt{Total\ Live-Births}, lag\_max = 9) autoplot() + labs(title =
+``ACF Plot for Total Live-Births (TLB)'') \# lags 1-6 are significant
+suggests short-term dependence \# slow decrease in the ACF as the lags
+increase indicates a trend \# as there are more than one large spike
+outside the dotted bounds, this series is probably not white noise
+
+BirthAndFertility \textbar\textgreater{}
+ACF(\texttt{Total\ Fertility\ Rate\ (TFR)}, lag\_max = 24)
+\textbar\textgreater{} autoplot() + labs(title = ``ACF Plot for Total
+Fertility Rate (TFR)'') \# lags 1-10 are significant suggests strong
+persistence \# slow decrease in the ACF as the lags increase indicates a
+trend \# as there are more than one large spike outside the dotted
+bounds, this series is probably not white noise
+
+\section{Box-Cox transformation}\label{box-cox-transformation}
+
+lambdatfr \textless- BirthAndFertility \textbar\textgreater{}
+features(\texttt{Total\ Fertility\ Rate\ (TFR)}, features = guerrero)
+\textbar\textgreater{} \# Guerrero method pull(lambda\_guerrero) \#
+Box-Cox transformation parameter = -0.44514 \# as lambda is below zero
+but halfway to -1 suggests moderate transformation required
+BirthAndFertility \textbar\textgreater{}
+autoplot(box\_cox(\texttt{Total\ Fertility\ Rate\ (TFR)}, lambdatfr)) +
+labs(title = latex2exp::TeX(paste0( ``Transformed Total Fertility Rate
+(TFR) with \(\\lambda\) ='', round(lambdatfr,2)))) \# decreasing trend
+still obvious \# still signs there might also be cyclic but still will
+have to take away trend to find out
+
+lambdatlb \textless- BirthAndFertility \textbar\textgreater{}
+features(\texttt{Total\ Live-Births}, features = guerrero)
+\textbar\textgreater{} \# Guerrero method pull(lambda\_guerrero) \#
+Box-Cox transformation parameter = -0.89992 \# as lambda is below zero
+but close to -1 suggests strong transformation required
+BirthAndFertility \textbar\textgreater{}
+autoplot(box\_cox(\texttt{Total\ Live-Births}, lambdatlb)) + labs(title
+= latex2exp::TeX(paste0( ``Transformed Total Live-Births (TLB) with
+\(\\lambda\) ='', round(lambdatlb,2)))) \# the decreasing trend from
+1960 to 2024 is less prominent \# might still be cyclic but still will
+have to take away trend to find out
+
+\section{STL decomposition method:
+trend}\label{stl-decomposition-method-trend}
+
+dcmptfr \textless- BirthAndFertility \textbar\textgreater{} model(stl =
+STL(\texttt{Total\ Fertility\ Rate\ (TFR)})) components(dcmptfr)
+\textbar\textgreater{} as\_tsibble() \textbar\textgreater{}
+autoplot(\texttt{Total\ Fertility\ Rate\ (TFR)}), colour = ``grey'') +
+\# raw data geom\_line(aes(y = trend), colour = ``\#D55E00'') + \#
+trend-cycle component labs(title = ``Plot of trend-cycle component
+(orange) and raw data (grey) for TFR'') \# little variability to the raw
+data, more smooth
+
+dcmptlb \textless- BirthAndFertility \textbar\textgreater{} model(stl =
+STL(\texttt{Total\ Live-Births})) components(dcmptlb)
+\textbar\textgreater{} as\_tsibble() \textbar\textgreater{}
+autoplot(\texttt{Total\ Live-Births}), colour = ``grey'') + \# raw data
+geom\_line(aes(y = trend), colour = ``\#D55E00'') + \# trend-cycle
+component labs(title = ``Plot of trend-cycle component (orange) and raw
+data (grey) for TLB'') \# more variability to the raw data, bigger
+changes
+
+\section{STL decomposition}\label{stl-decomposition}
+
+components(dcmptfr) \textbar\textgreater{} autoplot() \# decreasing
+trend as mentioned earlier
+
+components(dcmptlb) \textbar\textgreater{} autoplot() \# overall
+decreasing trend but there was an increase from 1980 with a peak in 1991
+before decreasing again
+
+\section{the remainder of both decompositions resemble each other with
+sharp dip around 1986 and spike
+1988}\label{the-remainder-of-both-decompositions-resemble-each-other-with-sharp-dip-around-1986-and-spike-1988}
+
+\section{moving average}\label{moving-average}
+
+BirthAndFertility\_MA\_TFR \textless- BirthAndFertility
+\textbar\textgreater{} mutate(\texttt{5-MA\_TFR} =
+slider::slide\_dbl(\texttt{Total\ Fertility\ Rate\ (TFR)}, mean, .before
+= 2, .after = 2, .complete = TRUE)) BirthAndFertility\_MA\_TFR
+\textbar\textgreater{} autoplot(\texttt{Total\ Fertility\ Rate\ (TFR)})
++ geom\_line(aes(y = \texttt{5-MA\_TFR}), colour = ``\#D55E00'') +
+labs(title = ``Total Fertility Rate (black) and 5-MA estimate of
+trend-cycle (orange)'') \# the original data was already quite smooth so
+it matches quite closely with the trend-cycle
+
+BirthAndFertility\_MA\_TLB \textless- BirthAndFertility
+\textbar\textgreater{} mutate(\texttt{5-MA\_TLB} =
+slider::slide\_dbl(\texttt{Total\ Live-Births}, mean, .before = 2,
+.after = 2, .complete = TRUE)) BirthAndFertility\_MA\_TLB
+\textbar\textgreater{} autoplot(\texttt{Total\ Live-Births}) +
+geom\_line(aes(y = \texttt{5-MA\_TLB}), colour = ``\#D55E00'') +
+labs(title = ``Total Live-Births (black) and 5-MA estimate of
+trend-cycle (orange)'') \# can see smooth curve but due to the roughness
+of the data should increase the average for a smoother curve
+
+BirthAndFertility\_MA\_TLB7 \textless- BirthAndFertility
+\textbar\textgreater{} mutate(\texttt{7-MA\_TLB} =
+slider::slide\_dbl(\texttt{Total\ Live-Births}, mean, .before = 3,
+.after = 3, .complete = TRUE)) BirthAndFertility\_MA\_TLB7
+\textbar\textgreater{} autoplot(\texttt{Total\ Live-Births}) +
+geom\_line(aes(y = \texttt{7-MA\_TLB}), colour = ``\#D55E00'') +
+labs(title = ``Total Live-Births (black) and 7-MA estimate of
+trend-cycle (orange)'') \# the curve is smoother at the cost of the ends
+
+\section{cannot do classical decomposition as data is yearly and need at
+least 2
+periods}\label{cannot-do-classical-decomposition-as-data-is-yearly-and-need-at-least-2-periods}
+
+\section{BirthAndFertility
+\textbar\textgreater{}}\label{birthandfertility}
+
+\section{\texorpdfstring{model(classical\_decomposition(\texttt{Total\ Fertility\ Rate\ (TFR)},
+type =
+``additive''))}{model(classical\_decomposition(Total Fertility Rate (TFR), type = ``additive''))}}\label{modelclassical_decompositiontotal-fertility-rate-tfr-type-additive}
+
+\section{components() \textbar\textgreater{}}\label{components}
+
+\section{\texorpdfstring{autoplot(\texttt{Total\ Fertility\ Rate\ (TFR)})
++}{autoplot(Total Fertility Rate (TFR)) +}}\label{autoplottotal-fertility-rate-tfr}
+
+\section{labs(title = ``Classical additive decomposition of Total
+Fertility
+Rate'')}\label{labstitle-classical-additive-decomposition-of-total-fertility-rate}
+
+\section{also cannot use the X-11 method for the same reason as
+classical
+decomposition}\label{also-cannot-use-the-x-11-method-for-the-same-reason-as-classical-decomposition}
+
+\end{document}
