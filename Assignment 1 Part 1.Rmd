@@ -304,3 +304,4 @@ k is the window size
 
 In this analysis when k = 5, the moving average at time t is calculated using the 2 observations before and 2 observations after t. This process smooths out short-term fluctuations in the series
 
+<https://github.com/twalepear/TSA.git>
