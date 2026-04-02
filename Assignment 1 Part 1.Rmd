@@ -1,6 +1,6 @@
 ---
 title: "1.1 Exploratory Data Analysis (EDA)"
-author: "Thoa Le"
+author: "Thoa Le (a1847933)"
 output: pdf_document
 ---
 
@@ -69,19 +69,59 @@ p1 + p2 # placing the plots side by side
 
 The above lag plots for TFR and TLB indicate stronger positive relationships at lags 1 and 2 suggesting that AR(1) and AR(2) models could be appropriate.
 
-# linear model for time series data
-TFR_lm <- BirthAndFertility |> model(lm = TSLM(`Total Fertility Rate (TFR)` ~ trend()))
-# summaries
-tidy(TFR_lm)
-glance(TFR_lm)
-
-TLB_lm <- BirthAndFertility |> model(lm = TSLM(`Total Live-Births` ~ trend()))
-# summaries
-tidy(TLB_lm)
-glance(TLB_lm)
+The following fitted AR(1) and AR(2) models (orange lines) follow the TFR and TLB (grey lines) but tends to overshoots and underestimate peaks. Residuals were examined and appear to have no pattern; however the ACF plots show multiple spikes outside the significance bounds indicating the residuals are not white noise. This indicates that an ARIMA model, which can account for trend, may be more appropriate.
 
 \newpage
-```{r page-, out.width = "70%", fig.align = 'center'}
+```{r page-5, out.width = "70%", fig.align = 'center', echo = TRUE, warning = FALSE, message = FALSE}
+TFR_ar <- BirthAndFertility |> model(AR(`Total Fertility Rate (TFR)`, order = 1)) # fits AR model
+TFR_fits <- augment(TFR_ar) # adds columns of data
+ggplot(TFR_fits, aes(x = Year)) +
+  geom_line(aes(y =`Total Fertility Rate (TFR)`), colour = "grey") + # raw data
+  geom_line(aes(y = .fitted), colour = "#D55E00") + # 
+  labs(title = "Plot of AR(1) fitted model (orange) and raw data (grey) for TFR")
+
+TLB_ar <- BirthAndFertility |> model(AR(`Total Live-Births`, order = 1))
+TLB_fits <- augment(TLB_ar)
+ggplot(TLB_fits, aes(x = Year)) +
+  geom_line(aes(y =`Total Live-Births`), colour = "grey") + # raw data
+  geom_line(aes(y = .fitted), colour = "#D55E00") + # 
+  labs(title = "Plot of AR(1) fitted model (orange) and raw data (grey) for TLB")
+```
+
+\newpage
+```{r page-6, out.width = "70%", fig.align = 'center', echo = TRUE, warning = FALSE, message = FALSE}
+TFR_ar2 <- BirthAndFertility |> model(AR(`Total Fertility Rate (TFR)`, order = 2)) # fits AR model
+TFR_fits2 <- augment(TFR_ar2) # adds columns of data
+ggplot(TFR_fits2, aes(x = Year)) +
+  geom_line(aes(y =`Total Fertility Rate (TFR)`), colour = "grey") + # raw data
+  geom_line(aes(y = .fitted), colour = "#D55E00") + # 
+  labs(title = "Plot of AR(2) fitted model (orange) and raw data (grey) for TFR")
+
+TLB_ar2 <- BirthAndFertility |> model(AR(`Total Live-Births`, order = 2))
+TLB_fits2 <- augment(TLB_ar2)
+ggplot(TLB_fits2, aes(x = Year)) +
+  geom_line(aes(y =`Total Live-Births`), colour = "grey") + # raw data
+  geom_line(aes(y = .fitted), colour = "#D55E00") + # 
+  labs(title = "Plot of AR(2) fitted model (orange) and raw data (grey) for TLB")
+```
+\newpage
+```{r page-7, out.width = "85%", fig.align = 'center', echo = TRUE, warning = FALSE, message = FALSE}
+gg_tsresiduals(TFR_ar) + # check residuals
+  labs(title = "AR(1) model Residuals for TFR")
+gg_tsresiduals(TLB_ar) +
+  labs(title = "AR(1) model Residuals for TLB")
+```
+
+\newpage
+```{r page-8, out.width = "85%", fig.align = 'center', echo = TRUE, warning = FALSE, message = FALSE}
+gg_tsresiduals(TFR_ar2) + # check residuals
+  labs(title = "AR(2) model Residuals for TFR")
+gg_tsresiduals(TLB_ar2) +
+  labs(title = "AR(2) model Residuals for TLB")
+```
+
+\newpage
+```{r page-9, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
   ACF(`Total Fertility Rate (TFR)`, lag_max = 9) |>
   autoplot() +
@@ -92,7 +132,7 @@ BirthAndFertility |>
   labs(title = "ACF Plot for Total Live-Births (TLB)")
 ```
 The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds. This slow decrease indicates the presence of a trend and consistent with a non-stationary series. The absence of a sharp cut-off suggests that an autoregressive (AR) model may be suitable for this series.
-```{r}
+```{r page-10}
 BirthAndFertility |>
   ACF(`Total Fertility Rate (TFR)`, lag_max = 24) |>
   autoplot() +
@@ -101,7 +141,7 @@ BirthAndFertility |>
 An extended ACF plot for TFR confirms that significant positive autocorrelations persist up to lag 10.
 
 \newpage
-```{r page-}
+```{r page-11}
 lambdatfr <- BirthAndFertility |>
   features(`Total Fertility Rate (TFR)`, features = guerrero) |> # Guerrero method
   pull(lambda_guerrero) # Box-Cox transformation parameter = -0.44514
@@ -112,7 +152,8 @@ BirthAndFertility |>
 ```
 A Box-Cox transformation was considered, with the estimated lambda for TFR found to be below zero but approximately midway to -1, suggesting that a moderate transformation may be appropriate. The transformed series still shows a decreasing trend and there may also be cyclical behaviour; however the trend should be removed before confirming the presence of any cycles.
 
-```{r}
+\newpage
+```{r page-12}
 lambdatlb <- BirthAndFertility |>
   features(`Total Live-Births`, features = guerrero) |> # Guerrero method
   pull(lambda_guerrero) # Box-Cox transformation parameter = -0.89992
