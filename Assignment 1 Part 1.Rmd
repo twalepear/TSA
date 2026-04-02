@@ -33,7 +33,7 @@ BirthAndFertility <- as_tsibble(BirthAndFertility, index = Year) # created a tsi
 is_tsibble(BirthAndFertility) # checking it is a tsibble
 ```
 
-In this exploratory data analysis, the data was visualised to identify patterns and trends over time. Since the data is yearly, classical decomposition and the X-11 method are not applicable. Once the patterns are identified, appropriate models can be selected, fitted, and evaluated for forecasting.
+In this exploratory data analysis, the data was visualised to identify patterns and trends over time. Since the data is yearly, classical decomposition and the X-11 method are not applicable and seasonal patterns cannot be detected. Additionally, the socio-economic and political factors influencing fertility are not included. Once the patterns are identified, appropriate models can be selected, fitted, and evaluated for forecasting.
 
 \newpage
 ```{r page-2, out.width = "70%", fig.align = 'center'}
@@ -43,7 +43,7 @@ autoplot(BirthAndFertility,`Total Live-Births`)+
   labs(title = "Initial Plot of Total Live-Births")
 ```
 
-From the initial plots of TFR and TLB, both series show a decreasing trend over time, with TFR exhibiting a more pronounced decline. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclic   behaviour, the trend would need to be removed to confirm this.
+From the initial plots of TFR and TLB, both series show a long-term decreasing trend over time, with TFR exhibiting a more pronounced decline. A notable change is observed around 1980 to 1990, where both series display a temporary broad peak before continuing their downward trend. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclical behaviour, the trend would need to be removed to confirm this.
 
 \newpage
 ```{r page-3}
@@ -131,7 +131,9 @@ BirthAndFertility |>
   ggplot2::autoplot() +
   labs(title = "ACF Plot for Total Live-Births (TLB)")
 ```
-The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds. This slow decrease indicates the presence of a trend and consistent with a non-stationary series. The absence of a sharp cut-off suggests that an autoregressive (AR) model may be suitable for this series.
+The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
+
+The presence of a strong trend and slow decrease confirms that both TFR and TLB are non-stationary series. The absence of a sharp cut-off suggests that differencing or an autoregressive (AR) model may be suitable for this series.
 ```{r page-10}
 BirthAndFertility |>
   ACF(`Total Fertility Rate (TFR)`, lag_max = 24) |>
@@ -231,10 +233,13 @@ BirthAndFertility_MA_TLB7 |>
 Evidently, the 7-moving average produces a smoother curve, at the cost of losing the observations at the ends of the series.
 
 \newpage
+# Research Questions
+Can the ARIMA model accurately forecast the Singapore's Total Live Births (TLB) and Total Fertility Rate (TFR) from 2013 to 2024 given the data from 1960 to 2012, capturing the short-term fluctuations? 
+
 # Statistical Appendix
 The following statistical methods were applied throughout the analysis in the order presented below.
 
-## Autoregressive Model AR(p)
+## Autoregressive Model (AR)
 $$
 y_t = c + \phi_1 y_{t-1} + \phi_2 y_{t-2} + \cdots + \phi_p y_{t-p} + \varepsilon_t
 $$
@@ -246,7 +251,17 @@ where:
 
 \( \varepsilon_t \) is white noise
 
-Dependence on using previous values (lags) to model
+Models the current values using its previous values (lags)
+
+## Residuals
+$$
+e_t = y_t - \hat{y}_t
+$$
+\( y_t \) is the actual observed value at time t
+
+\( \hat{y}_t \) is the predicted value at time t
+
+The error which is the difference between the actual observed value and predicted value at time t, used to check the chosen model accounts for all the patterns
 
 ## Autocorrelation Function (ACF)
 $$
@@ -256,37 +271,7 @@ where:
 
 \( \rho_k \) is the autocorrelation at lag \( k \)
 
-Measures the correlation between \( y_t \) and \( y_{t-k} \)
-
-## Residual
-$$
-e_t = y_t - \hat{y}_t
-$$
-\( y_t \) is the actual observed value at time t
-
-\( \hat{y}_t \) is the predicted value at time t
-
-The difference between the actual observed value and predicted value at time t
-
-## STL Decomposition
-$$
-y_t = T_t + R_t
-$$
-where:
-
-\( T_t \) is the trend component,
-
-\( R_t \) is the remainder
-
-Decomposes time series into components, usually with the seasonality component with the trend and remainder
-
-## Moving Average
-$$
-MA_k = \frac{1}{k} \sum_{i=-(k-1)/2}^{(k-1)/2} y_{t+i}
-$$
-k is the window size
-
-In this analysis when k = 5, the average include the 2 points before the point at time t and 2 points after time t
+Measures the correlation between a series \( y_t \) and lagged values \( y_{t-k} \), which checks for trend, seasonality and whether residuals are white noise
 
 ## Box-Cox Transformation
 $$
@@ -298,4 +283,24 @@ y^{(\lambda)} =
 $$
 
 \(\lambda\) was estimated using the Guerrero method
+
+## STL Decomposition
+$$
+y_t = T_t + R_t
+$$
+where:
+
+\( T_t \) is the trend component,
+
+\( R_t \) is the remainder
+
+Decomposes time series into trend and remainder components, usually with the seasonality component as well but the data in this analysis is yearly
+
+## Moving Average (MA)
+$$
+MA_k = \frac{1}{k} \sum_{i=-(k-1)/2}^{(k-1)/2} y_{t+i}
+$$
+k is the window size
+
+In this analysis when k = 5, the moving average at time t is calculated using the 2 observations before and 2 observations after t. This process smooths out short-term fluctuations in the series
 
