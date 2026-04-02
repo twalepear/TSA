@@ -4,7 +4,9 @@ author: "Thoa Le"
 output: pdf_document
 ---
 
-```{r setup, include=TRUE}
+Data from 1960 to 2024 on Total Live Births (TLB) and Total Fertility Rates (TFR) was pulled from Singapore Department of Statistics (data.gov.sg). The data was then transformed into a tsibble object with three columns: Year, Total Fertility Rates (TFR) and Total Live Births.
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE}
 library(fpp3) # time series analysis package
 library(tsibble) # tsibble objects
 library(lubridate) # for data to work with dates and times
@@ -12,10 +14,6 @@ library(feasts)
 library(latex2exp)
 
 data <- readr::read_csv("BirthsAndFertilityRatesAnnual.csv") # read in the data
-```
-
-Data from 1960 to 2024 for Total Live Births (TLB) and Total Fertility Rates (TFR) was pulled from Singapore Department of Statistics (data.sv.sg).
-```{r}
 BirthAndFertility <- data |>
   pivot_longer( # change rows to column
     cols = `1960`:`2025`,
@@ -26,44 +24,30 @@ BirthAndFertility <- data |>
   filter(DataSeries %in% c("Total Fertility Rate (TFR)", "Total Live-Births")) |>
   mutate(Year = as.integer(Year)) |>
   filter(Year != 2025) |> # assignment specified until 2024
-  pivot_wider( # taking TFR and Total Live-Births into 2 separate columns according to year
+  pivot_wider( # taking TFR & Total Live-Births into 2 separate columns according to year
   names_from = DataSeries, 
   values_from = Value
   )
+BirthAndFertility <- as_tsibble(BirthAndFertility, index = Year) # created a tsibble
+is_tsibble(BirthAndFertility) # checking it is a tsibble
 ```
 
+In this exploratory data analysis, the data was visualised to identify patterns and trends over time. Since the data is yearly, classical decomposition and the X-11 method are not applicable. Once the patterns are identified, appropriate models can be selected, fitted, and evaluated for forecasting.
 
-# created a tsibble
-```{r}
-BirthAndFertility <- as_tsibble(BirthAndFertility, index = Year)
-
-# checking it is a tsibble
-is_tsibble(BirthAndFertility)
-```
-
-# Preliminary (exploratory analysis) {then choosing and fitting models, then using & evaluating a forecasting model}
-
-# plot the Total Fertility Rate (TFR) and Total Live-Births (TLB)
-```{r}
+\newpage
+```{r tfr-plot, out.width = "70%", fig.align = 'center'}
 autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
   labs(title = "Initial Plot of Total Fertility Rate (TFR)")
 ```
-# obvious decreasing trend
-# cannot determine seasonality from yearly data
-# there might be cyclic but will have to take away trend to find out
 
-```{r}
+```{r tlb-plot, out.width = "70%", fig.align = 'center'}
 autoplot(BirthAndFertility,`Total Live-Births`)+
   labs(title = "Initial Plot of Total Live-Births")
 ```
-# there is a decreasing trend from 1960 to 2024
-# cannot determine seasonality from yearly data
-# there might also be cyclic but will have to take away trend to find out
 
-# evidence of the presence of business cycles?
-# outliers that need to be explained by experts?
+From the initial plots of TFR and TLB, both series show a decreasing trend over time, with TFR exhibiting a more pronounced decline. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclic   behaviour, the trend would need to be removed to confirm this.
 
-# strength of relationships among variables?
+\newpage
 ```{r}
 BirthAndFertility |>
   ggplot(aes(x = `Total Fertility Rate (TFR)`, y = `Total Live-Births`)) +
@@ -71,9 +55,10 @@ BirthAndFertility |>
   geom_smooth() +
   labs(title = "Total Fertility Rate (TFR) vs Total Live-Births (TLB)")
 ```
-# there seems to be a nonlinear positive relationship between TFR and TLB but need to do further analysis
-# noting that higher fertility rates will increase births
 
+The relationship between TFR and TLB was examined by plotting the two variables against each other. There appears to be a nonlinear positive relationship, suggesting that higher fertility rates are associated with higher numbers of live births, although further analysis is required.
+
+\newpage
 # lag plots
 ```{r}
 BirthAndFertility |>
@@ -220,11 +205,5 @@ BirthAndFertility_MA_TLB7 |>
 ```
 # the curve is smoother at the cost of the ends
 
-# cannot do classical decomposition as data is yearly and need at least 2 periods
-# BirthAndFertility |>
-#   model(classical_decomposition(`Total Fertility Rate (TFR)`, type = "additive"))
-#   components() |>
-#   autoplot(`Total Fertility Rate (TFR)`) +
-#   labs(title = "Classical additive decomposition of Total Fertility Rate")
-
-# also cannot use the X-11 method for the same reason as classical decomposition
+# evidence of the presence of business cycles?
+# outliers that need to be explained by experts?
