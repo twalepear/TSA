@@ -204,7 +204,7 @@ BirthAndFertility_MA_TFR |>
   geom_line(aes(y = `5-MA_TFR`), colour = "#D55E00") +
   labs(title = "Total Fertility Rate (black) and 5-MA estimate of trend-cycle (orange)")
 ```
-# the original data was already quite smooth so it matches quite closely with the trend-cycle
+The raw TFR series is already relatively smooth, so the 5-moving average closely follows the overall trend-cycle. However, it does fail to capture short-term fluctuations such as the dip around 1983 and spike around 1984.
 
 \newpage
 ```{r page-17}
@@ -216,7 +216,7 @@ BirthAndFertility_MA_TLB |>
   geom_line(aes(y = `5-MA_TLB`), colour = "#D55E00") +
   labs(title = "Total Live-Births (black) and 5-MA estimate of trend-cycle (orange)")
 ```
-# can see smooth curve but due to the roughness of the data should increase the average for a smoother curve
+The trend-cycle smooths out the short-term fluctuations in the raw TLB series. Increasing the window size of the current 5-moving average would result in a smoother curve.
 
 \newpage
 ```{r page-18}
@@ -228,7 +228,74 @@ BirthAndFertility_MA_TLB7 |>
   geom_line(aes(y = `7-MA_TLB`), colour = "#D55E00") +
   labs(title = "Total Live-Births (black) and 7-MA estimate of trend-cycle (orange)")
 ```
-# the curve is smoother at the cost of the ends
+Evidently, the 7-moving average produces a smoother curve, at the cost of losing the observations at the ends of the series.
 
-# evidence of the presence of business cycles?
-# outliers that need to be explained by experts?
+\newpage
+# Statistical Appendix
+The following statistical methods were applied throughout the analysis in the order presented below.
+
+## Autoregressive Model AR(p)
+$$
+y_t = c + \phi_1 y_{t-1} + \phi_2 y_{t-2} + \cdots + \phi_p y_{t-p} + \varepsilon_t
+$$
+where:
+
+\( y_t \) is the value at time t
+
+\( \phi_i \) are model parameters
+
+\( \varepsilon_t \) is white noise
+
+Dependence on using previous values (lags) to model
+
+## Autocorrelation Function (ACF)
+$$
+\rho_k = \frac{\text{Cov}(y_t, y_{t-k})}{\text{Var}(y_t)}
+$$
+where:
+
+\( \rho_k \) is the autocorrelation at lag \( k \)
+
+Measures the correlation between \( y_t \) and \( y_{t-k} \)
+
+## Residual
+$$
+e_t = y_t - \hat{y}_t
+$$
+\( y_t \) is the actual observed value at time t
+
+\( \hat{y}_t \) is the predicted value at time t
+
+The difference between the actual observed value and predicted value at time t
+
+## STL Decomposition
+$$
+y_t = T_t + R_t
+$$
+where:
+
+\( T_t \) is the trend component,
+
+\( R_t \) is the remainder
+
+Decomposes time series into components, usually with the seasonality component with the trend and remainder
+
+## Moving Average
+$$
+MA_k = \frac{1}{k} \sum_{i=-(k-1)/2}^{(k-1)/2} y_{t+i}
+$$
+k is the window size
+
+In this analysis when k = 5, the average include the 2 points before the point at time t and 2 points after time t
+
+## Box-Cox Transformation
+$$
+y^{(\lambda)} =
+\begin{cases}
+\frac{y^\lambda - 1}{\lambda}, & \lambda \ne 0 \\
+\log(y), & \lambda = 0
+\end{cases}
+$$
+
+\(\lambda\) was estimated using the Guerrero method
+
