@@ -12,6 +12,7 @@ library(tsibble) # tsibble objects
 library(lubridate) # for data to work with dates and times
 library(feasts)
 library(latex2exp)
+library(patchwork) # putting 2 plots next to each other
 
 data <- readr::read_csv("BirthsAndFertilityRatesAnnual.csv") # read in the data
 BirthAndFertility <- data |>
@@ -35,12 +36,9 @@ is_tsibble(BirthAndFertility) # checking it is a tsibble
 In this exploratory data analysis, the data was visualised to identify patterns and trends over time. Since the data is yearly, classical decomposition and the X-11 method are not applicable. Once the patterns are identified, appropriate models can be selected, fitted, and evaluated for forecasting.
 
 \newpage
-```{r tfr-plot, out.width = "70%", fig.align = 'center'}
+```{r page-2, out.width = "70%", fig.align = 'center'}
 autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
   labs(title = "Initial Plot of Total Fertility Rate (TFR)")
-```
-
-```{r tlb-plot, out.width = "70%", fig.align = 'center'}
 autoplot(BirthAndFertility,`Total Live-Births`)+
   labs(title = "Initial Plot of Total Live-Births")
 ```
@@ -48,7 +46,7 @@ autoplot(BirthAndFertility,`Total Live-Births`)+
 From the initial plots of TFR and TLB, both series show a decreasing trend over time, with TFR exhibiting a more pronounced decline. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclic   behaviour, the trend would need to be removed to confirm this.
 
 \newpage
-```{r}
+```{r page-3}
 BirthAndFertility |>
   ggplot(aes(x = `Total Fertility Rate (TFR)`, y = `Total Live-Births`)) +
   geom_point() +
@@ -59,23 +57,20 @@ BirthAndFertility |>
 The relationship between TFR and TLB was examined by plotting the two variables against each other. There appears to be a nonlinear positive relationship, suggesting that higher fertility rates are associated with higher numbers of live births, although further analysis is required.
 
 \newpage
-# lag plots
-```{r}
-BirthAndFertility |>
+```{r page-4, echo = TRUE, warning = FALSE, message = FALSE}
+p1 <- BirthAndFertility |>
   gg_lag(`Total Fertility Rate (TFR)`, geom = 'point') +
   labs(title = "Lag Plot of Total Fertility Rate (TFR)")
-```
-# stronger positive relationships at lags 1 and 2
-
-```{r}
-BirthAndFertility |>
+p2 <- BirthAndFertility |>
   gg_lag(`Total Live-Births`, geom = 'point') +
   labs(title = "Lag Plot of Total Live-Births (TLB)")
+p1 + p2 # placing the plots side by side
 ```
-# stronger positive relationships at lags 1 and 2 as well
 
-# autocorrelation
-```{r}
+The above lag plots for TFR and TLB indicate stronger positive relationships at lags 1 and 2 suggesting that AR(1) and AR(2) models could be appropriate.
+
+\newpage
+```{r page-5, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
   ACF(`Total Fertility Rate (TFR)`, lag_max = 9) |>
   autoplot() +
@@ -84,7 +79,7 @@ BirthAndFertility |>
 # lags 1-9 are significant so more lags should be checked
 # slow decrease in the ACF as the lags increase indicates a trend
 
-```{r}
+```{r, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
   ACF(`Total Live-Births`, lag_max = 9) |>
   ggplot2::autoplot() +
