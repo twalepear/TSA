@@ -69,6 +69,17 @@ p1 + p2 # placing the plots side by side
 
 The above lag plots for TFR and TLB indicate stronger positive relationships at lags 1 and 2 suggesting that AR(1) and AR(2) models could be appropriate.
 
+# linear model for time series data
+TFR_lm <- BirthAndFertility |> model(lm = TSLM(`Total Fertility Rate (TFR)` ~ trend()))
+# summaries
+tidy(TFR_lm)
+glance(TFR_lm)
+
+TLB_lm <- BirthAndFertility |> model(lm = TSLM(`Total Live-Births` ~ trend()))
+# summaries
+tidy(TLB_lm)
+glance(TLB_lm)
+
 \newpage
 ```{r page-5, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
