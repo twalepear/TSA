@@ -81,25 +81,17 @@ tidy(TLB_lm)
 glance(TLB_lm)
 
 \newpage
-```{r page-5, out.width = "70%", fig.align = 'center'}
+```{r page-, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
   ACF(`Total Fertility Rate (TFR)`, lag_max = 9) |>
   autoplot() +
   labs(title = "ACF Plot for Total Fertility Rate (TFR)")
-```
-# lags 1-9 are significant so more lags should be checked
-# slow decrease in the ACF as the lags increase indicates a trend
-
-```{r, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
   ACF(`Total Live-Births`, lag_max = 9) |>
   ggplot2::autoplot() +
   labs(title = "ACF Plot for Total Live-Births (TLB)")
 ```
-# lags 1-6 are significant suggests short-term dependence
-# slow decrease in the ACF as the lags increase indicates a trend
-# as there are more than one large spike outside the dotted bounds, this series is probably not white noise
-
+The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds. This slow decrease indicates the presence of a trend and consistent with a non-stationary series. The absence of a sharp cut-off suggests that an autoregressive (AR) model may be suitable for this series.
 ```{r}
 BirthAndFertility |>
   ACF(`Total Fertility Rate (TFR)`, lag_max = 24) |>
