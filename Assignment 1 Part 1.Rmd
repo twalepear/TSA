@@ -123,7 +123,7 @@ BirthAndFertility |>
 ```
 The estimated lambda for TLB was also found to be below zero but closer to -1, suggesting that a strong transformation may be required. The decreasing trend from 1960 to 2024 appears less prominent in this plot, and there might also be cyclical behaviour; however, the trend should be removed before confirming the presence of any cycles.
 
-# STL decomposition method: trend
+\newpage
 ```{r}
 dcmptfr <- BirthAndFertility |>
   model(stl = STL(`Total Fertility Rate (TFR)`))
@@ -133,6 +133,7 @@ components(dcmptfr) |>
   geom_line(aes(y = trend), colour = "#D55E00") + # trend-cycle component
   labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TFR")
 ```
+The STL decomposition suggests the series follows an additive structure with a clear trend component. 
 # little variability to the raw data, more smooth
 
 ```{r}
