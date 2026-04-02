@@ -165,7 +165,7 @@ BirthAndFertility |>
 The estimated lambda for TLB was also found to be below zero but closer to -1, suggesting that a strong transformation may be required. The decreasing trend from 1960 to 2024 appears less prominent in this plot, and there might also be cyclical behaviour; however, the trend should be removed before confirming the presence of any cycles.
 
 \newpage
-```{r}
+```{r page-13}
 dcmptfr <- BirthAndFertility |>
   model(stl = STL(`Total Fertility Rate (TFR)`))
 components(dcmptfr) |>
@@ -174,10 +174,9 @@ components(dcmptfr) |>
   geom_line(aes(y = trend), colour = "#D55E00") + # trend-cycle component
   labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TFR")
 ```
-The STL decomposition suggests the series follows an additive structure with a clear trend component. 
-# little variability to the raw data, more smooth
 
-```{r}
+\newpage
+```{r page-14}
 dcmptlb <- BirthAndFertility |>
   model(stl = STL(`Total Live-Births`))
 components(dcmptlb) |>
@@ -186,23 +185,17 @@ components(dcmptlb) |>
   geom_line(aes(y = trend), colour = "#D55E00") + # trend-cycle component
   labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TLB")
 ```
-# more variability to the raw data, bigger changes
+The STL decomposition suggests that both the TFR and TLB follow an additive structure with a clear trend component evident with the orange lines. The trend-component follows the TFR raw data smoothly, with little variability whereas the trend-component of TLB shows greater variability and larger fluctuations compared to its raw data.
 
-# STL decomposition
-```{r}
+\newpage
+```{r page-15, out.width = "75%", fig.align = 'center'}
 components(dcmptfr) |> autoplot()
-```
-# decreasing trend as mentioned earlier
-
-```{r}
 components(dcmptlb) |> autoplot()
 ```
-# overall decreasing trend but there was an increase from 1980 with a peak in 1991 before decreasing again
+The STL decompositions for both TFR and TLB show an overall decreasing trend. However, there is a temporary increase beginning around 1980, reaching a broad peak around 1991 before decreasing again. The remainder components for both series display similar behaviour, with noticeable dip around 1986 followed by a spike around 1988.
 
-# the remainder of both decompositions resemble each other with sharp dip around 1986 and spike 1988
-
-# moving average
-```{r}
+\newpage
+```{r page-16}
 BirthAndFertility_MA_TFR <- BirthAndFertility |>
   mutate(`5-MA_TFR` = slider::slide_dbl(`Total Fertility Rate (TFR)`, mean,
                                   .before = 2, .after = 2, .complete = TRUE))
@@ -213,7 +206,8 @@ BirthAndFertility_MA_TFR |>
 ```
 # the original data was already quite smooth so it matches quite closely with the trend-cycle
 
-```{r}
+\newpage
+```{r page-17}
 BirthAndFertility_MA_TLB <- BirthAndFertility |>
   mutate(`5-MA_TLB` = slider::slide_dbl(`Total Live-Births`, mean,
                                   .before = 2, .after = 2, .complete = TRUE))
@@ -224,7 +218,8 @@ BirthAndFertility_MA_TLB |>
 ```
 # can see smooth curve but due to the roughness of the data should increase the average for a smoother curve
 
-```{r}
+\newpage
+```{r page-18}
 BirthAndFertility_MA_TLB7 <- BirthAndFertility |>
   mutate(`7-MA_TLB` = slider::slide_dbl(`Total Live-Births`, mean,
                                   .before = 3, .after = 3, .complete = TRUE))
