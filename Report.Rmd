@@ -1,0 +1,272 @@
+---
+title: "1.2 Final Report"
+author: "Thoa Le (a1847933)"
+output: pdf_document
+---
+
+Data from 1960 to 2024 on Total Live Births (TLB) and Total Fertility Rates (TFR) was pulled from Singapore Department of Statistics (data.gov.sg). The data was then transformed into a tsibble object with three columns: Year, Total Fertility Rates (TFR) and Total Live Births.
+
+```{r, echo = TRUE, warning = FALSE, message = FALSE}
+library(fpp3) # time series analysis package
+library(tsibble) # tsibble objects
+library(lubridate) # for data to work with dates and times
+library(feasts)
+library(latex2exp)
+library(patchwork) # putting 2 plots next to each other
+
+data <- readr::read_csv("BirthsAndFertilityRatesAnnual.csv") # read in the data
+BirthAndFertility <- data |>
+  pivot_longer( # change rows to column
+    cols = `1960`:`2025`,
+    names_to = "Year",
+    values_to = "Value", # naming it to remember that it needs to be values
+    values_transform = list(Value = as.numeric)
+  ) |>
+  filter(DataSeries %in% c("Total Fertility Rate (TFR)", "Total Live-Births")) |>
+  mutate(Year = as.integer(Year)) |>
+  filter(Year != 2025) |> # assignment specified until 2024
+  pivot_wider( # taking TFR & Total Live-Births into 2 separate columns according to year
+  names_from = DataSeries, 
+  values_from = Value
+  )
+BirthAndFertility <- as_tsibble(BirthAndFertility, index = Year) # created a tsibble
+is_tsibble(BirthAndFertility) # checking it is a tsibble
+```
+
+From the exploratory data analysis, the data was visualised to identify patterns and trends over time. Since the data is yearly, classical decomposition and the X-11 method are not applicable and seasonal patterns cannot be detected. Additionally, the socio-economic and political factors influencing fertility are not included. Once the patterns are identified, appropriate models can be selected, fitted, and evaluated for forecasting.
+
+\newpage
+```{r page-2, out.width = "70%", fig.align = 'center'}
+autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
+  labs(title = "Initial Plot of Total Fertility Rate (TFR)")
+autoplot(BirthAndFertility,`Total Live-Births`)+
+  labs(title = "Initial Plot of Total Live-Births")
+```
+
+From the initial plots of TFR and TLB, both series show a long-term decreasing trend over time, with TFR exhibiting a more pronounced decline. A notable change is observed around 1980 to 1990, where both series display a temporary broad peak before continuing their downward trend. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclical behaviour, the trend would need to be removed to confirm this.
+
+\newpage
+```{r page-4, echo = TRUE, warning = FALSE, message = FALSE}
+p1 <- BirthAndFertility |>
+  gg_lag(`Total Fertility Rate (TFR)`, geom = 'point') +
+  labs(title = "Lag Plot of Total Fertility Rate (TFR)")
+p2 <- BirthAndFertility |>
+  gg_lag(`Total Live-Births`, geom = 'point') +
+  labs(title = "Lag Plot of Total Live-Births (TLB)")
+p1 + p2 # placing the plots side by side
+```
+
+The above lag plots for TFR and TLB indicate stronger positive relationships at lags 1 and 2 suggesting that AR(1) and AR(2) models could be appropriate.
+
+The following fitted AR(1) and AR(2) models (orange lines) follow the TFR and TLB (grey lines) but tends to overshoots and underestimate peaks. Residuals were examined and appear to have no pattern; however the ACF plots show multiple spikes outside the significance bounds indicating the residuals are not white noise. This indicates that an ARIMA model, which can account for trend, may be more appropriate.
+
+\newpage
+```{r page-5, out.width = "70%", fig.align = 'center', echo = TRUE, warning = FALSE, message = FALSE}
+TFR_ar <- BirthAndFertility |> model(AR(`Total Fertility Rate (TFR)`, order = 1)) # fits AR model
+TFR_fits <- augment(TFR_ar) # adds columns of data
+ggplot(TFR_fits, aes(x = Year)) +
+  geom_line(aes(y =`Total Fertility Rate (TFR)`), colour = "grey") + # raw data
+  geom_line(aes(y = .fitted), colour = "#D55E00") + # 
+  labs(title = "Plot of AR(1) fitted model (orange) and raw data (grey) for TFR")
+
+TLB_ar <- BirthAndFertility |> model(AR(`Total Live-Births`, order = 1))
+TLB_fits <- augment(TLB_ar)
+ggplot(TLB_fits, aes(x = Year)) +
+  geom_line(aes(y =`Total Live-Births`), colour = "grey") + # raw data
+  geom_line(aes(y = .fitted), colour = "#D55E00") + # 
+  labs(title = "Plot of AR(1) fitted model (orange) and raw data (grey) for TLB")
+```
+
+\newpage
+```{r page-6, out.width = "70%", fig.align = 'center', echo = TRUE, warning = FALSE, message = FALSE}
+TFR_ar2 <- BirthAndFertility |> model(AR(`Total Fertility Rate (TFR)`, order = 2)) # fits AR model
+TFR_fits2 <- augment(TFR_ar2) # adds columns of data
+ggplot(TFR_fits2, aes(x = Year)) +
+  geom_line(aes(y =`Total Fertility Rate (TFR)`), colour = "grey") + # raw data
+  geom_line(aes(y = .fitted), colour = "#D55E00") + # 
+  labs(title = "Plot of AR(2) fitted model (orange) and raw data (grey) for TFR")
+
+TLB_ar2 <- BirthAndFertility |> model(AR(`Total Live-Births`, order = 2))
+TLB_fits2 <- augment(TLB_ar2)
+ggplot(TLB_fits2, aes(x = Year)) +
+  geom_line(aes(y =`Total Live-Births`), colour = "grey") + # raw data
+  geom_line(aes(y = .fitted), colour = "#D55E00") + # 
+  labs(title = "Plot of AR(2) fitted model (orange) and raw data (grey) for TLB")
+```
+\newpage
+```{r page-7, out.width = "85%", fig.align = 'center', echo = TRUE, warning = FALSE, message = FALSE}
+gg_tsresiduals(TFR_ar) + # check residuals
+  labs(title = "AR(1) model Residuals for TFR")
+gg_tsresiduals(TLB_ar) +
+  labs(title = "AR(1) model Residuals for TLB")
+```
+
+\newpage
+```{r page-8, out.width = "85%", fig.align = 'center', echo = TRUE, warning = FALSE, message = FALSE}
+gg_tsresiduals(TFR_ar2) + # check residuals
+  labs(title = "AR(2) model Residuals for TFR")
+gg_tsresiduals(TLB_ar2) +
+  labs(title = "AR(2) model Residuals for TLB")
+```
+
+\newpage
+```{r page-9, out.width = "70%", fig.align = 'center'}
+BirthAndFertility |>
+  ACF(`Total Fertility Rate (TFR)`, lag_max = 9) |>
+  autoplot() +
+  labs(title = "ACF Plot for Total Fertility Rate (TFR)")
+BirthAndFertility |>
+  ACF(`Total Live-Births`, lag_max = 9) |>
+  ggplot2::autoplot() +
+  labs(title = "ACF Plot for Total Live-Births (TLB)")
+```
+The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
+
+The presence of a strong trend and slow decrease confirms that both TFR and TLB are non-stationary series. The absence of a sharp cut-off suggests that differencing or an autoregressive (AR) model may be suitable for this series.
+```{r page-10}
+BirthAndFertility |>
+  ACF(`Total Fertility Rate (TFR)`, lag_max = 24) |>
+  autoplot() +
+  labs(title = "ACF Plot for Total Fertility Rate (TFR)")
+```
+An extended ACF plot for TFR confirms that significant positive autocorrelations persist up to lag 10.
+
+\newpage
+```{r page-13}
+dcmptfr <- BirthAndFertility |>
+  model(stl = STL(`Total Fertility Rate (TFR)`))
+components(dcmptfr) |>
+  as_tsibble() |>
+  autoplot(`Total Fertility Rate (TFR)`, colour = "grey") + # raw data
+  geom_line(aes(y = trend), colour = "#D55E00") + # trend-cycle component
+  labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TFR")
+```
+
+\newpage
+```{r page-14}
+dcmptlb <- BirthAndFertility |>
+  model(stl = STL(`Total Live-Births`))
+components(dcmptlb) |>
+  as_tsibble() |>
+  autoplot(`Total Live-Births`, colour = "grey") + # raw data
+  geom_line(aes(y = trend), colour = "#D55E00") + # trend-cycle component
+  labs(title = "Plot of trend-cycle component (orange) and raw data (grey) for TLB")
+```
+The STL decomposition suggests that both the TFR and TLB follow an additive structure with a clear trend component evident with the orange lines. The trend-component follows the TFR raw data smoothly, with little variability whereas the trend-component of TLB shows greater variability and larger fluctuations compared to its raw data.
+
+\newpage
+```{r page-15, out.width = "75%", fig.align = 'center'}
+components(dcmptfr) |> autoplot()
+components(dcmptlb) |> autoplot()
+```
+The STL decompositions for both TFR and TLB show an overall decreasing trend. However, there is a temporary increase beginning around 1980, reaching a broad peak around 1991 before decreasing again. The remainder components for both series display similar behaviour, with noticeable dip around 1986 followed by a spike around 1988.
+
+\newpage
+```{r page-16}
+BirthAndFertility_MA_TFR <- BirthAndFertility |>
+  mutate(`5-MA_TFR` = slider::slide_dbl(`Total Fertility Rate (TFR)`, mean,
+                                  .before = 2, .after = 2, .complete = TRUE))
+BirthAndFertility_MA_TFR |>
+  autoplot(`Total Fertility Rate (TFR)`) +
+  geom_line(aes(y = `5-MA_TFR`), colour = "#D55E00") +
+  labs(title = "Total Fertility Rate (black) and 5-MA estimate of trend-cycle (orange)")
+```
+The raw TFR series is already relatively smooth, so the 5-moving average closely follows the overall trend-cycle. However, it does fail to capture short-term fluctuations such as the dip around 1983 and spike around 1984.
+
+\newpage
+```{r page-17}
+BirthAndFertility_MA_TLB <- BirthAndFertility |>
+  mutate(`5-MA_TLB` = slider::slide_dbl(`Total Live-Births`, mean,
+                                  .before = 2, .after = 2, .complete = TRUE))
+BirthAndFertility_MA_TLB |>
+  autoplot(`Total Live-Births`) +
+  geom_line(aes(y = `5-MA_TLB`), colour = "#D55E00") +
+  labs(title = "Total Live-Births (black) and 5-MA estimate of trend-cycle (orange)")
+```
+The trend-cycle smooths out the short-term fluctuations in the raw TLB series. Increasing the window size of the current 5-moving average would result in a smoother curve.
+
+\newpage
+```{r page-18}
+BirthAndFertility_MA_TLB7 <- BirthAndFertility |>
+  mutate(`7-MA_TLB` = slider::slide_dbl(`Total Live-Births`, mean,
+                                  .before = 3, .after = 3, .complete = TRUE))
+BirthAndFertility_MA_TLB7 |>
+  autoplot(`Total Live-Births`) +
+  geom_line(aes(y = `7-MA_TLB`), colour = "#D55E00") +
+  labs(title = "Total Live-Births (black) and 7-MA estimate of trend-cycle (orange)")
+```
+Evidently, the 7-moving average produces a smoother curve, at the cost of losing the observations at the ends of the series.
+
+\newpage
+# Research Questions
+Can the ARIMA model accurately forecast the Singapore's Total Live Births (TLB) and Total Fertility Rate (TFR) from 2013 to 2024 given the data from 1960 to 2012, capturing the short-term fluctuations? 
+
+# Statistical Appendix
+The following statistical methods were applied throughout the analysis in the order presented below.
+
+## Autoregressive Model (AR)
+$$
+y_t = c + \phi_1 y_{t-1} + \phi_2 y_{t-2} + \cdots + \phi_p y_{t-p} + \varepsilon_t
+$$
+where:
+
+\( y_t \) is the value at time t
+
+\( \phi_i \) are model parameters
+
+\( \varepsilon_t \) is white noise
+
+Models the current values using its previous values (lags)
+
+## Residuals
+$$
+e_t = y_t - \hat{y}_t
+$$
+\( y_t \) is the actual observed value at time t
+
+\( \hat{y}_t \) is the predicted value at time t
+
+The error which is the difference between the actual observed value and predicted value at time t, used to check the chosen model accounts for all the patterns
+
+## Autocorrelation Function (ACF)
+$$
+\rho_k = \frac{\text{Cov}(y_t, y_{t-k})}{\text{Var}(y_t)}
+$$
+where:
+
+\( \rho_k \) is the autocorrelation at lag \( k \)
+
+Measures the correlation between a series \( y_t \) and lagged values \( y_{t-k} \), which checks for trend, seasonality and whether residuals are white noise
+
+## Box-Cox Transformation
+$$
+y^{(\lambda)} =
+\begin{cases}
+\frac{y^\lambda - 1}{\lambda}, & \lambda \ne 0 \\
+\log(y), & \lambda = 0
+\end{cases}
+$$
+
+\(\lambda\) was estimated using the Guerrero method
+
+## STL Decomposition
+$$
+y_t = T_t + R_t
+$$
+where:
+
+\( T_t \) is the trend component,
+
+\( R_t \) is the remainder
+
+Decomposes time series into trend and remainder components, usually with the seasonality component as well but the data in this analysis is yearly
+
+## Moving Average (MA)
+$$
+MA_k = \frac{1}{k} \sum_{i=-(k-1)/2}^{(k-1)/2} y_{t+i}
+$$
+k is the window size
+
+In this analysis when k = 5, the moving average at time t is calculated using the 2 observations before and 2 observations after t. This process smooths out short-term fluctuations in the series
+
+<https://github.com/twalepear/TSA.git>
