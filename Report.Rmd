@@ -6,7 +6,7 @@ output: pdf_document
 
 Data from 1960 to 2024 on Total Live Births (TLB) and Total Fertility Rates (TFR) was pulled from Singapore Department of Statistics (data.gov.sg). The data was then transformed into a tsibble object with three columns: Year, Total Fertility Rates (TFR) and Total Live Births.
 
-```{r, echo = TRUE, warning = FALSE, message = FALSE}
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
 library(fpp3) # time series analysis package
 library(tsibble) # tsibble objects
 library(lubridate) # for data to work with dates and times
@@ -36,7 +36,7 @@ is_tsibble(BirthAndFertility) # checking it is a tsibble
 From the exploratory data analysis, the data was visualised to identify patterns and trends over time. Since the data is yearly, classical decomposition and the X-11 method are not applicable and seasonal patterns cannot be detected. Additionally, the socio-economic and political factors influencing fertility are not included. Once the patterns are identified, appropriate models can be selected, fitted, and evaluated for forecasting.
 
 \newpage
-```{r page-2, out.width = "70%", fig.align = 'center'}
+```{r page-2, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
   labs(title = "Initial Plot of Total Fertility Rate (TFR)")
 autoplot(BirthAndFertility,`Total Live-Births`)+
@@ -44,6 +44,16 @@ autoplot(BirthAndFertility,`Total Live-Births`)+
 ```
 
 From the initial plots of TFR and TLB, both series show a long-term decreasing trend over time, with TFR exhibiting a more pronounced decline. A notable change is observed around 1980 to 1990, where both series display a temporary broad peak before continuing their downward trend. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclical behaviour, the trend would need to be removed to confirm this.
+
+\newpage
+```{r page-3, echo = FALSE, warning = FALSE, message = FALSE}
+plot(diff(BirthAndFertility$`Total Fertility Rate (TFR)`), type = 'l') +
+  labs(title = "Plot of Total Fertility Rate (TFR)")
+plot(diff(BirthAndFertility$`Total Live-Births`), type = 'l') +
+  labs(title = "Plot of Total Live Births (TLB)")
+```
+
+By using differencing, the plots look like the trend has been removed.
 
 \newpage
 ```{r page-4, echo = TRUE, warning = FALSE, message = FALSE}
