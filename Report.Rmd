@@ -78,6 +78,19 @@ BirthAndFertility |>
 An extended ACF plot for TFR confirms that significant positive autocorrelations persist up to lag 10.
 
 \newpage
+```{r page-6, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+BirthAndFertility |>
+  PACF(`Total Fertility Rate (TFR)`, lag_max = 24) |>
+  autoplot() +
+  labs(title = "PACF Plot for Total Fertility Rate (TFR)")
+BirthAndFertility |>
+  PACF(`Total Live-Births`, lag_max = 24) |>
+  ggplot2::autoplot() +
+  labs(title = "PACF Plot for Total Live-Births (TLB)")
+```
+
+
+\newpage
 # Research Questions
 Can the ARIMA model accurately forecast the Singapore's Total Live Births (TLB) and Total Fertility Rate (TFR) from 2013 to 2024 given the data from 1960 to 2012, capturing the short-term fluctuations? 
 
