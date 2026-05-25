@@ -89,6 +89,29 @@ BirthAndFertility |>
   labs(title = "PACF Plot for Total Live-Births (TLB)")
 ```
 
+\newpage
+```{r page-7, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+BirthAndFertility |>
+  PACF(diff(`Total Fertility Rate (TFR)`, lag_max = 24)) |>
+  autoplot() +
+  labs(title = "PACF Plot for Differenced Total Fertility Rate (TFR)")
+BirthAndFertility |>
+  PACF(diff(`Total Live-Births`, lag_max = 24)) |>
+  ggplot2::autoplot() +
+  labs(title = "PACF Plot for Differenced Total Live-Births (TLB)")
+```
+
+\newpage
+```{r page-8, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+BirthAndFertility |>
+  PACF(diff(`Total Fertility Rate (TFR)`, lag_max = 24)) |>
+  autoplot() +
+  labs(title = "PACF Plot for Differenced Total Fertility Rate (TFR)")
+BirthAndFertility |>
+  PACF(diff(`Total Live-Births`, lag_max = 24)) |>
+  ggplot2::autoplot() +
+  labs(title = "PACF Plot for Differenced Total Live-Births (TLB)")
+```
 
 \newpage
 # Research Questions
