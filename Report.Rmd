@@ -58,39 +58,21 @@ By using differencing, the plots look like the trend has been removed.
 \newpage
 ```{r page-4, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
-  ACF(`Total Fertility Rate (TFR)`, lag_max = 9) |>
+  ACF(diff(`Total Fertility Rate (TFR)`, lag_max = 24)) |>
   autoplot() +
-  labs(title = "ACF Plot for Total Fertility Rate (TFR)")
+  labs(title = "ACF Plot for Differenced Total Fertility Rate (TFR)")
 BirthAndFertility |>
-  ACF(`Total Live-Births`, lag_max = 9) |>
+  ACF(diff(`Total Live-Births`, lag_max = 24)) |>
   ggplot2::autoplot() +
-  labs(title = "ACF Plot for Total Live-Births (TLB)")
+  labs(title = "ACF Plot for Differenced Total Live-Births (TLB)")
 ```
 The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
 
 The presence of a strong trend and slow decrease confirms that both TFR and TLB are non-stationary series. The absence of a sharp cut-off suggests that differencing or an autoregressive (AR) model may be suitable for this series.
-```{r page-10}
-BirthAndFertility |>
-  ACF(`Total Fertility Rate (TFR)`, lag_max = 24) |>
-  autoplot() +
-  labs(title = "ACF Plot for Total Fertility Rate (TFR)")
-```
 An extended ACF plot for TFR confirms that significant positive autocorrelations persist up to lag 10.
 
 \newpage
-```{r page-6, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-BirthAndFertility |>
-  PACF(`Total Fertility Rate (TFR)`, lag_max = 24) |>
-  autoplot() +
-  labs(title = "PACF Plot for Total Fertility Rate (TFR)")
-BirthAndFertility |>
-  PACF(`Total Live-Births`, lag_max = 24) |>
-  ggplot2::autoplot() +
-  labs(title = "PACF Plot for Total Live-Births (TLB)")
-```
-
-\newpage
-```{r page-7, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-5, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
   PACF(diff(`Total Fertility Rate (TFR)`, lag_max = 24)) |>
   autoplot() +
@@ -101,8 +83,10 @@ BirthAndFertility |>
   labs(title = "PACF Plot for Differenced Total Live-Births (TLB)")
 ```
 
+ARIMA (13,1,0)
+
 \newpage
-```{r page-8, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-8 ARIMA, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
   PACF(diff(`Total Fertility Rate (TFR)`, lag_max = 24)) |>
   autoplot() +
