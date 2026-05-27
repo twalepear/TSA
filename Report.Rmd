@@ -69,15 +69,10 @@ An extended ACF plot for TFR confirms that significant positive autocorrelations
 ARIMA (16,1,0)
 
 \newpage
-```{r page-8 ARIMA, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-BirthAndFertility |>
-  PACF(diff(`Total Fertility Rate (TFR)`, lag_max = 24)) |>
-  autoplot() +
-  labs(title = "PACF Plot for Differenced Total Fertility Rate (TFR)")
-BirthAndFertility |>
-  PACF(diff(`Total Live-Births`, lag_max = 24)) |>
-  ggplot2::autoplot() +
-  labs(title = "PACF Plot for Differenced Total Live-Births (TLB)")
+```{r page-4 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRm0 <- BirthAndFertility |>
+  model(ARIMA(`Total Fertility Rate (TFR)` ~ pdq(1,1,0)))
+report(TFRm0) # to see the AIC
 ```
 
 \newpage
@@ -105,6 +100,13 @@ BirthAndFertility |>
 ```
 
 ARIMA (13,1,0)
+
+\newpage
+```{r page-4 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TLBm0 <- BirthAndFertility |>
+  model(ARIMA(`Total Live-Births` ~ pdq(13,1,0)))
+report(TLBm0) # to see the AIC
+```
 
 \newpage
 # Research Questions
