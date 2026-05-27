@@ -30,7 +30,7 @@ BirthAndFertility <- data |>
   values_from = Value
   )
 BirthAndFertility <- as_tsibble(BirthAndFertility, index = Year) # created a tsibble
-is_tsibble(BirthAndFertility) # checking it is a tsibble
+# is_tsibble(BirthAndFertility) # checking it is a tsibble
 ```
 From the exploratory data analysis, the data was visualised to identify patterns and trends over time. Since the data is yearly, classical decomposition and the X-11 method are not applicable and seasonal patterns cannot be detected. Additionally, the socio-economic and political factors influencing fertility are not included. Once the patterns are identified, appropriate models can be selected, fitted, and evaluated for forecasting.
 
@@ -51,15 +51,11 @@ plot(diff(BirthAndFertility$`Total Fertility Rate (TFR)`), type = 'l') +
 By using differencing, the plots look like the trend has been removed.
 
 \newpage
-```{r page-4, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-3 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
-  ACF(diff(`Total Fertility Rate (TFR)`, lag_max = 24))$resid |>
+  ACF(diff(`Total Fertility Rate (TFR)`), lag_max = 40) |>
   autoplot() +
   labs(title = "ACF Plot for Differenced Total Fertility Rate (TFR)")
-BirthAndFertility |>
-  ACF(diff(`Total Live-Births`, lag_max = 24)) |>
-  ggplot2::autoplot() +
-  labs(title = "ACF Plot for Differenced Total Live-Births (TLB)")
 ```
 The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
 
@@ -102,6 +98,14 @@ autoplot(BirthAndFertility,`Total Live-Births`)+
 ```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE}
 plot(diff(BirthAndFertility$`Total Live-Births`), type = 'l') +
   labs(title = "Plot of Total Live Births (TLB)")
+```
+
+\newpage
+```{r page-3 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+BirthAndFertility |>
+  ACF(diff(`Total Live-Births`), lag_max = 40) |>
+  autoplot() +
+  labs(title = "ACF Plot for Differenced Total Live-Births (TLB)")
 ```
 
 \newpage
