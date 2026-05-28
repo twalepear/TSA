@@ -59,27 +59,41 @@ autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
 autoplot(TFR) +
   labs(title = "Initial Plot of Total Fertility Rate (TFR) until 2012")
 ```
-
 From the initial plots of TFR and TLB, both series show a long-term decreasing trend over time, with TFR exhibiting a more pronounced decline. A notable change is observed around 1980 to 1990, where both series display a temporary broad peak before continuing their downward trend. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclical behaviour, the trend would need to be removed to confirm this.
 
-```{r page-1b TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1b TFR 1st diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(TFR$`Total Fertility Rate (TFR)`),
      type = 'l',
      main = "Plot of Differenced Total Fertility Rate (TFR) until 2012")
 unitroot_kpss(diff(TFR$`Total Fertility Rate (TFR)`)) # still not stationary
+BirthAndFertility |>
+  ACF(diff(TFR$`Total Fertility Rate (TFR)`), lag_max = 50) |>
+  autoplot() +
+  labs(title = "ACF Plot for Differenced Total Fertility Rate (TFR)")
+BirthAndFertility |>
+  PACF(diff(TFR$`Total Fertility Rate (TFR)`), lag_max = 50) |>
+  autoplot() +
+  labs(title = "PACF Plot for Differenced Total Fertility Rate (TFR)")
+TFRm1610 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(16,1,0))
+res1610 <- residuals(TFRm1610)
+acf(res1610, lag.max = 50, main = "ACF of Residuals for ARIMA(16,1,0) for TFR")
+pacf(res1610, lag.max = 50, main = "PACF of Residuals for ARIMA(16,1,0) for TFR")
 ```
+
+\newpage
+```{r page-2 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRm0 <- Arima(TFR$`Total Fertility Rate (TFR)`, order = c(16,1,0))
+TFRm0 # to see the AIC
+```
+
 
 By using differencing, the plots look like the trend has been removed.
 
-# KPSS test
-```{r page-1c TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1c TFR 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(diff(TFR$`Total Fertility Rate (TFR)`)),
      type = 'l',
      main = "Plot of Differenced Twice Total Fertility Rate (TFR) until 2012")
 unitroot_kpss(diff(diff(TFR$`Total Fertility Rate (TFR)`))) # now stationary
-```
-\newpage
-```{r page-2 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
   ACF(diff(diff(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
@@ -88,6 +102,11 @@ BirthAndFertility |>
   PACF(diff(diff(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Differenced Total Fertility Rate (TFR)")
+```
+\newpage
+```{r page-2 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRm0 <- Arima(TFR$`Total Fertility Rate (TFR)`, order = c(16,1,0))
+TFRm0 # to see the AIC
 ```
 The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
 
@@ -98,8 +117,7 @@ ARIMA (16,1,0)
 
 \newpage
 ```{r page-3 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRm0 <- Arima(TFR$`Total Fertility Rate (TFR)`, order = c(16,1,0))
-TFRm0 # to see the AIC
+
 ```
 \newpage
 ```{r page-1 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
