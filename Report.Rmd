@@ -31,6 +31,18 @@ BirthAndFertility <- data |>
   )
 BirthAndFertility <- as_tsibble(BirthAndFertility, index = Year) # created a tsibble
 # is_tsibble(BirthAndFertility) # checking it is a tsibble
+
+TFR <- BirthAndFertility |>
+  filter(Year <= 2012) |>
+  select(Year, `Total Fertility Rate (TFR)`) |>
+  as_tsibble(index = Year)
+# is_tsibble(TFR)
+
+TLB <- BirthAndFertility |>
+  filter(Year <= 2012) |>
+  select(Year, `Total Live-Births`) |>
+  as_tsibble(index = Year)
+# is_tsibble(TLB)
 ```
 From the exploratory data analysis, the data was visualised to identify patterns and trends over time. Since the data is yearly, classical decomposition and the X-11 method are not applicable and seasonal patterns cannot be detected. Additionally, the socio-economic and political factors influencing fertility are not included. Once the patterns are identified, appropriate models can be selected, fitted, and evaluated for forecasting.
 
@@ -42,8 +54,7 @@ autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
 
 From the initial plots of TFR and TLB, both series show a long-term decreasing trend over time, with TFR exhibiting a more pronounced decline. A notable change is observed around 1980 to 1990, where both series display a temporary broad peak before continuing their downward trend. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclical behaviour, the trend would need to be removed to confirm this.
 
-\newpage
-```{r page-2 TFR, echo = FALSE, warning = FALSE, message = FALSE}
+```{r page-1b TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(BirthAndFertility$`Total Fertility Rate (TFR)`), type = 'l') +
   labs(title = "Plot of Total Fertility Rate (TFR)")
 ```
@@ -51,7 +62,7 @@ plot(diff(BirthAndFertility$`Total Fertility Rate (TFR)`), type = 'l') +
 By using differencing, the plots look like the trend has been removed.
 
 \newpage
-```{r page-3 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
   ACF(diff(`Total Fertility Rate (TFR)`), lag_max = 40) |>
   autoplot() +
@@ -69,7 +80,7 @@ An extended ACF plot for TFR confirms that significant positive autocorrelations
 ARIMA (16,1,0)
 
 \newpage
-```{r page-4 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-3 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 TFRm0 <- BirthAndFertility |>
   model(ARIMA(`Total Fertility Rate (TFR)` ~ pdq(1,1,0)))
 report(TFRm0) # to see the AIC
@@ -81,14 +92,14 @@ autoplot(BirthAndFertility,`Total Live-Births`)+
   labs(title = "Initial Plot of Total Live-Births")
 ```
 
-\newpage
-```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE}
+
+```{r page-1b TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(BirthAndFertility$`Total Live-Births`), type = 'l') +
   labs(title = "Plot of Total Live Births (TLB)")
 ```
 
 \newpage
-```{r page-3 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
   ACF(diff(`Total Live-Births`), lag_max = 40) |>
   autoplot() +
@@ -102,7 +113,7 @@ BirthAndFertility |>
 ARIMA (13,1,0)
 
 \newpage
-```{r page-4 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-3 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 TLBm0 <- BirthAndFertility |>
   model(ARIMA(`Total Live-Births` ~ pdq(13,1,0)))
 report(TLBm0) # to see the AIC
