@@ -79,20 +79,26 @@ From the initial plots of TFR and TLB, both series show a long-term decreasing t
 plot(diff(TFR$`Total Fertility Rate (TFR)`),
      type = 'l',
      main = "Plot of Differenced Total Fertility Rate (TFR) until 2012")
+unitroot_kpss(diff(TFR$`Total Fertility Rate (TFR)`)) # still not stationary
 ```
 
 By using differencing, the plots look like the trend has been removed.
 
 # KPSS test
-
+```{r page-1c TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+plot(diff(diff(TFR$`Total Fertility Rate (TFR)`)),
+     type = 'l',
+     main = "Plot of Differenced Twice Total Fertility Rate (TFR) until 2012")
+unitroot_kpss(diff(diff(TFR$`Total Fertility Rate (TFR)`))) # now stationary
+```
 \newpage
 ```{r page-2 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
-  ACF(diff(TFR$`Total Fertility Rate (TFR)`), lag_max = 50) |>
+  ACF(diff(diff(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
   labs(title = "ACF Plot for Differenced Total Fertility Rate (TFR)")
 BirthAndFertility |>
-  PACF(diff(TFR$`Total Fertility Rate (TFR)`), lag_max = 50) |>
+  PACF(diff(diff(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Differenced Total Fertility Rate (TFR)")
 ```
@@ -108,7 +114,6 @@ ARIMA (16,1,0)
 TFRm0 <- Arima(TFR$`Total Fertility Rate (TFR)`, order = c(16,1,0))
 TFRm0 # to see the AIC
 ```
-
 \newpage
 ```{r page-1 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 autoplot(BirthAndFertility,`Total Live-Births`)+
