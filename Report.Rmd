@@ -12,7 +12,9 @@ output: pdf_document
 
 # Results
 
+
 # Discussion
+
 
 # Conclusion
 
@@ -27,6 +29,7 @@ library(fpp3) # time series analysis package
 library(tsibble) # tsibble objects
 library(lubridate) # for data to work with dates and times
 library(feasts)
+library(forecast) # for arima
 library(latex2exp)
 library(patchwork) # putting 2 plots next to each other
 
@@ -73,22 +76,23 @@ autoplot(TFR) +
 From the initial plots of TFR and TLB, both series show a long-term decreasing trend over time, with TFR exhibiting a more pronounced decline. A notable change is observed around 1980 to 1990, where both series display a temporary broad peak before continuing their downward trend. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclical behaviour, the trend would need to be removed to confirm this.
 
 ```{r page-1b TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-plot(diff(BirthAndFertility$`Total Fertility Rate (TFR)`), type = 'l') +
-  labs(title = "Plot of Differenced Total Fertility Rate (TFR)")
-plot(diff(TFR$`Total Fertility Rate (TFR)`), type = 'l') +
-  labs(title = "Plot of Differenced Total Fertility Rate (TFR) until 2012")
+plot(diff(TFR$`Total Fertility Rate (TFR)`),
+     type = 'l',
+     main = "Plot of Differenced Total Fertility Rate (TFR) until 2012")
 ```
 
 By using differencing, the plots look like the trend has been removed.
 
+# KPSS test
+
 \newpage
 ```{r page-2 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 BirthAndFertility |>
-  ACF(diff(`Total Fertility Rate (TFR)`), lag_max = 40) |>
+  ACF(diff(TFR$`Total Fertility Rate (TFR)`), lag_max = 50) |>
   autoplot() +
   labs(title = "ACF Plot for Differenced Total Fertility Rate (TFR)")
 BirthAndFertility |>
-  PACF(diff(`Total Fertility Rate (TFR)`), lag_max = 40) |>
+  PACF(diff(TFR$`Total Fertility Rate (TFR)`), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Differenced Total Fertility Rate (TFR)")
 ```
@@ -101,9 +105,8 @@ ARIMA (16,1,0)
 
 \newpage
 ```{r page-3 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRm0 <- BirthAndFertility |>
-  model(ARIMA(`Total Fertility Rate (TFR)` ~ pdq(1,1,0)))
-report(TFRm0) # to see the AIC
+TFRm0 <- Arima(TFR$`Total Fertility Rate (TFR)`, order = c(16,1,0))
+TFRm0 # to see the AIC
 ```
 
 \newpage
