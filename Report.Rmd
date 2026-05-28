@@ -9,17 +9,6 @@ output: pdf_document
 # Introduction
 
 # Methods
-
-# Results
-
-# Discussion
-
-# Conclusion
-
-# References
-
-# Appendices
-
 Data from 1960 to 2024 on Total Live Births (TLB) and Total Fertility Rates (TFR) was pulled from Singapore Department of Statistics (data.gov.sg). The data was then transformed into a tsibble object with three columns: Year, Total Fertility Rates (TFR) and Total Live Births.
 
 ```{r page-0, echo = FALSE, warning = FALSE, message = FALSE}
@@ -138,6 +127,15 @@ TLBm0 <- BirthAndFertility |>
   model(ARIMA(`Total Live-Births` ~ pdq(13,1,0)))
 report(TLBm0) # to see the AIC
 ```
+# Results
+
+# Discussion
+
+# Conclusion
+
+# References
+
+# Appendices
 
 \newpage
 # Research Questions
