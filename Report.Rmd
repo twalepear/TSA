@@ -75,21 +75,32 @@ BirthAndFertility |>
   autoplot() +
   labs(title = "PACF Plot for Differenced Total Fertility Rate (TFR)")
 TFRm1610 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(16,1,0))
+TFRm1610 # AIC=-63.99
 res1610 <- residuals(TFRm1610)
 acf(res1610, lag.max = 50, main = "ACF of Residuals for ARIMA(16,1,0) for TFR")
 pacf(res1610, lag.max = 50, main = "PACF of Residuals for ARIMA(16,1,0) for TFR")
 ```
-
-\newpage
-```{r page-2 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRm0 <- Arima(TFR$`Total Fertility Rate (TFR)`, order = c(16,1,0))
-TFRm0 # to see the AIC
-```
-
-
 By using differencing, the plots look like the trend has been removed.
 
-```{r page-1c TFR 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+\newpage
+```{r page-1c TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRm1511 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(15,1,1))
+TFRm1511 # AIC=-60.26
+res1511 <- residuals(TFRm1511)
+acf(res1511, lag.max = 50, main = "ACF of Residuals for ARIMA(15,1,1) for TFR")
+pacf(res1511, lag.max = 50, main = "PACF of Residuals for ARIMA(15,1,1) for TFR")
+```
+
+\newpage
+```{r page-1d TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRm1411 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(14,1,1))
+TFRm1411 # AIC=-60.26
+res1411 <- residuals(TFRm1411)
+acf(res1411, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,1) for TFR")
+pacf(res1411, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,1) for TFR")
+```
+
+```{r page-1e TFR 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(diff(TFR$`Total Fertility Rate (TFR)`)),
      type = 'l',
      main = "Plot of Differenced Twice Total Fertility Rate (TFR) until 2012")
