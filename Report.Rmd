@@ -93,11 +93,11 @@ pacf(res1511, lag.max = 50, main = "PACF of Residuals for ARIMA(15,1,1) for TFR"
 
 \newpage
 ```{r page-1d TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRm1411 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(14,1,1))
-TFRm1411 # AIC=-60.26
-res1411 <- residuals(TFRm1411)
-acf(res1411, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,1) for TFR")
-pacf(res1411, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,1) for TFR")
+TFRm1412 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(14,1,2))
+TFRm1412 # AIC=-60.26
+res1412 <- residuals(TFRm1412)
+acf(res1412, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,2) for TFR")
+pacf(res1412, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,2) for TFR")
 ```
 
 ```{r page-1e TFR 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
