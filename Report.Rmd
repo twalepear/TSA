@@ -166,25 +166,42 @@ acf(res923, lag.max = 50, main = "ACF of Residuals for ARIMA(9,2,3) for TFR")
 pacf(res923, lag.max = 50, main = "PACF of Residuals for ARIMA(9,2,3) for TFR")
 ```
 
+```{r page-1k TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+plot(log(TFR$`Total Fertility Rate (TFR)`),
+     type = 'l',
+     main = "Plot of Log Transformation for Total Fertility Rate (TFR) until 2012")
+plot(diff(log(TFR$`Total Fertility Rate (TFR)`)),
+     type = 'l',
+     main = "Plot of Differenced Log Transformation for Total Fertility Rate (TFR) until 2012")
+unitroot_kpss(diff(log(TFR$`Total Fertility Rate (TFR)`))) # still not stationary
+BirthAndFertility |>
+  ACF(diff(log(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
+  autoplot() +
+  labs(title = "ACF Plot for Differenced Log Transformation of Total Fertility Rate (TFR)")
+BirthAndFertility |>
+  PACF(diff(log(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
+  autoplot() +
+  labs(title = "PACF Plot for Differenced Log Transformation of Total Fertility Rate (TFR)")
+TFRml1310 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,1,0)) # not a viable model
+TFRml1310 # AIC=-57.55 AICc=-47.72
+resl1310 <- residuals(TFRml1310)
+acf(resl1310, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,0) for TFR with log transformation")
+pacf(resl1310, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,0) for TFR with log transformation")
+```
+
 The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
 
 The presence of a strong trend and slow decrease confirms that both TFR and TLB are non-stationary series. The absence of a sharp cut-off suggests that differencing or an autoregressive (AR) model may be suitable for this series.
 An extended ACF plot for TFR confirms that significant positive autocorrelations persist up to lag 10.
 
-ARIMA (16,1,0)
-
 \newpage
-```{r page-3 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-
-```
-\newpage
-```{r page-1 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 autoplot(BirthAndFertility,`Total Live-Births`)+
   labs(title = "Initial Plot of Total Live-Births")
 ```
 
 
-```{r page-1b TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2b TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(BirthAndFertility$`Total Live-Births`), type = 'l') +
   labs(title = "Plot of Total Live Births (TLB)")
 ```
