@@ -306,18 +306,13 @@ pacf(resb1410, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,0) for TLB
 ```
 
 \newpage
-```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-BirthAndFertility |>
-  ACF(diff(`Total Live-Births`), lag_max = 40) |>
-  autoplot() +
-  labs(title = "ACF Plot for Differenced Total Live-Births (TLB)")
-BirthAndFertility |>
-  PACF(diff(`Total Live-Births`), lag_max = 40) |>
-  autoplot() +
-  labs(title = "PACF Plot for Differenced Total Live-Births (TLB)")
+```{r page-2c TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TLBm1411 <- Arima(TLB$`Total Live-Births`, order=c(14,1,1))
+TLBm1411 # AIC=975.62 AICc=991.17
+resb1411 <- residuals(TLBm1411)
+acf(resb1411, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,1) for TLB")
+pacf(resb1411, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,1) for TLB")
 ```
-
-ARIMA (13,1,0)
 
 \newpage
 ```{r page-3 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
