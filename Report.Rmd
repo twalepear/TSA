@@ -257,6 +257,15 @@ pacf(resl1422, lag.max = 50, main = "PACF of Residuals for ARIMA(14,2,2) for TFR
 
 \newpage
 ```{r page-1r TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRml1222 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(12,2,2))
+TFRml1222 # AIC=-127.34 AICc=-113.62
+resl1222 <- residuals(TFRml1222)
+acf(resl1222, lag.max = 50, main = "ACF of Residuals for ARIMA(12,2,2) for TFR with log transformation")
+pacf(resl1222, lag.max = 50, main = "PACF of Residuals for ARIMA(12,2,2) for TFR with log transformation")
+```
+
+\newpage
+```{r page-1r TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 TFRml1322 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,2,2))
 TFRml1322 # AIC=-132.39 AICc=-116.39
 resl1322 <- residuals(TFRml1322)
