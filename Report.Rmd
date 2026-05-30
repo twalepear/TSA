@@ -238,13 +238,22 @@ acf(resl1520, lag.max = 50, main = "ACF of Residuals for ARIMA(15,2,0) for TFR w
 pacf(resl1520, lag.max = 50, main = "PACF of Residuals for ARIMA(15,2,0) for TFR with log transformation")
 ```
 \newpage
-```{r page-1o TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1421 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(14,2,1))
-TFRml1421 # AIC=-133.67 AICc=-117.67
-resl1421 <- residuals(TFRml1421)
-acf(resl1421, lag.max = 50, main = "ACF of Residuals for ARIMA(14,2,1) for TFR with log transformation")
-pacf(resl1421, lag.max = 50, main = "PACF of Residuals for ARIMA(14,2,1) for TFR with log transformation")
+```{r page-1p TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRml1522 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(15,2,2))
+TFRml1522 # AIC=-135.54 AICc=-114.17
+resl1522 <- residuals(TFRml1522)
+acf(resl1522, lag.max = 50, main = "ACF of Residuals for ARIMA(15,2,2) for TFR with log transformation")
+pacf(resl1522, lag.max = 50, main = "PACF of Residuals for ARIMA(15,2,2) for TFR with log transformation")
 ```
+\newpage
+```{r page-1q TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRml1422 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(14,2,2))
+TFRml1422 # AIC=-130.49 AICc=-111.94
+resl1422 <- residuals(TFRml1522)
+acf(resl1422, lag.max = 50, main = "ACF of Residuals for ARIMA(14,2,2) for TFR with log transformation")
+pacf(resl1422, lag.max = 50, main = "PACF of Residuals for ARIMA(14,2,2) for TFR with log transformation")
+```
+
 The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
 
 The presence of a strong trend and slow decrease confirms that both TFR and TLB are non-stationary series. The absence of a sharp cut-off suggests that differencing or an autoregressive (AR) model may be suitable for this series.
