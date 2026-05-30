@@ -231,11 +231,11 @@ BirthAndFertility |>
   PACF(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Twice Differenced Log Transformation of Total Fertility Rate (TFR)")
-TFRml1310 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,2,0)) # not a viable model
-TFRml1310 # AIC=-131.8 AICc=-120.45
-resl1310 <- residuals(TFRml1310)
-acf(resl1310, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,0) for TFR with log transformation")
-pacf(resl1310, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,0) for TFR with log transformation")
+TFRml1520 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(15,2,0))
+TFRml1520 # AIC=-133.67 AICc=-117.67
+resl1520 <- residuals(TFRml1520)
+acf(resl1520, lag.max = 50, main = "ACF of Residuals for ARIMA(15,2,0) for TFR with log transformation")
+pacf(resl1520, lag.max = 50, main = "PACF of Residuals for ARIMA(15,2,0) for TFR with log transformation")
 ```
 The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
 
