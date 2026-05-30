@@ -158,15 +158,7 @@ pacf(res1023, lag.max = 50, main = "PACF of Residuals for ARIMA(10,2,3) for TFR"
 ```
 
 \newpage
-```{r page-1j TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRm923 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(9,2,3))
-TFRm923 # AIC=-54.69 AICc=-43.02
-res923 <- residuals(TFRm923)
-acf(res923, lag.max = 50, main = "ACF of Residuals for ARIMA(9,2,3) for TFR")
-pacf(res923, lag.max = 50, main = "PACF of Residuals for ARIMA(9,2,3) for TFR")
-```
-\newpage
-```{r page-1k TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1j TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(log(TFR$`Total Fertility Rate (TFR)`),
      type = 'l',
      main = "Plot of Log Transformation for Total Fertility Rate (TFR) until 2012")
@@ -190,21 +182,21 @@ pacf(resl1310, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,0) for TFR
 ```
 
 \newpage
-```{r page-1l TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1313 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,1,3)) # not a viable model
-TFRml1313 # AIC=-131.8 AICc=-120.45
+```{r page-1k TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRml1313 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,1,3))
+TFRml1313 # AIC=-136 AICc=-118
 resl1313 <- residuals(TFRml1313)
 acf(resl1313, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,3) for TFR with log transformation")
 pacf(resl1313, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,3) for TFR with log transformation")
 ```
 
 \newpage
-```{r page-1m TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1114 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(11,1,4)) # not a viable model
-TFRml1114 # AIC=-131.8 AICc=-120.45
-resl1114 <- residuals(TFRml1114)
-acf(resl1114, lag.max = 50, main = "ACF of Residuals for ARIMA(11,1,4) for TFR with log transformation")
-pacf(resl1114, lag.max = 50, main = "PACF of Residuals for ARIMA(11,1,4) for TFR with log transformation")
+```{r page-1l TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRml1214 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(12,1,4))
+TFRml1214 # AIC=-131.83 AICc=-113.83
+resl1214 <- residuals(TFRml1214)
+acf(resl1214, lag.max = 50, main = "ACF of Residuals for ARIMA(12,1,4) for TFR with log transformation")
+pacf(resl1214, lag.max = 50, main = "PACF of Residuals for ARIMA(12,1,4) for TFR with log transformation")
 ```
 
 The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
