@@ -128,6 +128,15 @@ pacf(res1314, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,4) for TFR"
 ```
 
 \newpage
+```{r page-1g TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRm1214 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(12,1,4))
+TFRm1214 # AIC=-54.2
+res1214 <- residuals(TFRm1214)
+acf(res1214, lag.max = 50, main = "ACF of Residuals for ARIMA(12,1,4) for TFR")
+pacf(res1214, lag.max = 50, main = "PACF of Residuals for ARIMA(12,1,4) for TFR")
+```
+
+\newpage
 ```{r page-1e TFR 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(diff(TFR$`Total Fertility Rate (TFR)`)),
      type = 'l',
