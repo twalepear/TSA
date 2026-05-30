@@ -257,15 +257,6 @@ pacf(resl1422, lag.max = 50, main = "PACF of Residuals for ARIMA(14,2,2) for TFR
 
 \newpage
 ```{r page-1r TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1222 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(12,2,2))
-TFRml1222 # AIC=-127.34 AICc=-113.62
-resl1222 <- residuals(TFRml1222)
-acf(resl1222, lag.max = 50, main = "ACF of Residuals for ARIMA(12,2,2) for TFR with log transformation")
-pacf(resl1222, lag.max = 50, main = "PACF of Residuals for ARIMA(12,2,2) for TFR with log transformation")
-```
-
-\newpage
-```{r page-1r TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 TFRml1322 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,2,2))
 TFRml1322 # AIC=-132.39 AICc=-116.39
 resl1322 <- residuals(TFRml1322)
@@ -273,6 +264,14 @@ acf(resl1322, lag.max = 50, main = "ACF of Residuals for ARIMA(13,2,2) for TFR w
 pacf(resl1322, lag.max = 50, main = "PACF of Residuals for ARIMA(13,2,2) for TFR with log transformation")
 ```
 
+\newpage
+```{r page-1s TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRml1222 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(12,2,2))
+TFRml1222 # AIC=-127.34 AICc=-113.62
+resl1222 <- residuals(TFRml1222)
+acf(resl1222, lag.max = 50, main = "ACF of Residuals for ARIMA(12,2,2) for TFR with log transformation")
+pacf(resl1222, lag.max = 50, main = "PACF of Residuals for ARIMA(12,2,2) for TFR with log transformation")
+```
 The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
 
 The presence of a strong trend and slow decrease confirms that both TFR and TLB are non-stationary series. The absence of a sharp cut-off suggests that differencing or an autoregressive (AR) model may be suitable for this series.
@@ -282,12 +281,28 @@ An extended ACF plot for TFR confirms that significant positive autocorrelations
 ```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 autoplot(BirthAndFertility,`Total Live-Births`)+
   labs(title = "Initial Plot of Total Live-Births")
+autoplot(TLB) +
+  labs(title = "Initial Plot of Total Live-Births (TLB) until 2012")
 ```
 
-
 ```{r page-2b TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-plot(diff(BirthAndFertility$`Total Live-Births`), type = 'l') +
-  labs(title = "Plot of Total Live Births (TLB)")
+plot(diff(TLB$`Total Live-Births`),
+     type = 'l',
+     main = "Plot of Differenced Total Live Births (TLB) until 2012")
+unitroot_kpss(diff(TLB$`Total Live-Births`)) # stationary
+BirthAndFertility |>
+  ACF(diff(TLB$`Total Live-Births`), lag_max = 50) |>
+  autoplot() +
+  labs(title = "ACF Plot for Differenced Total Live Births (TLB)")
+BirthAndFertility |>
+  PACF(diff(TLB$`Total Live-Births`), lag_max = 50) |>
+  autoplot() +
+  labs(title = "PACF Plot for Differenced Total Live Births (TLB)")
+TLBm1410 <- Arima(TLB$`Total Live-Births`, order=c(14,1,0))
+TLBm1410 # AIC=975.33 AICc=988.66
+resb1410 <- residuals(TLBm1410)
+acf(resb1410, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,0) for TLB")
+pacf(resb1410, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,0) for TLB")
 ```
 
 \newpage
