@@ -315,11 +315,14 @@ pacf(resb1411, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,1) for TLB
 ```
 
 \newpage
-```{r page-3 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TLBm0 <- BirthAndFertility |>
-  model(ARIMA(`Total Live-Births` ~ pdq(13,1,0)))
-report(TLBm0) # to see the AIC
+```{r page-2d TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TLBm1311 <- Arima(TLB$`Total Live-Births`, order=c(13,1,1))
+TLBm1311 # AIC=974.57 AICc=987.9
+resb1311 <- residuals(TLBm1311)
+acf(resb1311, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,1) for TLB")
+pacf(resb1311, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,1) for TLB")
 ```
+
 # Results
 
 
