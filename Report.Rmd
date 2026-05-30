@@ -123,6 +123,10 @@ BirthAndFertility |>
   PACF(diff(diff(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Twice Differenced Total Fertility Rate (TFR)")
+TFRm1220 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(12,2,0))
+TFRm1220 # AIC=-57.55 AICc=-47.72
+res1220 <- residuals(TFRm1610)
+pacf(res1220, lag.max = 50, main = "PACF of Residuals for ARIMA(12,2,0) for TFR")
 ```
 \newpage
 ```{r page-2 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
