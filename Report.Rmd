@@ -217,6 +217,15 @@ acf(resl1215, lag.max = 50, main = "ACF of Residuals for ARIMA(12,1,5) for TFR w
 pacf(resl1215, lag.max = 50, main = "PACF of Residuals for ARIMA(12,1,5) for TFR with log transformation")
 ```
 
+\newpage
+```{r page-1o TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRml1115 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(11,1,5))
+TFRml1115 # AIC=-130.02 AICc=-109.3
+resl1115 <- residuals(TFRml1115)
+acf(resl1115, lag.max = 50, main = "ACF of Residuals for ARIMA(11,1,5) for TFR with log transformation")
+pacf(resl1115, lag.max = 50, main = "PACF of Residuals for ARIMA(11,1,5) for TFR with log transformation")
+```
+
 The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
 
 The presence of a strong trend and slow decrease confirms that both TFR and TLB are non-stationary series. The absence of a sharp cut-off suggests that differencing or an autoregressive (AR) model may be suitable for this series.
