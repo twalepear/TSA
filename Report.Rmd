@@ -191,11 +191,11 @@ pacf(resl1310, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,0) for TFR
 
 \newpage
 ```{r page-1l TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1311 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,1,1)) # not a viable model
-TFRml1311 # AIC=-131.8 AICc=-120.45
-resl1311 <- residuals(TFRml1311)
-acf(resl1311, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,1) for TFR with log transformation")
-pacf(resl1311, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,1) for TFR with log transformation")
+TFRml1312 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,1,2)) # not a viable model
+TFRml1312 # AIC=-131.8 AICc=-120.45
+resl1312 <- residuals(TFRml1312)
+acf(resl1312, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,2) for TFR with log transformation")
+pacf(resl1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TFR with log transformation")
 ```
 
 The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
