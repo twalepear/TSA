@@ -325,11 +325,11 @@ pacf(resb1311, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,1) for TLB
 
 \newpage
 ```{r page-2e TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TLBm1211 <- Arima(TLB$`Total Live-Births`, order=c(12,1,1))
-TLBm1211 # AIC=974.57 AICc=987.9
-resb1211 <- residuals(TLBm1211)
-acf(resb1211, lag.max = 50, main = "ACF of Residuals for ARIMA(12,1,1) for TLB")
-pacf(resb1211, lag.max = 50, main = "PACF of Residuals for ARIMA(12,1,1) for TLB")
+TLBm1312 <- Arima(TLB$`Total Live-Births`, order=c(13,1,2))
+TLBm1312 # AIC=973.01 AICc=988.56
+resb1312 <- residuals(TLBm1312)
+acf(resb1312, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,2) for TLB")
+pacf(resb1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TLB")
 ```
 
 # Results
