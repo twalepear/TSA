@@ -6,13 +6,16 @@ output: pdf_document
 
 # Abstract
 ```{r echo = FALSE}
+# 2/30 points
 # comprehensively and succinctly summarised research question, analysis, and key findings.
 
 # Statistical results translated into accessible and accurate description for non-scientific audience
 ```
 
-# Introduction
+
+# Introduction and Literature Review
 ```{r echo = FALSE}
+# 4/30 points
 # clear, comprehensive, and highly relevant background information provided for data context
 
 # research question clearly and succinctly stated, well-motivated by EDA, strongly linked to data context (e.g. using previous studies)
@@ -20,6 +23,7 @@ output: pdf_document
 
 # Methods
 ```{r echo = FALSE}
+# 5/30 points
 # comprehensively described and justified modelling process and workflow in succinct manner
 
 # model(s) used are highly appropriate for research question and data with comprehensive justification
@@ -65,16 +69,21 @@ TLB <- BirthAndFertility |>
   as_tsibble(index = Year)
 # is_tsibble(TLB)
 ```
-From the exploratory data analysis, the data was visualised to identify patterns and trends over time. Since the data is yearly, classical decomposition and the X-11 method are not applicable and seasonal patterns cannot be detected. Additionally, the socio-economic and political factors influencing fertility are not included. Once the patterns are identified, appropriate models can be selected, fitted, and evaluated for forecasting.
+
+The TFR was initially plotted to examine the presence of trends, seasonality, and other notable patterns (Figure 1). The subsequent analysis focuses on the period from 1960 to 2012, a second plot was produced for visualisation and modelling purposes (Figure 2). 
+
+There is a long-term decreasing trend over time hence the data was differenced. Viable ARIMA models were found but the KPSS unit root test suggested the data needed to be differenced again where more viable ARIMA models were found. The initial plot decreasing trend suggests a log transformation would be appropriate where more models were found after differencing and twice differencing.
 
 \newpage
 ```{r page-1 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
-  labs(title = "Initial Plot of Total Fertility Rate (TFR)")
+  labs(title = "Figure 1. Initial Plot of Total Fertility Rate (TFR)")
 autoplot(TFR) +
-  labs(title = "Initial Plot of Total Fertility Rate (TFR) until 2012")
+  labs(title = "Figure 2. Initial Plot of Total Fertility Rate (TFR) until 2012")
 ```
-From the initial plots of TFR and TLB, both series show a long-term decreasing trend over time, with TFR exhibiting a more pronounced decline. A notable change is observed around 1980 to 1990, where both series display a temporary broad peak before continuing their downward trend. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclical behaviour, the trend would need to be removed to confirm this.
+Figure 1 show a long-term decreasing trend over time
+
+
 
 ```{r page-1b TFR 1st diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(TFR$`Total Fertility Rate (TFR)`),
@@ -101,7 +110,7 @@ By using differencing, the plots look like the trend has been removed.
 ```{r page-1c TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 TFRm1611 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(16,1,1))
 TFRm1611 # AIC=-62.39 AICc=-41.66
-res1611 <- residuals(TFRm1511)
+res1611 <- residuals(TFRm1611)
 acf(res1611, lag.max = 50, main = "ACF of Residuals for ARIMA(16,1,1) for TFR")
 pacf(res1611, lag.max = 50, main = "PACF of Residuals for ARIMA(16,1,1) for TFR")
 ```
@@ -300,6 +309,8 @@ autoplot(TLB) +
   labs(title = "Initial Plot of Total Live-Births (TLB) until 2012")
 ```
 
+From the initial plots of TFR and TLB, both series show a long-term decreasing trend over time, with TFR exhibiting a more pronounced decline. A notable change is observed around 1980 to 1990, where both series display a temporary broad peak before continuing their downward trend. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclical behaviour, the trend would need to be removed to confirm this.
+
 ```{r page-2b TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(TLB$`Total Live-Births`),
      type = 'l',
@@ -349,6 +360,7 @@ pacf(resb1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TLB
 
 # Results
 ```{r echo = FALSE}
+# 5/30 points
 # flawlessly estimated relevant time series models(s) and/or forecasts in R
 
 # effectively and appropriately used composition of time series methods and advanced modelling for data
@@ -356,8 +368,36 @@ pacf(resb1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TLB
 # critically interpreted and evaluated model fits with appropriate comprehensive use of diagnostics
 ```
 
+| TFR Model | AIC  | AICc |
+|--------|------|------|
+| ARIMA(16,1,0) | -63.99 | -45.99 |
+| ARIMA(16,1,1) | -62.39 | -42.66 |
+| ARIMA(15,1,1) | -60.26 | -42.26 |
+| ARIMA(14,1,3) | -60.99 | -40.26 |
+| ARIMA(12,2,3) | -62.57 | -46.57 |
+| ARIMA(11,2,3) | -52.91 | -39.19 |
+| ARIMA(10,2,3) | -54.69 | -43.02 |
+Log Transformation
+| ARIMA(13,1,3) | -136 | -118 |
+| ARIMA(12,1,4) | -131.83 | -113.83 |
+| ARIMA(13,1,5) | -133.96 | -110.21 |
+| ARIMA(12,1,5) | -130.02 | -109.3 |
+| ARIMA(15,2,0) | -133.67 | -117.67 |
+| ARIMA(15,2,2) | -135.54 | -114.17 |
+| ARIMA(14,2,2) | -130.49 | -111.94 |
+| ARIMA(13,2,2) | -132.39 | -116.39 |
+| ARIMA(12,2,2) | -127.34 | -113.62 |
+
+| TLB Model | AIC  | AICc |
+|--------|------|------|
+| ARIMA(14,1,0) | 975.33 | 988.66 |
+| ARIMA(14,1,1) | 975.62 | 991.17 |
+| ARIMA(13,1,1) | 974.57 | 987.9 |
+| ARIMA(13,1,2) | 973.01 | 988.56 |
+
 # Discussion
 ```{r echo = FALSE}
+# 5/30 points
 # thoroughly integrated limitations of models and processes into statistical conclusions
 
 # comprehensively evaluated impact of model limitations on answering research question
@@ -369,6 +409,7 @@ pacf(resb1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TLB
 ```
 
 ```{r echo = FALSE}
+# report presentation 2/30 points
 # report structured with appropriate length, use of sections and highly professional style
 
 # written with precise, concise, and correct scientific language with flawless grammar and professional tone
@@ -378,6 +419,7 @@ pacf(resb1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TLB
 
 # References
 ```{r echo = FALSE}
+# 5/30 points
 # extension relevant literature reference, all correctly cited and referenced to in the main report
 
 # appendix well presented as a coherent follow up to the main report
