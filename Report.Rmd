@@ -5,10 +5,25 @@ output: pdf_document
 ---
 
 # Abstract
+```{r echo = FALSE}
+# comprehensively and succinctly summarised research question, analysis, and key findings.
+
+# Statistical results translated into accessible and accurate description for non-scientific audience
+```
 
 # Introduction
+```{r echo = FALSE}
+# clear, comprehensive, and highly relevant background information provided for data context
+
+# research question clearly and succinctly stated, well-motivated by EDA, strongly linked to data context (e.g. using previous studies)
+```
 
 # Methods
+```{r echo = FALSE}
+# comprehensively described and justified modelling process and workflow in succinct manner
+
+# model(s) used are highly appropriate for research question and data with comprehensive justification
+```
 Data from 1960 to 2024 on Total Live Births (TLB) and Total Fertility Rates (TFR) was pulled from Singapore Department of Statistics (data.gov.sg). The data was then transformed into a tsibble object with three columns: Year, Total Fertility Rates (TFR) and Total Live Births.
 
 ```{r page-0, echo = FALSE, warning = FALSE, message = FALSE}
@@ -333,16 +348,45 @@ pacf(resb1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TLB
 ```
 
 # Results
+```{r echo = FALSE}
+# flawlessly estimated relevant time series models(s) and/or forecasts in R
 
+# effectively and appropriately used composition of time series methods and advanced modelling for data
+
+# critically interpreted and evaluated model fits with appropriate comprehensive use of diagnostics
+```
 
 # Discussion
+```{r echo = FALSE}
+# thoroughly integrated limitations of models and processes into statistical conclusions
 
+# comprehensively evaluated impact of model limitations on answering research question
+```
 
 # Conclusion
+```{r echo = FALSE}
+# 
+```
+
+```{r echo = FALSE}
+# report structured with appropriate length, use of sections and highly professional style
+
+# written with precise, concise, and correct scientific language with flawless grammar and professional tone
+
+# visualisation presented with professional quality
+```
 
 # References
+```{r echo = FALSE}
+# extension relevant literature reference, all correctly cited and referenced to in the main report
 
-# Appendices
+# appendix well presented as a coherent follow up to the main report
+```
+
+# Appendices / Statisical Appendix
+```{r echo = FALSE}
+# 
+```
 
 \newpage
 # Research Questions
