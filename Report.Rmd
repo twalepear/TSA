@@ -63,11 +63,31 @@ TFR <- BirthAndFertility |>
   as_tsibble(index = Year)
 # is_tsibble(TFR)
 
+TFR_ts <- ts(
+  TFR$`Total Fertility Rate (TFR)`,
+  start = min(TFR$Year),
+  frequency = 1
+)
+
+actualTFR <- BirthAndFertility |>
+  filter(Year %in% 2013:2024) |>
+  pull(`Total Fertility Rate (TFR)`)
+
 TLB <- BirthAndFertility |>
   filter(Year <= 2012) |>
   select(Year, `Total Live-Births`) |>
   as_tsibble(index = Year)
 # is_tsibble(TLB)
+
+TLB_ts <- ts(
+  TLB$`Total Live-Births`,
+  start = min(TLB$Year),
+  frequency = 1
+)
+
+actualTLB <- BirthAndFertility |>
+  filter(Year %in% 2013:2024) |>
+  pull(`Total Live-Births`)
 ```
 
 The TFR was initially plotted to examine the presence of trends, seasonality, and other notable patterns (Figure 1). The subsequent analysis focuses on the period from 1960 to 2012, a second plot was produced for visualisation and modelling purposes (Figure 2). 
@@ -98,17 +118,20 @@ BirthAndFertility |>
   PACF(diff(TFR$`Total Fertility Rate (TFR)`), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Differenced Total Fertility Rate (TFR)")
-TFRm1610 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(16,1,0))
+TFRm1610 <- Arima(TFR_ts, order=c(16,1,0))
 TFRm1610 # AIC=-63.99 AICc=-45.99
 res1610 <- residuals(TFRm1610)
 acf(res1610, lag.max = 50, main = "ACF of Residuals for ARIMA(16,1,0) for TFR")
 pacf(res1610, lag.max = 50, main = "PACF of Residuals for ARIMA(16,1,0) for TFR")
+arima1610 <- forecast(TFRm1610, h = 12)
+pred1610 <- arima1610$mean
+mse1610 <- mean((actualTFR - pred1610)^2)
 ```
 By using differencing, the plots look like the trend has been removed.
 
 \newpage
 ```{r page-1c TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRm1611 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(16,1,1))
+TFRm1611 <- Arima(TFR_ts, order=c(16,1,1))
 TFRm1611 # AIC=-62.39 AICc=-41.66
 res1611 <- residuals(TFRm1611)
 acf(res1611, lag.max = 50, main = "ACF of Residuals for ARIMA(16,1,1) for TFR")
@@ -117,7 +140,7 @@ pacf(res1611, lag.max = 50, main = "PACF of Residuals for ARIMA(16,1,1) for TFR"
 
 \newpage
 ```{r page-1d TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRm1511 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(15,1,1))
+TFRm1511 <- Arima(TFR_ts, order=c(15,1,1))
 TFRm1511 # AIC=-60.26 AICc=-42.26
 res1511 <- residuals(TFRm1511)
 acf(res1511, lag.max = 50, main = "ACF of Residuals for ARIMA(15,1,1) for TFR")
@@ -126,7 +149,7 @@ pacf(res1511, lag.max = 50, main = "PACF of Residuals for ARIMA(15,1,1) for TFR"
 
 \newpage
 ```{r page-1e TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRm1413 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(14,1,3))
+TFRm1413 <- Arima(TFR_ts, order=c(14,1,3))
 TFRm1413 # AIC=-60.99 AICc=-40.26
 res1413 <- residuals(TFRm1413)
 acf(res1413, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,3) for TFR")
@@ -147,7 +170,7 @@ BirthAndFertility |>
   PACF(diff(diff(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Twice Differenced Total Fertility Rate (TFR)")
-TFRm1220 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(12,2,0)) # not a viable model
+TFRm1220 <- Arima(TFR_ts, order=c(12,2,0)) # not a viable model
 TFRm1220 # AIC=-57.55 AICc=-47.72
 res1220 <- residuals(TFRm1220)
 acf(res1220, lag.max = 50, main = "ACF of Residuals for ARIMA(12,2,0) for TFR")
@@ -156,7 +179,7 @@ pacf(res1220, lag.max = 50, main = "PACF of Residuals for ARIMA(12,2,0) for TFR"
 
 \newpage
 ```{r page-1g TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRm1223 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(12,2,3))
+TFRm1223 <- Arima(TFR_ts, order=c(12,2,3))
 TFRm1223 # AIC=-62.57 AICc=-46.57
 res1223 <- residuals(TFRm1223)
 acf(res1223, lag.max = 50, main = "ACF of Residuals for ARIMA(12,2,3) for TFR")
@@ -165,7 +188,7 @@ pacf(res1223, lag.max = 50, main = "PACF of Residuals for ARIMA(12,2,3) for TFR"
 
 \newpage
 ```{r page-1h TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRm1123 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(11,2,3))
+TFRm1123 <- Arima(TFR_ts, order=c(11,2,3))
 TFRm1123 # AIC=-52.91 AICc=-39.19
 res1123 <- residuals(TFRm1123)
 acf(res1123, lag.max = 50, main = "ACF of Residuals for ARIMA(11,2,3) for TFR")
@@ -174,7 +197,7 @@ pacf(res1123, lag.max = 50, main = "PACF of Residuals for ARIMA(11,2,3) for TFR"
 
 \newpage
 ```{r page-1i TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRm1023 <- Arima(TFR$`Total Fertility Rate (TFR)`, order=c(10,2,3))
+TFRm1023 <- Arima(TFR_ts, order=c(10,2,3))
 TFRm1023 # AIC=-54.69 AICc=-43.02
 res1023 <- residuals(TFRm1023)
 acf(res1023, lag.max = 50, main = "ACF of Residuals for ARIMA(10,2,3) for TFR")
@@ -198,7 +221,7 @@ BirthAndFertility |>
   PACF(diff(log(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Differenced Log Transformation of Total Fertility Rate (TFR)")
-TFRml1310 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,1,0)) # not a viable model
+TFRml1310 <- Arima(log(TFR_ts), order=c(13,1,0)) # not a viable model
 TFRml1310 # AIC=-131.8 AICc=-120.45
 resl1310 <- residuals(TFRml1310)
 acf(resl1310, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,0) for TFR with log transformation")
@@ -207,7 +230,7 @@ pacf(resl1310, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,0) for TFR
 
 \newpage
 ```{r page-1k TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1313 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,1,3))
+TFRml1313 <- Arima(log(TFR_ts), order=c(13,1,3))
 TFRml1313 # AIC=-136 AICc=-118
 resl1313 <- residuals(TFRml1313)
 acf(resl1313, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,3) for TFR with log transformation")
@@ -216,7 +239,7 @@ pacf(resl1313, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,3) for TFR
 
 \newpage
 ```{r page-1l TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1214 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(12,1,4))
+TFRml1214 <- Arima(log(TFR_ts), order=c(12,1,4))
 TFRml1214 # AIC=-131.83 AICc=-113.83
 resl1214 <- residuals(TFRml1214)
 acf(resl1214, lag.max = 50, main = "ACF of Residuals for ARIMA(12,1,4) for TFR with log transformation")
@@ -225,7 +248,7 @@ pacf(resl1214, lag.max = 50, main = "PACF of Residuals for ARIMA(12,1,4) for TFR
 
 \newpage
 ```{r page-1m TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1315 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,1,5))
+TFRml1315 <- Arima(log(TFR_ts), order=c(13,1,5))
 TFRml1315 # AIC=-133.96 AICc=-110.21
 resl1315 <- residuals(TFRml1315)
 acf(resl1315, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,5) for TFR with log transformation")
@@ -234,7 +257,7 @@ pacf(resl1315, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,5) for TFR
 
 \newpage
 ```{r page-1n TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1215 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(12,1,5))
+TFRml1215 <- Arima(log(TFR_ts), order=c(12,1,5))
 TFRml1215 # AIC=-130.02 AICc=-109.3
 resl1215 <- residuals(TFRml1215)
 acf(resl1215, lag.max = 50, main = "ACF of Residuals for ARIMA(12,1,5) for TFR with log transformation")
@@ -255,7 +278,7 @@ BirthAndFertility |>
   PACF(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Twice Differenced Log Transformation of Total Fertility Rate (TFR)")
-TFRml1520 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(15,2,0))
+TFRml1520 <- Arima(log(TFR_ts), order=c(15,2,0))
 TFRml1520 # AIC=-133.67 AICc=-117.67
 resl1520 <- residuals(TFRml1520)
 acf(resl1520, lag.max = 50, main = "ACF of Residuals for ARIMA(15,2,0) for TFR with log transformation")
@@ -263,7 +286,7 @@ pacf(resl1520, lag.max = 50, main = "PACF of Residuals for ARIMA(15,2,0) for TFR
 ```
 \newpage
 ```{r page-1p TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1522 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(15,2,2))
+TFRml1522 <- Arima(log(TFR_ts), order=c(15,2,2))
 TFRml1522 # AIC=-135.54 AICc=-114.17
 resl1522 <- residuals(TFRml1522)
 acf(resl1522, lag.max = 50, main = "ACF of Residuals for ARIMA(15,2,2) for TFR with log transformation")
@@ -272,7 +295,7 @@ pacf(resl1522, lag.max = 50, main = "PACF of Residuals for ARIMA(15,2,2) for TFR
 
 \newpage
 ```{r page-1q TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1422 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(14,2,2))
+TFRml1422 <- Arima(log(TFR_ts), order=c(14,2,2))
 TFRml1422 # AIC=-130.49 AICc=-111.94
 resl1422 <- residuals(TFRml1422)
 acf(resl1422, lag.max = 50, main = "ACF of Residuals for ARIMA(14,2,2) for TFR with log transformation")
@@ -281,7 +304,7 @@ pacf(resl1422, lag.max = 50, main = "PACF of Residuals for ARIMA(14,2,2) for TFR
 
 \newpage
 ```{r page-1r TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1322 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(13,2,2))
+TFRml1322 <- Arima(log(TFR_ts), order=c(13,2,2))
 TFRml1322 # AIC=-132.39 AICc=-116.39
 resl1322 <- residuals(TFRml1322)
 acf(resl1322, lag.max = 50, main = "ACF of Residuals for ARIMA(13,2,2) for TFR with log transformation")
@@ -290,7 +313,7 @@ pacf(resl1322, lag.max = 50, main = "PACF of Residuals for ARIMA(13,2,2) for TFR
 
 \newpage
 ```{r page-1s TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRml1222 <- Arima(log(TFR$`Total Fertility Rate (TFR)`), order=c(12,2,2))
+TFRml1222 <- Arima(log(TFR_ts), order=c(12,2,2))
 TFRml1222 # AIC=-127.34 AICc=-113.62
 resl1222 <- residuals(TFRml1222)
 acf(resl1222, lag.max = 50, main = "ACF of Residuals for ARIMA(12,2,2) for TFR with log transformation")
@@ -324,7 +347,7 @@ BirthAndFertility |>
   PACF(diff(TLB$`Total Live-Births`), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Differenced Total Live Births (TLB)")
-TLBm1410 <- Arima(TLB$`Total Live-Births`, order=c(14,1,0))
+TLBm1410 <- Arima(TLB_ts, order=c(14,1,0))
 TLBm1410 # AIC=975.33 AICc=988.66
 resb1410 <- residuals(TLBm1410)
 acf(resb1410, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,0) for TLB")
@@ -333,7 +356,7 @@ pacf(resb1410, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,0) for TLB
 
 \newpage
 ```{r page-2c TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TLBm1411 <- Arima(TLB$`Total Live-Births`, order=c(14,1,1))
+TLBm1411 <- Arima(TLB_ts, order=c(14,1,1))
 TLBm1411 # AIC=975.62 AICc=991.17
 resb1411 <- residuals(TLBm1411)
 acf(resb1411, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,1) for TLB")
@@ -342,7 +365,7 @@ pacf(resb1411, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,1) for TLB
 
 \newpage
 ```{r page-2d TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TLBm1311 <- Arima(TLB$`Total Live-Births`, order=c(13,1,1))
+TLBm1311 <- Arima(TLB_ts, order=c(13,1,1))
 TLBm1311 # AIC=974.57 AICc=987.9
 resb1311 <- residuals(TLBm1311)
 acf(resb1311, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,1) for TLB")
@@ -351,7 +374,7 @@ pacf(resb1311, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,1) for TLB
 
 \newpage
 ```{r page-2e TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TLBm1312 <- Arima(TLB$`Total Live-Births`, order=c(13,1,2))
+TLBm1312 <- Arima(TLB_ts, order=c(13,1,2))
 TLBm1312 # AIC=973.01 AICc=988.56
 resb1312 <- residuals(TLBm1312)
 acf(resb1312, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,2) for TLB")
@@ -368,32 +391,35 @@ pacf(resb1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TLB
 # critically interpreted and evaluated model fits with appropriate comprehensive use of diagnostics
 ```
 
-| TFR Model | AIC  | AICc |
-|--------|------|------|
-| ARIMA(16,1,0) | -63.99 | -45.99 |
-| ARIMA(16,1,1) | -62.39 | -42.66 |
-| ARIMA(15,1,1) | -60.26 | -42.26 |
-| ARIMA(14,1,3) | -60.99 | -40.26 |
-| ARIMA(12,2,3) | -62.57 | -46.57 |
-| ARIMA(11,2,3) | -52.91 | -39.19 |
-| ARIMA(10,2,3) | -54.69 | -43.02 |
-Log Transformation
-| ARIMA(13,1,3) | -136 | -118 |
-| ARIMA(12,1,4) | -131.83 | -113.83 |
-| ARIMA(13,1,5) | -133.96 | -110.21 |
-| ARIMA(12,1,5) | -130.02 | -109.3 |
-| ARIMA(15,2,0) | -133.67 | -117.67 |
-| ARIMA(15,2,2) | -135.54 | -114.17 |
-| ARIMA(14,2,2) | -130.49 | -111.94 |
-| ARIMA(13,2,2) | -132.39 | -116.39 |
-| ARIMA(12,2,2) | -127.34 | -113.62 |
+| TFR Model | AIC  | AICc | MSE |
+|--------|------|------|------| 
+| ARIMA(16,1,0) | -63.99 | -45.99 | 0.04753075 |**
+| ARIMA(16,1,1) | -62.39 | -42.66 |  |
+| ARIMA(15,1,1) | -60.26 | -42.26 |  |
+| ARIMA(14,1,3) | -60.99 | -40.26 |  |
+| ARIMA(12,2,3) | -62.57 | -46.57 |  | **
+| ARIMA(11,2,3) | -52.91 | -39.19 |  |
+| ARIMA(10,2,3) | -54.69 | -43.02 |  |
 
-| TLB Model | AIC  | AICc |
-|--------|------|------|
-| ARIMA(14,1,0) | 975.33 | 988.66 |
-| ARIMA(14,1,1) | 975.62 | 991.17 |
-| ARIMA(13,1,1) | 974.57 | 987.9 |
-| ARIMA(13,1,2) | 973.01 | 988.56 |
+Log Transformation
+| TFR Model | AIC  | AICc | MSE |
+|--------|------|------|------| 
+| ARIMA(13,1,3) | -136 | -118 |  | **
+| ARIMA(12,1,4) | -131.83 | -113.83 |  |
+| ARIMA(13,1,5) | -133.96 | -110.21 |  |
+| ARIMA(12,1,5) | -130.02 | -109.3 |  |
+| ARIMA(15,2,0) | -133.67 | -117.67 |  |
+| ARIMA(15,2,2) | -135.54 | -114.17 |  |
+| ARIMA(14,2,2) | -130.49 | -111.94 |  |
+| ARIMA(13,2,2) | -132.39 | -116.39 |  |
+| ARIMA(12,2,2) | -127.34 | -113.62 |  |
+
+| TLB Model | AIC  | AICc | MSE |
+|--------|------|------|------|
+| ARIMA(14,1,0) | 975.33 | 988.66 |  |
+| ARIMA(14,1,1) | 975.62 | 991.17 |  |
+| ARIMA(13,1,1) | 974.57 | 987.9 |  | **
+| ARIMA(13,1,2) | 973.01 | 988.56 |  | **
 
 # Discussion
 ```{r echo = FALSE}
