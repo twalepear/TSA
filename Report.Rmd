@@ -125,7 +125,7 @@ acf(res1610, lag.max = 50, main = "ACF of Residuals for ARIMA(16,1,0) for TFR")
 pacf(res1610, lag.max = 50, main = "PACF of Residuals for ARIMA(16,1,0) for TFR")
 arima1610 <- forecast(TFRm1610, h = 12)
 pred1610 <- arima1610$mean
-mse1610 <- mean((actualTFR - pred1610)^2)
+mse1610 <- mean((actualTFR - pred1610)^2) # 
 ```
 By using differencing, the plots look like the trend has been removed.
 
@@ -136,6 +136,9 @@ TFRm1611 # AIC=-62.39 AICc=-41.66
 res1611 <- residuals(TFRm1611)
 acf(res1611, lag.max = 50, main = "ACF of Residuals for ARIMA(16,1,1) for TFR")
 pacf(res1611, lag.max = 50, main = "PACF of Residuals for ARIMA(16,1,1) for TFR")
+arima1611 <- forecast(TFRm1611, h = 12)
+pred1611 <- arima1611$mean
+mse1611 <- mean((actualTFR - pred1611)^2) # 0.04783471
 ```
 
 \newpage
@@ -145,6 +148,9 @@ TFRm1511 # AIC=-60.26 AICc=-42.26
 res1511 <- residuals(TFRm1511)
 acf(res1511, lag.max = 50, main = "ACF of Residuals for ARIMA(15,1,1) for TFR")
 pacf(res1511, lag.max = 50, main = "PACF of Residuals for ARIMA(15,1,1) for TFR")
+arima1511 <- forecast(TFRm1511, h = 12)
+pred1511 <- arima1511$mean
+mse1511 <- mean((actualTFR - pred1511)^2) # 0.08431368
 ```
 
 \newpage
@@ -154,6 +160,9 @@ TFRm1413 # AIC=-60.99 AICc=-40.26
 res1413 <- residuals(TFRm1413)
 acf(res1413, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,3) for TFR")
 pacf(res1413, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,3) for TFR")
+arima1413 <- forecast(TFRm1413, h = 12)
+pred1413 <- arima1413$mean
+mse1413 <- mean((actualTFR - pred1413)^2) # 0.01899351
 ```
 
 \newpage
@@ -184,6 +193,9 @@ TFRm1223 # AIC=-62.57 AICc=-46.57
 res1223 <- residuals(TFRm1223)
 acf(res1223, lag.max = 50, main = "ACF of Residuals for ARIMA(12,2,3) for TFR")
 pacf(res1223, lag.max = 50, main = "PACF of Residuals for ARIMA(12,2,3) for TFR")
+arima1223 <- forecast(TFRm1223, h = 12)
+pred1223 <- arima1223$mean
+mse1223 <- mean((actualTFR - pred1223)^2) # 0.01218546
 ```
 
 \newpage
@@ -193,6 +205,9 @@ TFRm1123 # AIC=-52.91 AICc=-39.19
 res1123 <- residuals(TFRm1123)
 acf(res1123, lag.max = 50, main = "ACF of Residuals for ARIMA(11,2,3) for TFR")
 pacf(res1123, lag.max = 50, main = "PACF of Residuals for ARIMA(11,2,3) for TFR")
+arima1123 <- forecast(TFRm1123, h = 12)
+pred1123 <- arima1123$mean
+mse1123 <- mean((actualTFR - pred1123)^2) # 0.05260825
 ```
 
 \newpage
@@ -202,6 +217,9 @@ TFRm1023 # AIC=-54.69 AICc=-43.02
 res1023 <- residuals(TFRm1023)
 acf(res1023, lag.max = 50, main = "ACF of Residuals for ARIMA(10,2,3) for TFR")
 pacf(res1023, lag.max = 50, main = "PACF of Residuals for ARIMA(10,2,3) for TFR")
+arima1023 <- forecast(TFRm1023, h = 12)
+pred1023 <- arima1023$mean
+mse1023 <- mean((actualTFR - pred1023)^2) # 0.05680021
 ```
 
 \newpage
@@ -235,6 +253,9 @@ TFRml1313 # AIC=-136 AICc=-118
 resl1313 <- residuals(TFRml1313)
 acf(resl1313, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,3) for TFR with log transformation")
 pacf(resl1313, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,3) for TFR with log transformation")
+arimal1313 <- forecast(TFRml1313, h = 12)
+predl1313 <- arimal1313$mean
+msel1313 <- mean((actualTFR - predl1313)^2)
 ```
 
 \newpage
@@ -394,12 +415,12 @@ pacf(resb1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TLB
 | TFR Model | AIC  | AICc | MSE |
 |--------|------|------|------| 
 | ARIMA(16,1,0) | -63.99 | -45.99 | 0.04753075 |**
-| ARIMA(16,1,1) | -62.39 | -42.66 |  |
-| ARIMA(15,1,1) | -60.26 | -42.26 |  |
-| ARIMA(14,1,3) | -60.99 | -40.26 |  |
-| ARIMA(12,2,3) | -62.57 | -46.57 |  | **
-| ARIMA(11,2,3) | -52.91 | -39.19 |  |
-| ARIMA(10,2,3) | -54.69 | -43.02 |  |
+| ARIMA(16,1,1) | -62.39 | -42.66 | 0.04783471 |
+| ARIMA(15,1,1) | -60.26 | -42.26 | 0.08431368 |
+| ARIMA(14,1,3) | -60.99 | -40.26 | 0.01899351 |
+| ARIMA(12,2,3) | -62.57 | -46.57 | 0.01218546 | **
+| ARIMA(11,2,3) | -52.91 | -39.19 | 0.05260825 |
+| ARIMA(10,2,3) | -54.69 | -43.02 | 0.05680021 |
 
 Log Transformation
 | TFR Model | AIC  | AICc | MSE |
