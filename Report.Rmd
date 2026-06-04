@@ -125,7 +125,8 @@ acf(res1610, lag.max = 50, main = "ACF of Residuals for ARIMA(16,1,0) for TFR")
 pacf(res1610, lag.max = 50, main = "PACF of Residuals for ARIMA(16,1,0) for TFR")
 arima1610 <- forecast(TFRm1610, h = 12)
 pred1610 <- arima1610$mean
-mse1610 <- mean((actualTFR - pred1610)^2) # 
+mse1610 <- mean((actualTFR - pred1610)^2) # 0.04753075
+abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```
 By using differencing, the plots look like the trend has been removed.
 
@@ -139,6 +140,7 @@ pacf(res1611, lag.max = 50, main = "PACF of Residuals for ARIMA(16,1,1) for TFR"
 arima1611 <- forecast(TFRm1611, h = 12)
 pred1611 <- arima1611$mean
 mse1611 <- mean((actualTFR - pred1611)^2) # 0.04783471
+abs1611 <- mean(abs(actualTFR - pred1611)) # 0.1700046
 ```
 
 \newpage
@@ -151,6 +153,7 @@ pacf(res1511, lag.max = 50, main = "PACF of Residuals for ARIMA(15,1,1) for TFR"
 arima1511 <- forecast(TFRm1511, h = 12)
 pred1511 <- arima1511$mean
 mse1511 <- mean((actualTFR - pred1511)^2) # 0.08431368
+abs1511 <- mean(abs(actualTFR - pred1511)) # 0.223524
 ```
 
 \newpage
@@ -163,6 +166,7 @@ pacf(res1413, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,3) for TFR"
 arima1413 <- forecast(TFRm1413, h = 12)
 pred1413 <- arima1413$mean
 mse1413 <- mean((actualTFR - pred1413)^2) # 0.01899351
+abs1413 <- mean(abs(actualTFR - pred1413)) # 0.09964934
 ```
 
 \newpage
@@ -196,6 +200,7 @@ pacf(res1223, lag.max = 50, main = "PACF of Residuals for ARIMA(12,2,3) for TFR"
 arima1223 <- forecast(TFRm1223, h = 12)
 pred1223 <- arima1223$mean
 mse1223 <- mean((actualTFR - pred1223)^2) # 0.01218546
+abs1223 <- mean(abs(actualTFR - pred1223)) # 0.08274547
 ```
 
 \newpage
@@ -208,6 +213,7 @@ pacf(res1123, lag.max = 50, main = "PACF of Residuals for ARIMA(11,2,3) for TFR"
 arima1123 <- forecast(TFRm1123, h = 12)
 pred1123 <- arima1123$mean
 mse1123 <- mean((actualTFR - pred1123)^2) # 0.05260825
+abs1123 <- mean(abs(actualTFR - pred1123)) # 0.1823268
 ```
 
 \newpage
@@ -220,6 +226,7 @@ pacf(res1023, lag.max = 50, main = "PACF of Residuals for ARIMA(10,2,3) for TFR"
 arima1023 <- forecast(TFRm1023, h = 12)
 pred1023 <- arima1023$mean
 mse1023 <- mean((actualTFR - pred1023)^2) # 0.05680021
+abs1023 <- mean(abs(actualTFR - pred1023)) # 0.1898403
 ```
 
 \newpage
@@ -255,7 +262,8 @@ acf(resl1313, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,3) for TFR w
 pacf(resl1313, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,3) for TFR with log transformation")
 arimal1313 <- forecast(TFRml1313, h = 12)
 predl1313 <- arimal1313$mean
-msel1313 <- mean((actualTFR - predl1313)^2)
+msel1313 <- mean((actualTFR - exp(predl1313))^2) # 0.02602064
+absl1313 <- mean(abs(actualTFR - exp(predl1313))) # 0.121592
 ```
 
 \newpage
@@ -265,6 +273,10 @@ TFRml1214 # AIC=-131.83 AICc=-113.83
 resl1214 <- residuals(TFRml1214)
 acf(resl1214, lag.max = 50, main = "ACF of Residuals for ARIMA(12,1,4) for TFR with log transformation")
 pacf(resl1214, lag.max = 50, main = "PACF of Residuals for ARIMA(12,1,4) for TFR with log transformation")
+arimal1214 <- forecast(TFRml1214, h = 12)
+predl1214 <- arimal1214$mean
+msel1214 <- mean((actualTFR - exp(predl1214))^2) # 0.02101819
+absl1214 <- mean(abs(actualTFR - exp(predl1214))) # 0.1132223
 ```
 
 \newpage
@@ -274,6 +286,10 @@ TFRml1315 # AIC=-133.96 AICc=-110.21
 resl1315 <- residuals(TFRml1315)
 acf(resl1315, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,5) for TFR with log transformation")
 pacf(resl1315, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,5) for TFR with log transformation")
+arimal1315 <- forecast(TFRml1315, h = 12)
+predl1315 <- arimal1315$mean
+msel1315 <- mean((actualTFR - exp(predl1315))^2) # 0.05826379
+absl1315 <- mean(abs(actualTFR - exp(predl1315))) # 0.1840232
 ```
 
 \newpage
@@ -283,6 +299,10 @@ TFRml1215 # AIC=-130.02 AICc=-109.3
 resl1215 <- residuals(TFRml1215)
 acf(resl1215, lag.max = 50, main = "ACF of Residuals for ARIMA(12,1,5) for TFR with log transformation")
 pacf(resl1215, lag.max = 50, main = "PACF of Residuals for ARIMA(12,1,5) for TFR with log transformation")
+arimal1215 <- forecast(TFRml1215, h = 12)
+predl1215 <- arimal1215$mean
+msel1215 <- mean((actualTFR - exp(predl1215))^2) # 0.02172126
+absl1215 <- mean(abs(actualTFR - exp(predl1215))) # 0.1147922
 ```
 
 \newpage
@@ -304,6 +324,10 @@ TFRml1520 # AIC=-133.67 AICc=-117.67
 resl1520 <- residuals(TFRml1520)
 acf(resl1520, lag.max = 50, main = "ACF of Residuals for ARIMA(15,2,0) for TFR with log transformation")
 pacf(resl1520, lag.max = 50, main = "PACF of Residuals for ARIMA(15,2,0) for TFR with log transformation")
+arimal1520 <- forecast(TFRml1520, h = 12)
+predl1520 <- arimal1520$mean
+msel1520 <- mean((actualTFR - exp(predl1520))^2) # 0.01869052
+absl1520 <- mean(abs(actualTFR - exp(predl1520))) # 0.1056717
 ```
 \newpage
 ```{r page-1p TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
@@ -412,30 +436,31 @@ pacf(resb1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TLB
 # critically interpreted and evaluated model fits with appropriate comprehensive use of diagnostics
 ```
 
-| TFR Model | AIC  | AICc | MSE |
-|--------|------|------|------| 
-| ARIMA(16,1,0) | -63.99 | -45.99 | 0.04753075 |**
-| ARIMA(16,1,1) | -62.39 | -42.66 | 0.04783471 |
-| ARIMA(15,1,1) | -60.26 | -42.26 | 0.08431368 |
-| ARIMA(14,1,3) | -60.99 | -40.26 | 0.01899351 |
-| ARIMA(12,2,3) | -62.57 | -46.57 | 0.01218546 | **
-| ARIMA(11,2,3) | -52.91 | -39.19 | 0.05260825 |
-| ARIMA(10,2,3) | -54.69 | -43.02 | 0.05680021 |
+| TFR Model | AIC  | AICc | MSE | MAE |
+|--------|------|------|------|------| 
+| ARIMA(16,1,0) | -63.99 | -45.99 | 0.04753075 | 0.1690442 |**
+| ARIMA(16,1,1) | -62.39 | -42.66 | 0.04783471 | 0.1700046 |
+| ARIMA(15,1,1) | -60.26 | -42.26 | 0.08431368 | 0.223524 |
+| ARIMA(14,1,3) | -60.99 | -40.26 | 0.01899351 | 0.09964934 |
+| ARIMA(12,2,3) | -62.57 | -46.57 | 0.01218546 | 0.08274547 |**
+| ARIMA(11,2,3) | -52.91 | -39.19 | 0.05260825 | 0.1823268 |
+| ARIMA(10,2,3) | -54.69 | -43.02 | 0.05680021 | 0.1898403 |
 
 Log Transformation
-| TFR Model | AIC  | AICc | MSE |
-|--------|------|------|------| 
-| ARIMA(13,1,3) | -136 | -118 |  | **
-| ARIMA(12,1,4) | -131.83 | -113.83 |  |
-| ARIMA(13,1,5) | -133.96 | -110.21 |  |
-| ARIMA(12,1,5) | -130.02 | -109.3 |  |
+
+| TFR Model | AIC  | AICc | MSE | MAE |
+|--------|------|------|------|------| 
+| ARIMA(13,1,3) | -136 | -118 | 0.02602064 | 0.121592 | **
+| ARIMA(12,1,4) | -131.83 | -113.83 | 0.02101819 | 0.1132223 |
+| ARIMA(13,1,5) | -133.96 | -110.21 | 0.05826379 | 0.1840232 |
+| ARIMA(12,1,5) | -130.02 | -109.3 | 0.02172126 | 0.1147922 |
 | ARIMA(15,2,0) | -133.67 | -117.67 |  |
 | ARIMA(15,2,2) | -135.54 | -114.17 |  |
 | ARIMA(14,2,2) | -130.49 | -111.94 |  |
 | ARIMA(13,2,2) | -132.39 | -116.39 |  |
 | ARIMA(12,2,2) | -127.34 | -113.62 |  |
 
-| TLB Model | AIC  | AICc | MSE |
+| TLB Model | AIC  | AICc | MSE | MAE |
 |--------|------|------|------|
 | ARIMA(14,1,0) | 975.33 | 988.66 |  |
 | ARIMA(14,1,1) | 975.62 | 991.17 |  |
