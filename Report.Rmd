@@ -475,7 +475,7 @@ BirthAndFertility |>
   PACF(diff(log(TLB$`Total Live-Births`)), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Differenced Log Transformation of Total Live-Births (TLB)")
-TLBml1510 <- Arima(log(TLB_ts), order=c(15,1,0)) # not a viable model
+TLBml1510 <- Arima(log(TLB_ts), order=c(15,1,0))
 TLBml1510 # AIC=-145.56 AICc=-130.02
 resl1510 <- residuals(TLBml1510)
 acf(resl1510, lag.max = 50, main = "ACF of Residuals for ARIMA(15,1,0) for TLB with log transformation")
@@ -484,6 +484,31 @@ arimal1510 <- forecast(TLBml1510, h = 12)
 predl1510 <- arimal1510$mean
 msel1510 <- mean((actualTFR - exp(predl1510))^2) # 2239721240
 absl1510 <- mean(abs(actualTFR - exp(predl1510))) # 47245.34
+```
+\newpage
+```{r page-2g TLB log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TLBml1511 <- Arima(log(TLB_ts), order=c(15,1,1))
+TLBml1511 # AIC=-145.43 AICc=-127.43
+resl1511 <- residuals(TLBml1511)
+acf(resl1511, lag.max = 50, main = "ACF of Residuals for ARIMA(15,1,1) for TLB with log transformation")
+pacf(resl1511, lag.max = 50, main = "PACF of Residuals for ARIMA(15,1,1) for TLB with log transformation")
+arimal1511 <- forecast(TLBml1511, h = 12)
+predl1511 <- arimal1511$mean
+msel1511 <- mean((actualTFR - exp(predl1511))^2) # 2173041601
+absl1511 <- mean(abs(actualTFR - exp(predl1511))) # 46542.86
+```
+
+\newpage
+```{r page-2h TLB log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TLBml1411 <- Arima(log(TLB_ts), order=c(14,1,1))
+TLBml1411 # AIC=-140.56 AICc=-125.02
+resl1411 <- residuals(TLBml1411)
+acf(resl1411, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,1) for TLB with log transformation")
+pacf(resl1411, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,1) for TLB with log transformation")
+arimal1411 <- forecast(TLBml1411, h = 12)
+predl1411 <- arimal1411$mean
+msel1411 <- mean((actualTFR - exp(predl1411))^2) # 2173041601
+absl1411 <- mean(abs(actualTFR - exp(predl1411))) # 46542.86
 ```
 
 # Results
@@ -530,7 +555,7 @@ absl1510 <- mean(abs(actualTFR - exp(predl1510))) # 47245.34
 | Log Transformed TLB Model | AIC  | AICc | MSE | MAE |
 |--------|------|------|------|------| 
 | ARIMA(15,1,0) | -145.56 | -130.02 | 2239721240 | 47245.34 | **
-| ARIMA(12,1,4) | -131.83 | -113.83 | 0.02101819 | 0.1132223 |
+| ARIMA(15,1,1) | -145.43 | -127.43 | 2173041601 | 46542.86 |
 | ARIMA(13,1,5) | -133.96 | -110.21 | 0.05826379 | 0.1840232 |
 | ARIMA(12,1,5) | -130.02 | -109.3 | 0.02172126 | 0.1147922 |
 | ARIMA(15,2,0) | -133.67 | -117.67 | 0.01869052 | 0.1056717 |
