@@ -511,6 +511,20 @@ msel1411 <- mean((actualTFR - exp(predl1411))^2) # 2173041601
 absl1411 <- mean(abs(actualTFR - exp(predl1411))) # 46542.86
 ```
 
+\newpage
+```{r page-2i TLB log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TLBml1311 <- Arima(log(TLB_ts), order=c(13,1,1))
+TLBml1311 # AIC=-141.45 AICc=-128.11
+resl1311 <- residuals(TLBml1311)
+acf(resl1311, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,1) for TLB with log transformation")
+pacf(resl1311, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,1) for TLB with log transformation")
+arimal1311 <- forecast(TLBml1311, h = 12)
+predl1311 <- arimal1311$mean
+msel1311 <- mean((actualTFR - exp(predl1311))^2) # 2200303964
+absl1311 <- mean(abs(actualTFR - exp(predl1311))) # 46836.59
+```
+
+\newpage
 # Results
 ```{r echo = FALSE}
 # 5/30 points
@@ -556,8 +570,8 @@ absl1411 <- mean(abs(actualTFR - exp(predl1411))) # 46542.86
 |--------|------|------|------|------| 
 | ARIMA(15,1,0) | -145.56 | -130.02 | 2239721240 | 47245.34 | **
 | ARIMA(15,1,1) | -145.43 | -127.43 | 2173041601 | 46542.86 |
-| ARIMA(13,1,5) | -133.96 | -110.21 | 0.05826379 | 0.1840232 |
-| ARIMA(12,1,5) | -130.02 | -109.3 | 0.02172126 | 0.1147922 |
+| ARIMA(14,1,1) | -140.56 | -125.02 | 2211919788 | 46958.53 |
+| ARIMA(13,1,1) | -141.45 | -128.11 | 2200303964 | 46836.59 |
 | ARIMA(15,2,0) | -133.67 | -117.67 | 0.01869052 | 0.1056717 |
 
 # Discussion
