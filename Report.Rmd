@@ -1,6 +1,6 @@
 ---
-title: "1.2 Final Report"
-author: "Thoa Le (a1847933)"
+title: "Final Report"
+author: "Thoa Thanh Thi Le"
 output: pdf_document
 ---
 
@@ -20,6 +20,10 @@ output: pdf_document
 
 # research question clearly and succinctly stated, well-motivated by EDA, strongly linked to data context (e.g. using previous studies)
 ```
+
+
+
+This report is structured as follows
 
 # Methods
 ```{r echo = FALSE}
@@ -616,6 +620,8 @@ absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 
 # appendix well presented as a coherent follow up to the main report
 ```
+
+Shair, S.N., Shaadan, N., Amirudin, N.A.B.M., & A’kashalf, N.A.M., 2024. Predictions of Malaysia Age-Specific Fertility Rates using the Lee-Carter and the Functional Data Approaches, AIUB Journal of Science and Engineering, 23(1), 71-78, DOI: 10.53799/ajse.v23i1.1024.
 
 # Appendices / Statisical Appendix
 ```{r echo = FALSE}
