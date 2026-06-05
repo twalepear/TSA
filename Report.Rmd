@@ -621,7 +621,12 @@ absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 # appendix well presented as a coherent follow up to the main report
 ```
 
-Shair, S.N., Shaadan, N., Amirudin, N.A.B.M., & A’kashalf, N.A.M., 2024. Predictions of Malaysia Age-Specific Fertility Rates using the Lee-Carter and the Functional Data Approaches, AIUB Journal of Science and Engineering, 23(1), 71-78, DOI: 10.53799/ajse.v23i1.1024.
+Chen, M., Yip, P.S.F. & Yap, M.T. (2018). Identifying the most Influential Groups in Determining Singapore’s Fertility. *Journal of Social Policy*, 47(1), 139-160. doi:10.1017/S0047279417000241.
+
+Shair, S.N., Shaadan, N., Amirudin, N.A.B.M., & A’kashalf, N.A.M. (2024). Predictions of Malaysia Age-Specific Fertility Rates using the Lee-Carter and the Functional Data Approaches. *AIUB Journal of Science and Engineering*, 23(1), 71-78. doi: 10.53799/ajse.v23i1.1024.
+
+Vanella, P. (2016). The Total Fertility Rate in Germany until 2040 – A Stochastic Principal Components Projection based on Age-specific Fertility Rates. *Hannover Economic Papers
+(HEP)*, 579. https://hdl.handle.net/10419/155634
 
 # Appendices / Statisical Appendix
 ```{r echo = FALSE}
