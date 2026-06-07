@@ -630,11 +630,20 @@ Chen, M., Yip, P.S.F. & Yap, M.T. (2018). Identifying the most Influential Group
 # (Shair et al. 2024)
 ```
 Shair, S.N., Shaadan, N., Amirudin, N.A.B.M., & A’kashalf, N.A.M. (2024). Predictions of Malaysia Age-Specific Fertility Rates using the Lee-Carter and the Functional Data Approaches. *AIUB Journal of Science and Engineering*, 23(1), 71-78. doi: 10.53799/ajse.v23i1.1024.
+
+Tan, J. (2024). Using Decomposed Total Fertility Rate (TFR) to Understand the Drivers for the Decline of TFR in Singapore. *Statistics Singapore Newsletter: Issue 1, 2024*, Household Income and Population Division, Singapore Department of Statistics. https://www.singstat.gov.sg/files/fc3d9271-e877-4a5c-a197-e244fddd80fb.pdf
+
 ```{r echo = FALSE}
 # (Vanella 2024)
 ```
 Vanella, P. (2016). The Total Fertility Rate in Germany until 2040 – A Stochastic Principal Components Projection based on Age-specific Fertility Rates. *Hannover Economic Papers
 (HEP)*, 579. https://hdl.handle.net/10419/155634
+
+Wilmoth, J., Menozzi, C. & Bassarsky, L. (2022). *Why population growth matters for sustainable development* (Policy Brief No. 130), United Nations Department of Economic and Social Affairs, Population Division.  https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/undesa_pd_2022_policy_brief_population_growth.pdf
+
+World Health Organization. *Total fertility rate (per woman)*. Accessed June 7, 2026, from https://www.who.int/data/gho/indicator-metadata-registry/imr-details/123
+
+
 
 # Appendices / Statisical Appendix
 ```{r echo = FALSE}
