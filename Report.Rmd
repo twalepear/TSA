@@ -23,6 +23,8 @@ output: pdf_document
 
 
 
+Total fertility rates are key population indicators that are often monitored (Chen et al. 2018; Shair et al. 2024; Vanella 2024), and Singapore's resident total fertility rate has dropped below the replacement level required for a generation to replace itself (Tan, 2024; Wilmoth et al. 2022).
+
 This report is structured as follows
 
 # Methods
@@ -639,11 +641,13 @@ Tan, J. (2024). Using Decomposed Total Fertility Rate (TFR) to Understand the Dr
 Vanella, P. (2016). The Total Fertility Rate in Germany until 2040 – A Stochastic Principal Components Projection based on Age-specific Fertility Rates. *Hannover Economic Papers
 (HEP)*, 579. https://hdl.handle.net/10419/155634
 
+```{r echo = FALSE}
+# (Wilmoth et al. 2022)
+```
+
 Wilmoth, J., Menozzi, C. & Bassarsky, L. (2022). *Why population growth matters for sustainable development* (Policy Brief No. 130), United Nations Department of Economic and Social Affairs, Population Division.  https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/undesa_pd_2022_policy_brief_population_growth.pdf
 
 World Health Organization. *Total fertility rate (per woman)*. Accessed June 7, 2026, from https://www.who.int/data/gho/indicator-metadata-registry/imr-details/123
-
-
 
 # Appendices / Statisical Appendix
 ```{r echo = FALSE}
