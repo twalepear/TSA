@@ -21,9 +21,9 @@ output: pdf_document
 # research question clearly and succinctly stated, well-motivated by EDA, strongly linked to data context (e.g. using previous studies)
 ```
 
+Total fertility rates (TFRs) are key population indicators that are widely monitored because they influence age structure and population growth (Wilmoth et al.2022; World Health Organisation). Globally, fertility rates have declined over recent decades (Chen et al. 2018; Shair et al. 2024; Vanella 2024). In Singapore, the total fertility rate has dropped below the replacement level required for a population to replace itself across generations (Jones & Hamid 2015; Tan, 2024; Wilmoth et al. 2022). Therefore, forecasting TFR and total live births (TLB) may provide insight into future fertility patterns and population change in Singapore.
 
-
-Total fertility rates are key population indicators that are often monitored (Chen et al. 2018; Shair et al. 2024; Vanella 2024), and Singapore's resident total fertility rate has dropped below the replacement level required for a generation to replace itself (Tan, 2024; Wilmoth et al. 2022).
+Furthermore, cultural preferences associated with the Lunar zodiac may contribute to the cyclical patterns in TFR and TLB, with increases observed during Dragon years (1964, 1976, 1988, 2000, 2012 and 2024), which are considered especially auspicious years (Goodkind 1996; Jones & Hamid 2015).
 
 This report is structured as follows
 
@@ -628,6 +628,11 @@ absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 # (Chen et al. 2018)
 ```
 Chen, M., Yip, P.S.F. & Yap, M.T. (2018). Identifying the most Influential Groups in Determining Singapore’s Fertility. *Journal of Social Policy*, 47(1), 139-160. doi:10.1017/S0047279417000241.
+
+Goodkind, D. (1996). Chinese Lunar Birth Timing in Singapore: New Concerns for Child Quality amidst Multicultural Modernity. *Journal of Marriage and Family*, 58(3), 784-795. https://doi.org/10.2307/353736
+
+Jones, G.W. & Hamid, W. (2015). Singapore's Pro-natalist Policies: To What Extend Have They Worked? *Low and Lower Fertility: Variations across Developed Countries*, 1, 33-61. Springer. https://doi.org/10.1007/978-3-319-21482-5_3
+
 ```{r echo = FALSE}
 # (Shair et al. 2024)
 ```
