@@ -12,7 +12,6 @@ output: pdf_document
 # Statistical results translated into accessible and accurate description for non-scientific audience
 ```
 
-
 # 2. Introduction
 ```{r echo = FALSE}
 # 4/30 points Introduction and Literature Review
@@ -21,15 +20,15 @@ output: pdf_document
 # research question clearly and succinctly stated, well-motivated by EDA, strongly linked to data context (e.g. using previous studies)
 ```
 
-Total fertility rates (TFRs) are key population indicators that are widely monitored because they influence age structure and population growth (Wilmoth et al.2022; World Health Organisation). Globally, fertility rates have declined over recent decades (Chen et al. 2018; Shair et al. 2024; Vanella 2024). In Singapore, the total fertility rate has dropped below the replacement level required for a population to replace itself across generations (Jones & Hamid 2015; Tan, 2024; Wilmoth et al. 2022). Therefore, forecasting TFR and total live births (TLB) may provide insight into future fertility patterns and population change in Singapore.
+Total fertility rates (TFRs) are key population indicators that are widely monitored because they influence age structure and population growth (Wilmoth et al.2022; World Health Organisation). Globally, fertility rates have declined over recent decades (Chen et al. 2018; Shair et al. 2024; Vanella 2024). In Singapore, the total fertility rate has dropped below the replacement level required for a population to replace itself across generations (Jones & Hamid 2015; Tan, 2024; Wilmoth et al. 2022). Therefore, forecasting TFR and total live births (TLB) may provide insight into future fertility patterns and population change in Singapore. Preliminary exploratory data analysis indicated a long-term decline in TFR and TLB with periodic fluctuations, motivating the use of forecasting models capable of capturing these patterns.
 
-Data from 1960 to 2024 on TLB and TFR was pulled from Singapore Department of Statistics (2023). The research question addressed in this report is: Can ARIMA model can accurately forecast Singapore's TLB and TFR while capturing the short-term fluctuations?
+Data from 1960 to 2024 on TLB and TFR were obtained from the Singapore Department of Statistics (2023). The research question addressed in this report is: Can ARIMA models accurately forecast Singapore's TLB and TFR while capturing short-term fluctuations?
 
-This report is structured as follows. Part 3 ... Part 4
+This report is structured as follows. Part 3 describes the fertility decline in Singapore, Part 4
 
 # 3. Literature Review
 
-Around 1965, Singapore introduced policies aimed at reducing population growth, which contributed to subsequent declines in fertility rates (Chen et al. 2018; Goodkind 1996; Singh et al. 1988; Vanella 2024). Despite this long-term decline, there may be cyclical patterns in TFR and TLB. These fluctuations may be associated with cultural preferences surrounding Lunar zodiac Dragon years (1964, 1976, 1988, 2000, 2012 and 2024), which are considered especially auspicious years and have been associated with higher fertility rates and live births (Goodkind 1996; Jones & Hamid 2015). Forecasting such series therefore requires models that can capture both long-term trends and short-term variation. Among the various models for time series forecasting, ARIMA models are particularly flexible because they allow selection from a broad class of models rather than imposing a single model form on every time series (Kolambe & Arora 2024; Newbold 1983).
+Around 1965, Singapore introduced policies aimed at reducing population growth, which contributed to subsequent declines in fertility rates (Chen et al. 2018; Goodkind 1996; Singh et al. 1988; Vanella 2024). Despite this long-term decline, there may be cyclical patterns in TFR and TLB. These fluctuations may be associated with cultural preferences surrounding Lunar zodiac Dragon years (1964, 1976, 1988, 2000, 2012 and 2024), which are considered especially auspicious years and have been associated with higher fertility rates and live births (Goodkind 1996; Jones & Hamid 2015). Forecasting such series therefore requires models that can capture both long-term trends and short-term variation. Among the various models for time series forecasting, ARIMA models are particularly flexible because they allow selection from a broad class of models rather than imposing a single model form on every time series (Kolambe & Arora 2024; Newbold 1983). Consequently, ARIMA models were selected as the forecasting approach for Singapore's TFR and TLB.
 
 # Methods
 ```{r echo = FALSE}
@@ -39,7 +38,7 @@ Around 1965, Singapore introduced policies aimed at reducing population growth, 
 # model(s) used are highly appropriate for research question and data with comprehensive justification
 ```
 
-The data was then transformed into a tsibble object with three columns: Year, Total Fertility Rates (TFR) and Total Live Births.
+For both TFR and TLB, an identical modelling workflow was applied. The analysis focused on the period from 1960-2012 for model fitting, with observations 2013-2024 reserved for evaluating forecast accuracy. Initial plots were used to examine the presence of trends, seasonality, and other notable patterns, which indicated a long-term decreasing trend in both series. Several transformations were considered including logarithmic transformation and first- and second-order differencing. Stationarity was assessed using the KPSS test. For each transformed series, autocorrelation (ACF) and partial autocorrelation (PACF) plots were used to find candidate ARIMA models. The candidate ARIMA models were then fitted and the residual ACF and PACF were examined to assess whether the residuals resembled white noise. Forecast accuracy was evaluated using mean square error (MSE) and mean absolute error (MAE) while model selection was guided by Akaike's Information Criterion (AIC) and the corrected Akaike's Information Criterion (AICc). This procedure was applied consistently to both series to ensure comparability of results.
 
 ```{r page-0, echo = FALSE, warning = FALSE, message = FALSE}
 library(fpp3) # time series analysis package
@@ -101,10 +100,6 @@ actualTLB <- BirthAndFertility |>
   pull(`Total Live-Births`)
 ```
 
-The TFR was initially plotted to examine the presence of trends, seasonality, and other notable patterns (Figure 1). The subsequent analysis focuses on the period from 1960 to 2012, a second plot was produced for visualisation and modelling purposes (Figure 2). 
-
-There is a long-term decreasing trend over time hence the data was differenced. Viable ARIMA models were found but the KPSS unit root test suggested the data needed to be differenced again where more viable ARIMA models were found. The initial plot decreasing trend suggests a log transformation would be appropriate where more models were found after differencing and twice differencing.
-
 \newpage
 ```{r page-1 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
@@ -136,8 +131,6 @@ pred1610 <- arima1610$mean
 mse1610 <- mean((actualTFR - pred1610)^2) # 0.04753075
 abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```
-By using differencing, the plots look like the trend has been removed.
-
 \newpage
 ```{r page-1c TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 # TFRm1611 <- Arima(TFR_ts, order=c(16,1,1))
@@ -395,10 +388,9 @@ An extended ACF plot for TFR confirms that significant positive autocorrelations
 
 \newpage
 ```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-autoplot(BirthAndFertility,`Total Live-Births`)+
+autoplot(BirthAndFertility,`Total Live-Births`) +
+  geom_vline(xintercept = 2012, colour = "red") +
   labs(title = "Initial Plot of Total Live-Births")
-autoplot(TLB) +
-  labs(title = "Initial Plot of Total Live-Births (TLB) until 2012")
 ```
 
 From the initial plots of TFR and TLB, both series show a long-term decreasing trend over time, with TFR exhibiting a more pronounced decline. A notable change is observed around 1980 to 1990, where both series display a temporary broad peak before continuing their downward trend. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclical behaviour, the trend would need to be removed to confirm this.
