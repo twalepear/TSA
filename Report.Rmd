@@ -19,27 +19,170 @@ output: pdf_document
 
 # research question clearly and succinctly stated, well-motivated by EDA, strongly linked to data context (e.g. using previous studies)
 ```
-
 Total fertility rates (TFRs) are key population indicators that are widely monitored because they influence age structure and population growth (Wilmoth et al.2022; World Health Organisation). Globally, fertility rates have declined over recent decades (Chen et al. 2018; Shair et al. 2024; Vanella 2024). In Singapore, the total fertility rate has dropped below the replacement level required for a population to replace itself across generations (Jones & Hamid 2015; Tan, 2024; Wilmoth et al. 2022). Therefore, forecasting TFR and total live births (TLB) may provide insight into future fertility patterns and population change in Singapore. Preliminary exploratory data analysis indicated a long-term decline in TFR and TLB with periodic fluctuations, motivating the use of forecasting models capable of capturing these patterns.
 
 Data from 1960 to 2024 on TLB and TFR were obtained from the Singapore Department of Statistics (2023). The research question addressed in this report is: Can ARIMA models accurately forecast Singapore's TLB and TFR while capturing short-term fluctuations?
 
-This report is structured as follows. Part 3 describes the fertility decline in Singapore, Part 4
+This report is structured as follows. Part 3 describes the fertility decline in Singapore, Part 4 describes the process and workflow of obtaining viable ARIMA models, 
 
 # 3. Literature Review
 
 Around 1965, Singapore introduced policies aimed at reducing population growth, which contributed to subsequent declines in fertility rates (Chen et al. 2018; Goodkind 1996; Singh et al. 1988; Vanella 2024). Despite this long-term decline, there may be cyclical patterns in TFR and TLB. These fluctuations may be associated with cultural preferences surrounding Lunar zodiac Dragon years (1964, 1976, 1988, 2000, 2012 and 2024), which are considered especially auspicious years and have been associated with higher fertility rates and live births (Goodkind 1996; Jones & Hamid 2015). Forecasting such series therefore requires models that can capture both long-term trends and short-term variation. Among the various models for time series forecasting, ARIMA models are particularly flexible because they allow selection from a broad class of models rather than imposing a single model form on every time series (Kolambe & Arora 2024; Newbold 1983). Consequently, ARIMA models were selected as the forecasting approach for Singapore's TFR and TLB.
 
-# Methods
+# 4. Methods
 ```{r echo = FALSE}
 # 5/30 points
 # comprehensively described and justified modelling process and workflow in succinct manner
 
 # model(s) used are highly appropriate for research question and data with comprehensive justification
 ```
-
 For both TFR and TLB, an identical modelling workflow was applied. The analysis focused on the period from 1960-2012 for model fitting, with observations 2013-2024 reserved for evaluating forecast accuracy. Initial plots were used to examine the presence of trends, seasonality, and other notable patterns, which indicated a long-term decreasing trend in both series. Several transformations were considered including logarithmic transformation and first- and second-order differencing. Stationarity was assessed using the KPSS test. For each transformed series, autocorrelation (ACF) and partial autocorrelation (PACF) plots were used to find candidate ARIMA models. The candidate ARIMA models were then fitted and the residual ACF and PACF were examined to assess whether the residuals resembled white noise. Forecast accuracy was evaluated using mean square error (MSE) and mean absolute error (MAE) while model selection was guided by Akaike's Information Criterion (AIC) and the corrected Akaike's Information Criterion (AICc). This procedure was applied consistently to both series to ensure comparability of results.
 
+\newpage
+# 5. Results
+```{r echo = FALSE}
+# 5/30 points
+# flawlessly estimated relevant time series models(s) and/or forecasts in R
+
+# effectively and appropriately used composition of time series methods and advanced modelling for data
+
+# critically interpreted and evaluated model fits with appropriate comprehensive use of diagnostics
+
+# | TFR Model | AIC  | AICc | MSE | MAE |
+# |:--------:|:------:|:------:|:------:|:------:| 
+# | ARIMA(16,1,0) | -63.99 | -45.99 | 0.04753075 | 0.1690442 |**
+# | ARIMA(16,1,1) | -62.39 | -42.66 | 0.04783471 | 0.1700046 |
+# | ARIMA(15,1,1) | -60.26 | -42.26 | 0.08431368 | 0.223524 |
+# | ARIMA(14,1,3) | -60.99 | -40.26 | 0.01899351 | 0.09964934 |
+# | ARIMA(12,2,3) | -62.57 | -46.57 | 0.01218546 | 0.08274547 |**
+# | ARIMA(11,2,3) | -52.91 | -39.19 | 0.05260825 | 0.1823268 |
+# | ARIMA(10,2,3) | -54.69 | -43.02 | 0.05680021 | 0.1898403 |
+# 
+# | Log Transformed TFR Model | AIC  | AICc | MSE | MAE |
+# |:--------:|:------:|:------:|:------:|:------:| 
+# | ARIMA(13,1,3) | -136 | -118 | 0.02602064 | 0.121592 | **
+# | ARIMA(12,1,4) | -131.83 | -113.83 | 0.02101819 | 0.1132223 |
+# | ARIMA(13,1,5) | -133.96 | -110.21 | 0.05826379 | 0.1840232 |
+# | ARIMA(12,1,5) | -130.02 | -109.3 | 0.02172126 | 0.1147922 |
+# | ARIMA(15,2,0) | -133.67 | -117.67 | 0.01869052 | 0.1056717 |
+# | ARIMA(15,2,2) | -135.54 | -114.17 | 0.02235162 | 0.1187815 |
+# | ARIMA(14,2,2) | -130.49 | -111.94 | 0.01087075 | 0.08352761 |
+# | ARIMA(13,2,2) | -132.39 | -116.39 | 0.007426324 | 0.06826933 |**
+# | ARIMA(12,2,2) | -127.34 | -113.62 | 0.0498791 | 0.1720094 |
+# 
+# | TLB Model | AIC  | AICc | MSE | MAE |
+# |:--------:|:------:|:------:|:------:|:------:| 
+# | ARIMA(14,1,0) | 975.33 | 988.66 | 67367429 | 6853.008 |
+# | ARIMA(14,1,1) | 975.62 | 991.17 | 84179161 | 7769.997 |
+# | ARIMA(13,1,1) | 974.57 | 987.9 | 82856991 | 7698.072 |**
+# | ARIMA(13,1,2) | 973.01 | 988.56 | 54382525 | 6014.802 |**
+# 
+# | Log Transformed TLB Model | AIC  | AICc | MSE | MAE |
+# |:--------:|:------:|:------:|:------:|:------:| 
+# | ARIMA(15,1,0) | -145.56 | -130.02 | 2239721240 | 47245.34 |**
+# | ARIMA(15,1,1) | -145.43 | -127.43 | 2173041601 | 46542.86 |
+# | ARIMA(14,1,1) | -140.56 | -125.02 | 2211919788 | 46958.53 |
+# | ARIMA(13,1,1) | -141.45 | -128.11 | 2200303964 | 46836.59 |
+# | ARIMA(12,1,3) | -139.69 | -124.15 | 1752591080 | 41851.92 |**
+```
+| TFR Model | AIC  | AICc | MSE | MAE |
+|:--------:|:------:|:------:|:------:|:------:| 
+| ARIMA(16,1,0) | -63.99 | -45.99 | 0.04753075 | 0.1690442 |**
+| ARIMA(12,2,3) | -62.57 | -46.57 | 0.01218546 | 0.08274547 |**
+
+| Log Transformed TFR Model | AIC  | AICc | MSE | MAE |
+|:--------:|:------:|:------:|:------:|:------:| 
+| ARIMA(13,1,3) | -136 | -118 | 0.02602064 | 0.121592 | **
+| ARIMA(13,2,2) | -132.39 | -116.39 | 0.007426324 | 0.06826933 |**
+
+| TLB Model | AIC  | AICc | MSE | MAE |
+|:--------:|:------:|:------:|:------:|:------:| 
+| ARIMA(13,1,1) | 974.57 | 987.9 | 82856991 | 7698.072 |**
+| ARIMA(13,1,2) | 973.01 | 988.56 | 54382525 | 6014.802 |**
+
+| Log Transformed TLB Model | AIC  | AICc | MSE | MAE |
+|:--------:|:------:|:------:|:------:|:------:| 
+| ARIMA(15,1,0) | -145.56 | -130.02 | 2239721240 | 47245.34 |**
+| ARIMA(12,1,3) | -139.69 | -124.15 | 1752591080 | 41851.92 |**
+
+# 6. Discussion
+```{r echo = FALSE}
+# 5/30 points
+# thoroughly integrated limitations of models and processes into statistical conclusions
+
+# comprehensively evaluated impact of model limitations on answering research question
+```
+For TFR, ARIMA(16,1,0) has the lowest AIC (-63.99) and ARIMA(12,2,3) has the lowest AICc (-46.57). For the log transformed data, ARIMA(13,1,3) has the lowest AIC (-136) and ARIMA(13,2,2) has the lowest AICc (-116.39).
+Between all TFR, non-log transformed and log transformed models overall ARIMA(13,2,2) has the lowest MSE (0.007426) and lowest MAE (0.06827).
+
+
+# Conclusion
+```{r echo = FALSE}
+# 
+```
+
+```{r echo = FALSE}
+# report presentation 2/30 points
+# report structured with appropriate length, use of sections and highly professional style
+
+# written with precise, concise, and correct scientific language with flawless grammar and professional tone
+
+# visualisation presented with professional quality
+```
+
+\newpage
+# References
+```{r echo = FALSE}
+# 5/30 points
+# extension relevant literature reference, all correctly cited and referenced to in the main report
+
+# appendix well presented as a coherent follow up to the main report
+```
+
+```{r echo = FALSE}
+# (Chen et al. 2018; Shair et al. 2024; Vanella 2024)
+```
+
+```{r echo = FALSE}
+# (Chen et al. 2018)
+```
+Chen, M., Yip, P.S.F. & Yap, M.T. (2018). Identifying the most Influential Groups in Determining Singapore’s Fertility. *Journal of Social Policy*, 47(1), 139-160. doi:10.1017/S0047279417000241
+
+Goodkind, D. (1996). Chinese Lunar Birth Timing in Singapore: New Concerns for Child Quality amidst Multicultural Modernity. *Journal of Marriage and Family*, 58(3), 784-795. https://doi.org/10.2307/353736
+
+Jones, G.W. & Hamid, W. (2015). Singapore's Pro-natalist Policies: To What Extend Have They Worked? *Low and Lower Fertility: Variations across Developed Countries*, 1, 33-61. Springer. https://doi.org/10.1007/978-3-319-21482-5_3
+
+Kolambe, M. & Arora, S. (2024). Forecasting the Future: A Comprehensive Review of Time Series Prediction Techniques. *Journal of Electrical Systems*, 20(2), 575-586.
+
+Newbold, P. (1983). ARIMA Model Building and the Time Series Analysis Approach to Forecasting. *Journal of Forecasting*, 2, 23-35. https://doi.org/10.1002/for.3980020104
+
+Singapore Department of Statistics. (2023). *Births And Fertility Rates, Annual* [Dataset]. data.gov.sg. Accessed March 9, 2026, from https://data.gov.sg/datasets/d_e39eeaeadb571c0d0725ef1eec48d166/view
+
+```{r echo = FALSE}
+# (Shair et al. 2024)
+```
+Shair, S.N., Shaadan, N., Amirudin, N.A.B.M., & A’kashalf, N.A.M. (2024). Predictions of Malaysia Age-Specific Fertility Rates using the Lee-Carter and the Functional Data Approaches. *AIUB Journal of Science and Engineering*, 23(1), 71-78. doi: 10.53799/ajse.v23i1.1024
+
+Singh, K., Viegas, O. & Ratnam, S.S. (1988). Fertility Trends in Singapore. *Journal of Biosocial Science*, 20(4), 401-409. https://doi.org/10.1017/S0021932000017521
+
+Tan, J. (2024). Using Decomposed Total Fertility Rate (TFR) to Understand the Drivers for the Decline of TFR in Singapore. *Statistics Singapore Newsletter: Issue 1, 2024*, Household Income and Population Division, Singapore Department of Statistics. https://www.singstat.gov.sg/files/fc3d9271-e877-4a5c-a197-e244fddd80fb.pdf
+
+```{r echo = FALSE}
+# (Vanella 2024)
+```
+Vanella, P. (2016). The Total Fertility Rate in Germany until 2040 – A Stochastic Principal Components Projection based on Age-specific Fertility Rates. *Hannover Economic Papers
+(HEP)*, 579. https://hdl.handle.net/10419/155634
+
+```{r echo = FALSE}
+# (Wilmoth et al. 2022)
+```
+
+Wilmoth, J., Menozzi, C. & Bassarsky, L. (2022). *Why population growth matters for sustainable development* (Policy Brief No. 130), United Nations Department of Economic and Social Affairs, Population Division.  https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/undesa_pd_2022_policy_brief_population_growth.pdf
+
+World Health Organization. *Total fertility rate (per woman)*. Accessed June 7, 2026, from https://www.who.int/data/gho/indicator-metadata-registry/imr-details/123
+
+\newpage
+# Appendices
 ```{r page-0, echo = FALSE, warning = FALSE, message = FALSE}
 library(fpp3) # time series analysis package
 library(tsibble) # tsibble objects
@@ -106,7 +249,6 @@ autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
   geom_vline(xintercept = 2012, colour = "red") +
   labs(title = "Figure 1. Initial Plot of Total Fertility Rate (TFR)")
 ```
-Figure 1 show a long-term decreasing trend over time
 
 ```{r page-1b TFR 1st diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(TFR$`Total Fertility Rate (TFR)`),
@@ -131,6 +273,7 @@ pred1610 <- arima1610$mean
 mse1610 <- mean((actualTFR - pred1610)^2) # 0.04753075
 abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```
+
 \newpage
 ```{r page-1c TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 # TFRm1611 <- Arima(TFR_ts, order=c(16,1,1))
@@ -330,6 +473,7 @@ predl1520 <- arimal1520$mean
 msel1520 <- mean((actualTFR - exp(predl1520))^2) # 0.01869052
 absl1520 <- mean(abs(actualTFR - exp(predl1520))) # 0.1056717
 ```
+
 \newpage
 ```{r page-1p TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 # TFRml1522 <- Arima(log(TFR_ts), order=c(15,2,2))
@@ -381,10 +525,6 @@ absl1322 <- mean(abs(actualTFR - exp(predl1322))) # 0.06826933
 # msel1222 <- mean((actualTFR - exp(predl1222))^2) # 0.0498791
 # absl1222 <- mean(abs(actualTFR - exp(predl1222))) # 0.1720094
 ```
-The ACF for TFR shows significant positive autocorrelations from lags 1 to 9, while TLB shows significant positive autocorrelations from lags 1 to 6, with a slow decrease in the ACF as the lag increases. This suggests that neither series is white noise, as there are multiple spikes outside the significance bounds.
-
-The presence of a strong trend and slow decrease confirms that both TFR and TLB are non-stationary series. The absence of a sharp cut-off suggests that differencing or an autoregressive (AR) model may be suitable for this series.
-An extended ACF plot for TFR confirms that significant positive autocorrelations persist up to lag 10.
 
 \newpage
 ```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
@@ -392,8 +532,6 @@ autoplot(BirthAndFertility,`Total Live-Births`) +
   geom_vline(xintercept = 2012, colour = "red") +
   labs(title = "Initial Plot of Total Live-Births")
 ```
-
-From the initial plots of TFR and TLB, both series show a long-term decreasing trend over time, with TFR exhibiting a more pronounced decline. A notable change is observed around 1980 to 1990, where both series display a temporary broad peak before continuing their downward trend. As the data is yearly, seasonality cannot be determined. While both series may suggest cyclical behaviour, the trend would need to be removed to confirm this.
 
 ```{r page-2b TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(TLB$`Total Live-Births`),
@@ -537,161 +675,19 @@ msel1213 <- mean((actualTFR - exp(predl1213))^2) # 1752591080
 absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 ```
 
-\newpage
-# Results
-```{r echo = FALSE}
-# 5/30 points
-# flawlessly estimated relevant time series models(s) and/or forecasts in R
 
-# effectively and appropriately used composition of time series methods and advanced modelling for data
-
-# critically interpreted and evaluated model fits with appropriate comprehensive use of diagnostics
-```
-
-| TFR Model | AIC  | AICc | MSE | MAE |
-|:--------:|:------:|:------:|:------:|:------:| 
-| ARIMA(16,1,0) | -63.99 | -45.99 | 0.04753075 | 0.1690442 |**
-| ARIMA(16,1,1) | -62.39 | -42.66 | 0.04783471 | 0.1700046 |
-| ARIMA(15,1,1) | -60.26 | -42.26 | 0.08431368 | 0.223524 |
-| ARIMA(14,1,3) | -60.99 | -40.26 | 0.01899351 | 0.09964934 |
-| ARIMA(12,2,3) | -62.57 | -46.57 | 0.01218546 | 0.08274547 |**
-| ARIMA(11,2,3) | -52.91 | -39.19 | 0.05260825 | 0.1823268 |
-| ARIMA(10,2,3) | -54.69 | -43.02 | 0.05680021 | 0.1898403 |
-
-
-
-| Log Transformed TFR Model | AIC  | AICc | MSE | MAE |
-|:--------:|:------:|:------:|:------:|:------:| 
-| ARIMA(13,1,3) | -136 | -118 | 0.02602064 | 0.121592 | **
-| ARIMA(12,1,4) | -131.83 | -113.83 | 0.02101819 | 0.1132223 |
-| ARIMA(13,1,5) | -133.96 | -110.21 | 0.05826379 | 0.1840232 |
-| ARIMA(12,1,5) | -130.02 | -109.3 | 0.02172126 | 0.1147922 |
-| ARIMA(15,2,0) | -133.67 | -117.67 | 0.01869052 | 0.1056717 |
-| ARIMA(15,2,2) | -135.54 | -114.17 | 0.02235162 | 0.1187815 |
-| ARIMA(14,2,2) | -130.49 | -111.94 | 0.01087075 | 0.08352761 |
-| ARIMA(13,2,2) | -132.39 | -116.39 | 0.007426324 | 0.06826933 |**
-| ARIMA(12,2,2) | -127.34 | -113.62 | 0.0498791 | 0.1720094 |
-
-| TLB Model | AIC  | AICc | MSE | MAE |
-|:--------:|:------:|:------:|:------:|:------:| 
-| ARIMA(14,1,0) | 975.33 | 988.66 | 67367429 | 6853.008 |
-| ARIMA(14,1,1) | 975.62 | 991.17 | 84179161 | 7769.997 |
-| ARIMA(13,1,1) | 974.57 | 987.9 | 82856991 | 7698.072 |**
-| ARIMA(13,1,2) | 973.01 | 988.56 | 54382525 | 6014.802 |**
-
-| Log Transformed TLB Model | AIC  | AICc | MSE | MAE |
-|:--------:|:------:|:------:|:------:|:------:| 
-| ARIMA(15,1,0) | -145.56 | -130.02 | 2239721240 | 47245.34 |**
-| ARIMA(15,1,1) | -145.43 | -127.43 | 2173041601 | 46542.86 |
-| ARIMA(14,1,1) | -140.56 | -125.02 | 2211919788 | 46958.53 |
-| ARIMA(13,1,1) | -141.45 | -128.11 | 2200303964 | 46836.59 |
-| ARIMA(12,1,3) | -139.69 | -124.15 | 1752591080 | 41851.92 |**
-
-# Discussion
-```{r echo = FALSE}
-# 5/30 points
-# thoroughly integrated limitations of models and processes into statistical conclusions
-
-# comprehensively evaluated impact of model limitations on answering research question
-```
-
-# Conclusion
 ```{r echo = FALSE}
 # 
 ```
 
-```{r echo = FALSE}
-# report presentation 2/30 points
-# report structured with appropriate length, use of sections and highly professional style
-
-# written with precise, concise, and correct scientific language with flawless grammar and professional tone
-
-# visualisation presented with professional quality
-```
-
-# References
-```{r echo = FALSE}
-# 5/30 points
-# extension relevant literature reference, all correctly cited and referenced to in the main report
-
-# appendix well presented as a coherent follow up to the main report
-```
-
-```{r echo = FALSE}
-# (Chen et al. 2018; Shair et al. 2024; Vanella 2024)
-```
-
-```{r echo = FALSE}
-# (Chen et al. 2018)
-```
-Chen, M., Yip, P.S.F. & Yap, M.T. (2018). Identifying the most Influential Groups in Determining Singapore’s Fertility. *Journal of Social Policy*, 47(1), 139-160. doi:10.1017/S0047279417000241
-
-Goodkind, D. (1996). Chinese Lunar Birth Timing in Singapore: New Concerns for Child Quality amidst Multicultural Modernity. *Journal of Marriage and Family*, 58(3), 784-795. https://doi.org/10.2307/353736
-
-Jones, G.W. & Hamid, W. (2015). Singapore's Pro-natalist Policies: To What Extend Have They Worked? *Low and Lower Fertility: Variations across Developed Countries*, 1, 33-61. Springer. https://doi.org/10.1007/978-3-319-21482-5_3
-
-Kolambe, M. & Arora, S. (2024). Forecasting the Future: A Comprehensive Review of Time Series Prediction Techniques. *Journal of Electrical Systems*, 20(2), 575-586.
-
-Newbold, P. (1983). ARIMA Model Building and the Time Series Analysis Approach to Forecasting. *Journal of Forecasting*, 2, 23-35. https://doi.org/10.1002/for.3980020104
-
-Singapore Department of Statistics. (2023). *Births And Fertility Rates, Annual* [Dataset]. data.gov.sg. Accessed March 9, 2026, from https://data.gov.sg/datasets/d_e39eeaeadb571c0d0725ef1eec48d166/view
-
-```{r echo = FALSE}
-# (Shair et al. 2024)
-```
-Shair, S.N., Shaadan, N., Amirudin, N.A.B.M., & A’kashalf, N.A.M. (2024). Predictions of Malaysia Age-Specific Fertility Rates using the Lee-Carter and the Functional Data Approaches. *AIUB Journal of Science and Engineering*, 23(1), 71-78. doi: 10.53799/ajse.v23i1.1024
-
-Singh, K., Viegas, O. & Ratnam, S.S. (1988). Fertility Trends in Singapore. *Journal of Biosocial Science*, 20(4), 401-409. https://doi.org/10.1017/S0021932000017521
-
-Tan, J. (2024). Using Decomposed Total Fertility Rate (TFR) to Understand the Drivers for the Decline of TFR in Singapore. *Statistics Singapore Newsletter: Issue 1, 2024*, Household Income and Population Division, Singapore Department of Statistics. https://www.singstat.gov.sg/files/fc3d9271-e877-4a5c-a197-e244fddd80fb.pdf
-
-```{r echo = FALSE}
-# (Vanella 2024)
-```
-Vanella, P. (2016). The Total Fertility Rate in Germany until 2040 – A Stochastic Principal Components Projection based on Age-specific Fertility Rates. *Hannover Economic Papers
-(HEP)*, 579. https://hdl.handle.net/10419/155634
-
-```{r echo = FALSE}
-# (Wilmoth et al. 2022)
-```
-
-Wilmoth, J., Menozzi, C. & Bassarsky, L. (2022). *Why population growth matters for sustainable development* (Policy Brief No. 130), United Nations Department of Economic and Social Affairs, Population Division.  https://www.un.org/development/desa/pd/sites/www.un.org.development.desa.pd/files/undesa_pd_2022_policy_brief_population_growth.pdf
-
-World Health Organization. *Total fertility rate (per woman)*. Accessed June 7, 2026, from https://www.who.int/data/gho/indicator-metadata-registry/imr-details/123
-
-# Appendices / Statisical Appendix
-```{r echo = FALSE}
-# 
-```
-
-\newpage
-# Statistical Appendix
-The following statistical methods were applied throughout the analysis in the order presented below.
-
-## Autoregressive Model (AR)
+## Autoregressive Model Integrated (ARIMA) model
 $$
-y_t = c + \phi_1 y_{t-1} + \phi_2 y_{t-2} + \cdots + \phi_p y_{t-p} + \varepsilon_t
+\phi(B)(1-B)^d y_t = c + \theta(B)\varepsilon_t
 $$
-where:
 
-\( y_t \) is the value at time t
-
-\( \phi_i \) are model parameters
-
-\( \varepsilon_t \) is white noise
-
-Models the current values using its previous values (lags)
-
-## Residuals
 $$
-e_t = y_t - \hat{y}_t
+\phi(B)(1-B)^d y_t = c + \theta(B)\varepsilon_t
 $$
-\( y_t \) is the actual observed value at time t
-
-\( \hat{y}_t \) is the predicted value at time t
-
-The error which is the difference between the actual observed value and predicted value at time t, used to check the chosen model accounts for all the patterns
-
 ## Autocorrelation Function (ACF)
 $$
 \rho_k = \frac{\text{Cov}(y_t, y_{t-k})}{\text{Var}(y_t)}
@@ -702,35 +698,14 @@ where:
 
 Measures the correlation between a series \( y_t \) and lagged values \( y_{t-k} \), which checks for trend, seasonality and whether residuals are white noise
 
-## Box-Cox Transformation
+## Partial Autocorrelation Function (PACF)
 $$
-y^{(\lambda)} =
-\begin{cases}
-\frac{y^\lambda - 1}{\lambda}, & \lambda \ne 0 \\
-\log(y), & \lambda = 0
-\end{cases}
-$$
-
-\(\lambda\) was estimated using the Guerrero method
-
-## STL Decomposition
-$$
-y_t = T_t + R_t
+\phi_{kk} = \text{Corr}(y_t, y_{t-k} \mid y_{t-1}, \ldots, y_{t-k+1})
 $$
 where:
 
-\( T_t \) is the trend component,
+\( \phi_{kk} \) is the partial autocorrelation at lag \( k \)
 
-\( R_t \) is the remainder
-
-Decomposes time series into trend and remainder components, usually with the seasonality component as well but the data in this analysis is yearly
-
-## Moving Average (MA)
-$$
-MA_k = \frac{1}{k} \sum_{i=-(k-1)/2}^{(k-1)/2} y_{t+i}
-$$
-k is the window size
-
-In this analysis when k = 5, the moving average at time t is calculated using the 2 observations before and 2 observations after t. This process smooths out short-term fluctuations in the series
+Measures the correlation between a series \( y_t \) and its lagged values \(y_{t-k} \) after removing the effects of the intervening lags \( y_{t-1}, \ldots, y_{t-k+1} \). PACF is commonly used to identify the order of the autoregressive (AR) component in an ARIMA model.
 
 <https://github.com/twalepear/TSA.git>
