@@ -4,7 +4,7 @@ author: "Thoa Thanh Thi Le"
 output: pdf_document
 ---
 
-# Abstract
+# 1. Abstract
 ```{r echo = FALSE}
 # 2/30 points
 # comprehensively and succinctly summarised research question, analysis, and key findings.
@@ -13,9 +13,9 @@ output: pdf_document
 ```
 
 
-# Introduction and Literature Review
+# 2. Introduction
 ```{r echo = FALSE}
-# 4/30 points
+# 4/30 points Introduction and Literature Review
 # clear, comprehensive, and highly relevant background information provided for data context
 
 # research question clearly and succinctly stated, well-motivated by EDA, strongly linked to data context (e.g. using previous studies)
@@ -23,13 +23,17 @@ output: pdf_document
 
 Total fertility rates (TFRs) are key population indicators that are widely monitored because they influence age structure and population growth (Wilmoth et al.2022; World Health Organisation). Globally, fertility rates have declined over recent decades (Chen et al. 2018; Shair et al. 2024; Vanella 2024). In Singapore, the total fertility rate has dropped below the replacement level required for a population to replace itself across generations (Jones & Hamid 2015; Tan, 2024; Wilmoth et al. 2022). Therefore, forecasting TFR and total live births (TLB) may provide insight into future fertility patterns and population change in Singapore.
 
+Data from 1960 to 2024 on TLB and TFR was pulled from Singapore Department of Statistics (2023). The research question addressed in this report is can ARIMA model can accurately forecast the TLB and TFR from 2013 to 2024 while capturing the short-term fluctuations?
+
+This report is structured as follows. Part 3 ... Part 4
+
+# 3. Literature Review
+
+(Chen et al. 2018; Goodkind 1996; Singh et al. 1988; Vanella 2024).
+
 Furthermore, cultural preferences associated with the Lunar zodiac may contribute to the cyclical patterns in TFR and TLB, with increases observed during Dragon years (1964, 1976, 1988, 2000, 2012 and 2024), which are considered especially auspicious years (Goodkind 1996; Jones & Hamid 2015).
 
-Kolambe, M. & Arora, S. (2024)
-
-Newbold, P. (1983)
-
-This report is structured as follows
+There are various mathematical models for time series forecasting, including ARIMA models which accommodates a wide range of time series behaviours through flexible model selection (Kolambe & Arora 2024; Newbold 1983).
 
 # Methods
 ```{r echo = FALSE}
@@ -38,7 +42,8 @@ This report is structured as follows
 
 # model(s) used are highly appropriate for research question and data with comprehensive justification
 ```
-Data from 1960 to 2024 on Total Live Births (TLB) and Total Fertility Rates (TFR) was pulled from Singapore Department of Statistics (data.gov.sg). The data was then transformed into a tsibble object with three columns: Year, Total Fertility Rates (TFR) and Total Live Births.
+
+The data was then transformed into a tsibble object with three columns: Year, Total Fertility Rates (TFR) and Total Live Births.
 
 ```{r page-0, echo = FALSE, warning = FALSE, message = FALSE}
 library(fpp3) # time series analysis package
@@ -637,14 +642,18 @@ Goodkind, D. (1996). Chinese Lunar Birth Timing in Singapore: New Concerns for C
 
 Jones, G.W. & Hamid, W. (2015). Singapore's Pro-natalist Policies: To What Extend Have They Worked? *Low and Lower Fertility: Variations across Developed Countries*, 1, 33-61. Springer. https://doi.org/10.1007/978-3-319-21482-5_3
 
-Kolambe, M. & Arora, S. (2024). Forecasting the Future: A Comprehnsive Review of Time Series Prediction Techniques. *Journal of Electrical Systems*, 20(2), 575-586.
+Kolambe, M. & Arora, S. (2024). Forecasting the Future: A Comprehensive Review of Time Series Prediction Techniques. *Journal of Electrical Systems*, 20(2), 575-586.
 
-Newbold, P. (1983). ARIMA Model Building and the TimeSeries Analysis Approach to Forecasting. *Journal of Forecasting*, 2, 23-35. https://doi.org/10.1002/for.3980020104
+Newbold, P. (1983). ARIMA Model Building and the Time Series Analysis Approach to Forecasting. *Journal of Forecasting*, 2, 23-35. https://doi.org/10.1002/for.3980020104
+
+Singapore Department of Statistics. (2023). *Births And Fertility Rates, Annual* [Dataset]. data.gov.sg. Accessed March 9, 2026, from https://data.gov.sg/datasets/d_e39eeaeadb571c0d0725ef1eec48d166/view
 
 ```{r echo = FALSE}
 # (Shair et al. 2024)
 ```
 Shair, S.N., Shaadan, N., Amirudin, N.A.B.M., & A’kashalf, N.A.M. (2024). Predictions of Malaysia Age-Specific Fertility Rates using the Lee-Carter and the Functional Data Approaches. *AIUB Journal of Science and Engineering*, 23(1), 71-78. doi: 10.53799/ajse.v23i1.1024
+
+Singh, K., Viegas, O. & Ratnam, S.S. (1988). Fertility Trends in Singapore. *Journal of Biosocial Science*, 20(4), 401-409. https://doi.org/10.1017/S0021932000017521
 
 Tan, J. (2024). Using Decomposed Total Fertility Rate (TFR) to Understand the Drivers for the Decline of TFR in Singapore. *Statistics Singapore Newsletter: Issue 1, 2024*, Household Income and Population Division, Singapore Department of Statistics. https://www.singstat.gov.sg/files/fc3d9271-e877-4a5c-a197-e244fddd80fb.pdf
 
@@ -668,9 +677,6 @@ World Health Organization. *Total fertility rate (per woman)*. Accessed June 7, 
 ```
 
 \newpage
-# Research Questions
-Can the ARIMA model accurately forecast the Singapore's Total Live Births (TLB) and Total Fertility Rate (TFR) from 2013 to 2024 given the data from 1960 to 2012, capturing the short-term fluctuations? 
-
 # Statistical Appendix
 The following statistical methods were applied throughout the analysis in the order presented below.
 
