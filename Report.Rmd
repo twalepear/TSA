@@ -23,17 +23,13 @@ output: pdf_document
 
 Total fertility rates (TFRs) are key population indicators that are widely monitored because they influence age structure and population growth (Wilmoth et al.2022; World Health Organisation). Globally, fertility rates have declined over recent decades (Chen et al. 2018; Shair et al. 2024; Vanella 2024). In Singapore, the total fertility rate has dropped below the replacement level required for a population to replace itself across generations (Jones & Hamid 2015; Tan, 2024; Wilmoth et al. 2022). Therefore, forecasting TFR and total live births (TLB) may provide insight into future fertility patterns and population change in Singapore.
 
-Data from 1960 to 2024 on TLB and TFR was pulled from Singapore Department of Statistics (2023). The research question addressed in this report is can ARIMA model can accurately forecast the TLB and TFR from 2013 to 2024 while capturing the short-term fluctuations?
+Data from 1960 to 2024 on TLB and TFR was pulled from Singapore Department of Statistics (2023). The research question addressed in this report is: Can ARIMA model can accurately forecast Singapore's TLB and TFR while capturing the short-term fluctuations?
 
 This report is structured as follows. Part 3 ... Part 4
 
 # 3. Literature Review
 
-(Chen et al. 2018; Goodkind 1996; Singh et al. 1988; Vanella 2024).
-
-Furthermore, cultural preferences associated with the Lunar zodiac may contribute to the cyclical patterns in TFR and TLB, with increases observed during Dragon years (1964, 1976, 1988, 2000, 2012 and 2024), which are considered especially auspicious years (Goodkind 1996; Jones & Hamid 2015).
-
-There are various mathematical models for time series forecasting, including ARIMA models which accommodates a wide range of time series behaviours through flexible model selection (Kolambe & Arora 2024; Newbold 1983).
+Around 1965, Singapore introduced policies aimed at reducing population growth, which contributed to subsequent declines in fertility rates (Chen et al. 2018; Goodkind 1996; Singh et al. 1988; Vanella 2024). Despite this long-term decline, there may be cyclical patterns in TFR and TLB. These fluctuations may be associated with cultural preferences surrounding Lunar zodiac Dragon years (1964, 1976, 1988, 2000, 2012 and 2024), which are considered especially auspicious years and have been associated with higher fertility rates and live births (Goodkind 1996; Jones & Hamid 2015). Forecasting such series therefore requires models that can capture both long-term trends and short-term variation. Among the various models for time series forecasting, ARIMA models are particularly flexible because they allow selection from a broad class of models rather than imposing a single model form on every time series (Kolambe & Arora 2024; Newbold 1983).
 
 # Methods
 ```{r echo = FALSE}
