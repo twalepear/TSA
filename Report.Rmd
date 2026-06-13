@@ -12,6 +12,7 @@ output: pdf_document
 # Statistical results translated into accessible and accurate description for non-scientific audience
 ```
 
+
 # 2. Introduction
 ```{r echo = FALSE}
 # 4/30 points Introduction and Literature Review
@@ -39,7 +40,6 @@ Around 1965, Singapore introduced policies aimed at reducing population growth, 
 ```
 For both TFR and TLB, an identical modelling workflow was applied. The analysis focused on the period from 1960-2012 for model fitting, with observations 2013-2024 reserved for evaluating forecast accuracy. Initial plots were used to examine the presence of trends, seasonality, and other notable patterns, which indicated a long-term decreasing trend in both series. Several transformations were considered including logarithmic transformation and first- and second-order differencing. Stationarity was assessed using the KPSS test. For each transformed series, autocorrelation (ACF) and partial autocorrelation (PACF) plots were used to find candidate ARIMA models. The candidate ARIMA models were then fitted and the residual ACF and PACF were examined to assess whether the residuals resembled white noise. Forecast accuracy was evaluated using mean square error (MSE) and mean absolute error (MAE) while model selection was guided by Akaike's Information Criterion (AIC) and the corrected Akaike's Information Criterion (AICc). This procedure was applied consistently to both series to ensure comparability of results.
 
-\newpage
 # 5. Results
 ```{r echo = FALSE}
 # 5/30 points
@@ -89,15 +89,18 @@ For both TFR and TLB, an identical modelling workflow was applied. The analysis 
 
 # comprehensively evaluated impact of model limitations on answering research question
 ```
-For TFR, ARIMA(16,1,0) has the lowest AIC (-63.99) as the initial ARIMA model but higher MSE and MAE compared to the other models. However, the KPSS test shown that the data needed to be differenced twice. ARIMA(12,2,3) has the lowest AICc (-46.57) and relatively lower MSE and MAE which shows that the data were best to be differenced.
+For TFR, the initial model, ARIMA(16,1,0) has the lowest AIC (-63.99) but its forecast accuracy was lower compared to the other models, including the log transformed models. Furthermore the KPSS test suggested the series remained stationary after first-order differencing. Hence models based on second-order differencing were considered and ARIMA(12,2,3) has the lowest AICc (-46.57) and achieved better forecast accuracy. This suggests that second-order differencing provided a better representation of the underlying series.
 
-For the log transformed data, ARIMA(13,1,3) has the lowest AIC (-136) but the MSE and MAE were not as low as ARIMA(13,2,2) which has the lowest AICc (-116.39) and lowest MSE (0.007426) and lowest MAE (0.06827) among all TFR, non-log transformed and log transformed models overall. This indicated the data required to be log transformed and differenced.
+Among the log transformed data, ARIMA(13,1,3) produced the lowest AIC (-136) but the forecast accuracy were did not perform as well as ARIMA(13,2,2) which has the lowest AICc (-116.39) and lowest MSE (0.007426) and lowest MAE (0.06827) across all TFR models. These results suggest that applying a log transformation together with second-order differencing improved the forecast performance for the TFR series.
 
+For TLB, the ARIMA(13,1,2) model has the lowest AIC (973.01) and produced lowest forecast errors than the other TLB models (MSE: 54,382,525 & MAE: 6,014.80). ARIMA(13,1,1) model has the lower AICc (987.9) but its forecast accuracy was lower.
 
-# Conclusion
-```{r echo = FALSE}
-# 
-```
+Among the log-transformed models, ARIMA(15,1,0) model produced the lower AIC (-145.56) and AICc (-130.02) but lower forecast accuracy. While ARIMA(12,1,3) had higher AIC and AICc values, it had a better forecast accuracy than ARIMA(15,1,0), log-transformed models resulted in considerably larger forecast errors when transformed back to the original scale.
+
+These results suggest that first-order differencing was sufficient to account for the long-term trend in TLB, while logarithmic transformation did not improve forecast accuracy. However, the selected model contains a large number of autoregressive and moving average terms. Furthermore, ARIMA models rely solely on historical observations and do not explicitly incorporate external factors such as policies, economic status, or cultural influences. Therefore, while the model performed reasonably well for the evaluation period, forecast accuracy may decline if future birth patterns differ substantially from historical trends.
+
+# 7. Conclusion
+
 
 ```{r echo = FALSE}
 # report presentation 2/30 points
@@ -109,7 +112,7 @@ For the log transformed data, ARIMA(13,1,3) has the lowest AIC (-136) but the MS
 ```
 
 \newpage
-# References
+# 8. References
 ```{r echo = FALSE}
 # 5/30 points
 # extension relevant literature reference, all correctly cited and referenced to in the main report
@@ -159,8 +162,14 @@ Wilmoth, J., Menozzi, C. & Bassarsky, L. (2022). *Why population growth matters 
 
 World Health Organization. *Total fertility rate (per woman)*. Accessed June 7, 2026, from https://www.who.int/data/gho/indicator-metadata-registry/imr-details/123
 
+```{r echo = FALSE}
+# $$
+# \phi(B)(1-B)^d y_t = c + \theta(B)\varepsilon_t
+# $$
+```
+
 \newpage
-# Appendices
+# 9. Appendices
 ```{r page-0, echo = FALSE, warning = FALSE, message = FALSE}
 library(fpp3) # time series analysis package
 library(tsibble) # tsibble objects
@@ -221,31 +230,67 @@ actualTLB <- BirthAndFertility |>
   pull(`Total Live-Births`)
 ```
 
-\newpage
-```{r page-1 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "50%", fig.align = 'center'}
 autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
   geom_vline(xintercept = 2012, colour = "red") +
   labs(title = "Figure 1. Initial Plot of Total Fertility Rate (TFR)")
-```
-
-```{r page-1b TFR 1st diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(TFR$`Total Fertility Rate (TFR)`),
      type = 'l',
-     main = "Plot of Differenced Total Fertility Rate (TFR) until 2012")
+     main = "Figure 2. Plot of Differenced Total Fertility Rate (TFR) until 2012")
 unitroot_kpss(diff(TFR$`Total Fertility Rate (TFR)`)) # still not stationary
-BirthAndFertility |>
+```
+
+```{r page-1a TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+TFRACF <- BirthAndFertility |>
   ACF(diff(TFR$`Total Fertility Rate (TFR)`), lag_max = 50) |>
   autoplot() +
-  labs(title = "ACF Plot for Differenced Total Fertility Rate (TFR)")
-BirthAndFertility |>
+  labs(title = "ACF")
+TFRPACF <- BirthAndFertility |>
   PACF(diff(TFR$`Total Fertility Rate (TFR)`), lag_max = 50) |>
   autoplot() +
-  labs(title = "PACF Plot for Differenced Total Fertility Rate (TFR)")
+  labs(title = "PACF")
+TFRACF + TFRPACF +
+  patchwork::plot_annotation(
+    title = "Figure 3. ACF and PACF Plots for Differenced Total Fertility Rate (TFR)")
 TFRm1610 <- Arima(TFR_ts, order=c(16,1,0))
 TFRm1610 # AIC=-63.99 AICc=-45.99
 res1610 <- residuals(TFRm1610)
-acf(res1610, lag.max = 50, main = "ACF of Residuals for ARIMA(16,1,0) for TFR")
-pacf(res1610, lag.max = 50, main = "PACF of Residuals for ARIMA(16,1,0) for TFR")
+```
+Fitted ARIMA(16,1,0) model for TFR:
+$$
+\begin{aligned}
+&(1
+-0.3647B
++0.1061B^2
+-0.4577B^3
++0.2586B^4
+-0.2984B^5
+-0.2452B^6 \\
+&\quad
+-0.2006B^7
+-0.1578B^8 
++0.0293B^9
++0.0306B^{10}
++0.3594B^{11} \\
+&\quad
+-0.3889B^{12}
++0.6048B^{13}
++0.0419B^{14}
++0.3361B^{15}
+-0.5135B^{16})
+(1-B)y_t \\
+&=  c+\varepsilon_t
+\end{aligned}
+$$
+Figure 4. ACF and PACF plots of residuals for the ARIMA(16,1,0) model fitted to TFR
+```{r page-1a_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+par(mfrow = c(1, 2))
+acf(res1610, lag.max = 50, main = "ACF of Residuals")
+pacf(res1610, lag.max = 50, main = "PACF of Residuals")
+par(mfrow = c(1, 1))
+```
+
+```{r page-1b TFR 1st diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 arima1610 <- forecast(TFRm1610, h = 12)
 pred1610 <- arima1610$mean
 mse1610 <- mean((actualTFR - pred1610)^2) # 0.04753075
@@ -292,33 +337,50 @@ abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```
 
 \newpage
-```{r page-1f TFR 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1fTFR 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(diff(TFR$`Total Fertility Rate (TFR)`)),
      type = 'l',
-     main = "Plot of Differenced Twice Total Fertility Rate (TFR) until 2012")
+     main = "Figure 5. Plot of Differenced Twice Total Fertility Rate (TFR) until 2012")
 unitroot_kpss(diff(diff(TFR$`Total Fertility Rate (TFR)`))) # now stationary
-BirthAndFertility |>
+TFR2ACF <- BirthAndFertility |>
   ACF(diff(diff(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
-  labs(title = "ACF Plot for Twice Differenced Total Fertility Rate (TFR)")
-BirthAndFertility |>
+  labs(title = "ACF")
+TFR2PACF <- BirthAndFertility |>
   PACF(diff(diff(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
-  labs(title = "PACF Plot for Twice Differenced Total Fertility Rate (TFR)")
-TFRm1220 <- Arima(TFR_ts, order=c(12,2,0)) # not a viable model
-TFRm1220 # AIC=-57.55 AICc=-47.72
-res1220 <- residuals(TFRm1220)
-acf(res1220, lag.max = 50, main = "ACF of Residuals for ARIMA(12,2,0) for TFR")
-pacf(res1220, lag.max = 50, main = "PACF of Residuals for ARIMA(12,2,0) for TFR")
+  labs(title = "PACF")
+TFR2ACF + TFR2PACF +
+  patchwork::plot_annotation(
+    title = "Figure 6. ACF and PACF Plots for Twice Differenced Total Fertility Rate (TFR)")
 ```
 
 \newpage
-```{r page-1g TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1ff-TFR-2nd-diff, echo = FALSE, warning = FALSE, message = FALSE}
+TFRm1220 <- Arima(TFR_ts, order=c(12,2,0)) # not a viable model
+TFRm1220 # AIC=-57.55 AICc=-47.72
+res1220 <- residuals(TFRm1220)
+```
+Figure 6. ACF and PACF plots of residuals for the ARIMA(12,2,0) model fitted to TFR
+```{r page-1ff_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+par(mfrow = c(1, 2))
+acf(res1220, lag.max = 50, main = "ACF of Residuals")
+pacf(res1220, lag.max = 50, main = "PACF of Residuals")
+par(mfrow = c(1, 1))
+```
+
+\newpage
+```{r page-1ggTFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 TFRm1223 <- Arima(TFR_ts, order=c(12,2,3))
 TFRm1223 # AIC=-62.57 AICc=-46.57
 res1223 <- residuals(TFRm1223)
-acf(res1223, lag.max = 50, main = "ACF of Residuals for ARIMA(12,2,3) for TFR")
-pacf(res1223, lag.max = 50, main = "PACF of Residuals for ARIMA(12,2,3) for TFR")
+```
+Figure 7. ACF and PACF plots of residuals for the ARIMA(12,2,3) model fitted to TFR
+```{r page-1g_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+par(mfrow = c(1, 2))
+acf(res1223, lag.max = 50, main = "ACF of Residuals")
+pacf(res1223, lag.max = 50, main = "PACF of Residuals")
+par(mfrow = c(1, 1))
 arima1223 <- forecast(TFRm1223, h = 12)
 pred1223 <- arima1223$mean
 mse1223 <- mean((actualTFR - pred1223)^2) # 0.01218546
@@ -358,7 +420,7 @@ plot(log(TFR$`Total Fertility Rate (TFR)`),
      main = "Plot of Log Transformation for Total Fertility Rate (TFR) until 2012")
 plot(diff(log(TFR$`Total Fertility Rate (TFR)`)),
      type = 'l',
-     main = "Plot of Differenced Log Transformation for Total Fertility Rate (TFR) until 2012")
+     main = "Plot of Differenced Log Transformation for Total Fertility Rate (TFR)")
 unitroot_kpss(diff(log(TFR$`Total Fertility Rate (TFR)`))) # borderline 0.0405
 BirthAndFertility |>
   ACF(diff(log(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
@@ -368,11 +430,20 @@ BirthAndFertility |>
   PACF(diff(log(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Differenced Log Transformation of Total Fertility Rate (TFR)")
+```
+
+\newpage
+```{r page-1ggg TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 TFRml1310 <- Arima(log(TFR_ts), order=c(13,1,0)) # not a viable model
 TFRml1310 # AIC=-131.8 AICc=-120.45
 resl1310 <- residuals(TFRml1310)
-acf(resl1310, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,0) for TFR with log transformation")
-pacf(resl1310, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,0) for TFR with log transformation")
+```
+Figure 8. ACF and PACF plots of residuals for the ARIMA(13,1,0) model fitted to TFR with log transformation
+```{r page-1gg_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+par(mfrow = c(1, 2))
+acf(resl1310, lag.max = 50, main = "ACF of Residuals")
+pacf(resl1310, lag.max = 50, main = "PACF of Residuals")
+par(mfrow = c(1, 1))
 ```
 
 \newpage
@@ -380,10 +451,16 @@ pacf(resl1310, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,0) for TFR
 TFRml1313 <- Arima(log(TFR_ts), order=c(13,1,3))
 TFRml1313 # AIC=-136 AICc=-118
 resl1313 <- residuals(TFRml1313)
-acf(resl1313, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,3) for TFR with log transformation")
-pacf(resl1313, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,3) for TFR with log transformation")
+```
+Figure 9. ACF and PACF plots of residuals for the ARIMA(13,1,3) model fitted to TFR with log transformation
+```{r page-1f_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+par(mfrow = c(1, 2))
+acf(resl1313, lag.max = 50, main = "ACF of Residuals")
+pacf(resl1313, lag.max = 50, main = "PACF of Residuals")
+par(mfrow = c(1, 1))
 arimal1313 <- forecast(TFRml1313, h = 12)
 predl1313 <- arimal1313$mean
+pred1313 <- exp(predl1313)
 msel1313 <- mean((actualTFR - exp(predl1313))^2) # 0.02602064
 absl1313 <- mean(abs(actualTFR - exp(predl1313))) # 0.121592
 ```
@@ -431,12 +508,12 @@ absl1313 <- mean(abs(actualTFR - exp(predl1313))) # 0.121592
 ```{r page-1o TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 plot(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))),
      type = 'l',
-     main = "Plot of Differenced Twice Log Transformation for Total Fertility Rate (TFR)")
+     main = "Plot of Differenced Twice Log Transformation for TFR")
 unitroot_kpss(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))))
 BirthAndFertility |>
   ACF(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))), lag_max = 50) |>
   autoplot() +
-  labs(title = "ACF Plot for Twice Differenced Log Transformation of Total Fertility Rate (TFR)")
+  labs(title = "ACF Plot for Twice Differenced Log Transformation of TFR")
 BirthAndFertility |>
   PACF(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))), lag_max = 50) |>
   autoplot() +
@@ -444,8 +521,13 @@ BirthAndFertility |>
 TFRml1520 <- Arima(log(TFR_ts), order=c(15,2,0))
 TFRml1520 # AIC=-133.67 AICc=-117.67
 resl1520 <- residuals(TFRml1520)
+```
+Figure 8. ACF and PACF plots of residuals for the ARIMA(13,1,0) model fitted to TFR with log transformation
+```{r page-1o_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+par(mfrow = c(1, 2))
 acf(resl1520, lag.max = 50, main = "ACF of Residuals for ARIMA(15,2,0) for TFR with log transformation")
 pacf(resl1520, lag.max = 50, main = "PACF of Residuals for ARIMA(15,2,0) for TFR with log transformation")
+par(mfrow = c(1, 1))
 arimal1520 <- forecast(TFRml1520, h = 12)
 predl1520 <- arimal1520$mean
 msel1520 <- mean((actualTFR - exp(predl1520))^2) # 0.01869052
@@ -483,10 +565,13 @@ absl1520 <- mean(abs(actualTFR - exp(predl1520))) # 0.1056717
 TFRml1322 <- Arima(log(TFR_ts), order=c(13,2,2))
 TFRml1322 # AIC=-132.39 AICc=-116.39
 resl1322 <- residuals(TFRml1322)
+par(mfrow = c(1, 2))
 acf(resl1322, lag.max = 50, main = "ACF of Residuals for ARIMA(13,2,2) for TFR with log transformation")
 pacf(resl1322, lag.max = 50, main = "PACF of Residuals for ARIMA(13,2,2) for TFR with log transformation")
+par(mfrow = c(1, 1))
 arimal1322 <- forecast(TFRml1322, h = 12)
 predl1322 <- arimal1322$mean
+pred1322 <- exp(predl1322)
 msel1322 <- mean((actualTFR - exp(predl1322))^2) # 0.007426324
 absl1322 <- mean(abs(actualTFR - exp(predl1322))) # 0.06826933
 ```
@@ -516,19 +601,24 @@ plot(diff(TLB$`Total Live-Births`),
      type = 'l',
      main = "Plot of Differenced Total Live Births (TLB) until 2012")
 unitroot_kpss(diff(TLB$`Total Live-Births`)) # stationary
-BirthAndFertility |>
+TLBACF <- BirthAndFertility |>
   ACF(diff(TLB$`Total Live-Births`), lag_max = 50) |>
   autoplot() +
   labs(title = "ACF Plot for Differenced Total Live Births (TLB)")
-BirthAndFertility |>
+TLBPACF <- BirthAndFertility |>
   PACF(diff(TLB$`Total Live-Births`), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF Plot for Differenced Total Live Births (TLB)")
+TLBACF + TLBPACF + 
+  patchwork::plot_annotation(
+    title = "Figure 9. ACF and PACF Plots for Differenced Total Live-Births (TLB)")
 TLBm1410 <- Arima(TLB_ts, order=c(14,1,0))
 TLBm1410 # AIC=975.33 AICc=988.66
 resb1410 <- residuals(TLBm1410)
+par(mfrow = c(1, 2))
 acf(resb1410, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,0) for TLB")
 pacf(resb1410, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,0) for TLB")
+par(mfrow = c(1, 1))
 arima1410 <- forecast(TLBm1410, h = 12)
 pred1410 <- arima1410$mean
 mse1410 <- mean((actualTLB - pred1410)^2) # 67367429
@@ -553,8 +643,10 @@ abs1410 <- mean(abs(actualTLB - pred1410)) # 6853.008
 TLBm1311 <- Arima(TLB_ts, order=c(13,1,1))
 TLBm1311 # AIC=974.57 AICc=987.9
 resb1311 <- residuals(TLBm1311)
+par(mfrow = c(1, 2))
 acf(resb1311, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,1) for TLB")
 pacf(resb1311, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,1) for TLB")
+par(mfrow = c(1, 1))
 arima1311 <- forecast(TLBm1311, h = 12)
 pred1311 <- arima1311$mean
 mse1311 <- mean((actualTLB - pred1311)^2) # 82856991
@@ -566,8 +658,10 @@ abs1311 <- mean(abs(actualTLB - pred1311)) # 7698.072
 TLBm1312 <- Arima(TLB_ts, order=c(13,1,2))
 TLBm1312 # AIC=973.01 AICc=988.56
 resb1312 <- residuals(TLBm1312)
+par(mfrow = c(1, 2))
 acf(resb1312, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,2) for TLB")
 pacf(resb1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TLB")
+par(mfrow = c(1, 1))
 arima1312 <- forecast(TLBm1312, h = 12)
 pred1312 <- arima1312$mean
 mse1312 <- mean((actualTLB - pred1312)^2) # 54382525
@@ -594,8 +688,10 @@ BirthAndFertility |>
 TLBml1510 <- Arima(log(TLB_ts), order=c(15,1,0))
 TLBml1510 # AIC=-145.56 AICc=-130.02
 resl1510 <- residuals(TLBml1510)
+par(mfrow = c(1, 2))
 acf(resl1510, lag.max = 50, main = "ACF of Residuals for ARIMA(15,1,0) for TLB with log transformation")
 pacf(resl1510, lag.max = 50, main = "PACF of Residuals for ARIMA(15,1,0) for TLB with log transformation")
+par(mfrow = c(1, 1))
 arimal1510 <- forecast(TLBml1510, h = 12)
 predl1510 <- arimal1510$mean
 msel1510 <- mean((actualTFR - exp(predl1510))^2) # 2239721240
@@ -645,17 +741,16 @@ absl1510 <- mean(abs(actualTFR - exp(predl1510))) # 47245.34
 TLBml1213 <- Arima(log(TLB_ts), order=c(12,1,3))
 TLBml1213 # AIC=-139.69 AICc=-124.15
 resl1213 <- residuals(TLBml1213)
+par(mfrow = c(1, 2))
 acf(resl1213, lag.max = 50, main = "ACF of Residuals for ARIMA(12,1,3) for TLB with log transformation")
 pacf(resl1213, lag.max = 50, main = "PACF of Residuals for ARIMA(12,1,3) for TLB with log transformation")
+par(mfrow = c(1, 1))
 arimal1213 <- forecast(TLBml1213, h = 12)
 predl1213 <- arimal1213$mean
 msel1213 <- mean((actualTFR - exp(predl1213))^2) # 1752591080
 absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 ```
-## Autoregressive Model Integrated (ARIMA) model
-$$
-\phi(B)(1-B)^d y_t = c + \theta(B)\varepsilon_t
-$$
+
 \newpage
 \begin{center}
 \textbf{Table 5. Full table for TFR - no log transformation}
@@ -707,4 +802,14 @@ $$
 | ARIMA(13,1,1) | -141.45 | -128.11 | 2200303964 | 46836.59 |  |
 | ARIMA(12,1,3) | -139.69 | -124.15 | 1752591080 | 41851.92 |  |
 
+```{r page-result plot, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
+  autolayer(pred1610, series = "ARIMA(16,1,0)") +
+  autolayer(pred1223, series = "ARIMA(12,2,3)") +
+  autolayer(pred1313, series = "ARIMA(13,1,3)") +
+  autolayer(pred1322, series = "ARIMA(12,2,2)") +
+  labs(title = "Comparison of ARIMA Forecasts for TFR",
+       x = "Year",
+       y = "Total Fertility Rate (TFR)")
+```
 <https://github.com/twalepear/TSA.git>
