@@ -169,7 +169,7 @@ World Health Organization. *Total fertility rate (per woman)*. Accessed June 7, 
 ```
 
 \newpage
-# 9. Appendices
+# 9. Appendix
 ```{r page-0, echo = FALSE, warning = FALSE, message = FALSE}
 library(fpp3) # time series analysis package
 library(tsibble) # tsibble objects
@@ -230,7 +230,7 @@ actualTLB <- BirthAndFertility |>
   pull(`Total Live-Births`)
 ```
 
-```{r page-1 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "50%", fig.align = 'center'}
+```{r page-1 1st diff TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
   geom_vline(xintercept = 2012, colour = "red") +
   labs(title = "Figure 1. Initial Plot of Total Fertility Rate (TFR)")
@@ -239,19 +239,22 @@ plot(diff(TFR$`Total Fertility Rate (TFR)`),
      main = "Figure 2. Plot of Differenced Total Fertility Rate (TFR) until 2012")
 unitroot_kpss(diff(TFR$`Total Fertility Rate (TFR)`)) # still not stationary
 ```
-
-```{r page-1a TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
-TFRACF <- BirthAndFertility |>
+\newpage
+\begin{center}
+\text{Figure 3. ACF and PACF Plots for Differenced Total Fertility Rate (TFR)}
+\end{center}
+```{r page-1 1st diff ACF PACF TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
+BirthAndFertility |>
   ACF(diff(TFR$`Total Fertility Rate (TFR)`), lag_max = 50) |>
   autoplot() +
   labs(title = "ACF")
-TFRPACF <- BirthAndFertility |>
+BirthAndFertility |>
   PACF(diff(TFR$`Total Fertility Rate (TFR)`), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF")
-TFRACF + TFRPACF +
-  patchwork::plot_annotation(
-    title = "Figure 3. ACF and PACF Plots for Differenced Total Fertility Rate (TFR)")
+```
+\newpage
+```{r page-1-1610 TFR, echo = FALSE, warning = FALSE, message = FALSE, fig.align = 'center'}
 TFRm1610 <- Arima(TFR_ts, order=c(16,1,0))
 TFRm1610 # AIC=-63.99 AICc=-45.99
 res1610 <- residuals(TFRm1610)
@@ -282,15 +285,17 @@ $$
 &=  c+\varepsilon_t
 \end{aligned}
 $$
-Figure 4. ACF and PACF plots of residuals for the ARIMA(16,1,0) model fitted to TFR
-```{r page-1a_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+\begin{center}
+\text{Figure 4. ACF and PACF plots of residuals for the ARIMA(16,1,0) model fitted to TFR}
+\end{center}
+```{r page-1-1610 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%'}
 par(mfrow = c(1, 2))
 acf(res1610, lag.max = 50, main = "ACF of Residuals")
 pacf(res1610, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
 ```
 
-```{r page-1b TFR 1st diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1b 1st diff forecast TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 arima1610 <- forecast(TFRm1610, h = 12)
 pred1610 <- arima1610$mean
 mse1610 <- mean((actualTFR - pred1610)^2) # 0.04753075
@@ -298,7 +303,7 @@ abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```
 
 \newpage
-```{r page-1c TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-1611 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 # TFRm1611 <- Arima(TFR_ts, order=c(16,1,1))
 # TFRm1611 # AIC=-62.39 AICc=-41.66
 # res1611 <- residuals(TFRm1611)
@@ -311,7 +316,7 @@ abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```
 
 \newpage
-```{r page-1d TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-1511 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 # TFRm1511 <- Arima(TFR_ts, order=c(15,1,1))
 # TFRm1511 # AIC=-60.26 AICc=-42.26
 # res1511 <- residuals(TFRm1511)
@@ -324,7 +329,7 @@ abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```
 
 \newpage
-```{r page-1e TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-1413 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 # TFRm1413 <- Arima(TFR_ts, order=c(14,1,3))
 # TFRm1413 # AIC=-60.99 AICc=-40.26
 # res1413 <- residuals(TFRm1413)
@@ -337,26 +342,29 @@ abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```
 
 \newpage
-```{r page-1fTFR 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1 2nd diff TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "100%", fig.align = 'center'}
 plot(diff(diff(TFR$`Total Fertility Rate (TFR)`)),
      type = 'l',
      main = "Figure 5. Plot of Differenced Twice Total Fertility Rate (TFR) until 2012")
 unitroot_kpss(diff(diff(TFR$`Total Fertility Rate (TFR)`))) # now stationary
-TFR2ACF <- BirthAndFertility |>
+```
+\newpage
+\begin{center}
+\text{Figure 6. ACF and PACF Plots for Twice Differenced Total Fertility Rate (TFR)}
+\end{center}
+```{r page-1 2nd diff ACF PACF TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
+BirthAndFertility |>
   ACF(diff(diff(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
   labs(title = "ACF")
-TFR2PACF <- BirthAndFertility |>
+BirthAndFertility |>
   PACF(diff(diff(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
   autoplot() +
   labs(title = "PACF")
-TFR2ACF + TFR2PACF +
-  patchwork::plot_annotation(
-    title = "Figure 6. ACF and PACF Plots for Twice Differenced Total Fertility Rate (TFR)")
 ```
 
 \newpage
-```{r page-1ff-TFR-2nd-diff, echo = FALSE, warning = FALSE, message = FALSE}
+```{r page-1-1220 2nd diff, echo = FALSE, warning = FALSE, message = FALSE}
 TFRm1220 <- Arima(TFR_ts, order=c(12,2,0)) # not a viable model
 TFRm1220 # AIC=-57.55 AICc=-47.72
 res1220 <- residuals(TFRm1220)
