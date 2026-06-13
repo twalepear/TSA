@@ -912,37 +912,82 @@ abs1312 <- mean(abs(actualTLB - pred1312)) # 6014.802
 ```
 
 \newpage
-```{r page-2f TLB log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2 log diff TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 plot(log(TLB$`Total Live-Births`),
      type = 'l',
-     main = "Plot of Log Transformation for Total Live-Births (TLB) until 2012")
+     main = "Figure 24. Plot of Log Transformation for TLB until 2012")
 plot(diff(log(TLB$`Total Live-Births`)),
      type = 'l',
-     main = "Plot of Differenced Log Transformation for Total Live-Births (TLB) until 2012")
+     main = "Figure 25. Plot of Differenced Log Transformation for TLB until 2012")
 unitroot_kpss(diff(log(TLB$`Total Live-Births`))) # stationary
+```
+
+\newpage
+\begin{center}
+\text{Figure 26. ACF and PACF Plot for Differenced Log Transformation of Total Live-Births (TLB)}
+\end{center}
+```{r page-2 log diff ACF PACF TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 BirthAndFertility |>
   ACF(diff(log(TLB$`Total Live-Births`)), lag_max = 50) |>
   autoplot() +
-  labs(title = "ACF Plot for Differenced Log Transformation of Total Live-Births (TLB)")
+  labs(title = "ACF")
 BirthAndFertility |>
   PACF(diff(log(TLB$`Total Live-Births`)), lag_max = 50) |>
   autoplot() +
-  labs(title = "PACF Plot for Differenced Log Transformation of Total Live-Births (TLB)")
+  labs(title = "PACF")
+```
+
+\newpage
+```{r page-2-1510 TLB, echo = FALSE, warning = FALSE}
 TLBml1510 <- Arima(log(TLB_ts), order=c(15,1,0))
 TLBml1510 # AIC=-145.56 AICc=-130.02
 resl1510 <- residuals(TLBml1510)
+```
+$$
+\begin{aligned}
+&(1
++0.1455B
++0.1154B^2
+-0.0919B^3
++0.1862B^4
+-0.0220B^5
+-0.1559B^6 \\
+&\quad
+-0.1565B^7
+-0.1742B^8
+-0.0826B^9
++0.0706B^{10}
++0.2325B^{11}
+-0.2774B^{12} \\
+&\quad
++0.3642B^{13}
++0.3436B^{14}
++0.4237B^{15}
+)(1-B)\log(y_t) \\
+&= c+\varepsilon_t
+\end{aligned}
+$$
+
+\begin{center}
+\text{Figure 27. ACF and PACF plots of residuals for ARIMA(15,1,0) model fitted to TLB}
+\end{center}
+```{r page-2-1510 ACF PACF TLB, echo = FALSE, warning = FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
-acf(resl1510, lag.max = 50, main = "ACF of Residuals for ARIMA(15,1,0) for TLB with log transformation")
-pacf(resl1510, lag.max = 50, main = "PACF of Residuals for ARIMA(15,1,0) for TLB with log transformation")
+acf(resl1510, lag.max = 50, main = "ACF of Residuals")
+pacf(resl1510, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
+```
+
+```{r page-2-1510 forecast TLB, echo = FALSE, warning = FALSE}
 arimal1510 <- forecast(TLBml1510, h = 12)
 predl1510 <- arimal1510$mean
 pred1510 <- exp(predl1510)
 msel1510 <- mean((actualTFR - exp(predl1510))^2) # 2239721240
 absl1510 <- mean(abs(actualTFR - exp(predl1510))) # 47245.34
 ```
+
 \newpage
-```{r page-2g TLB log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2-1511 TLB log diff, echo = FALSE, warning = FALSE, message = FALSE}
 # TLBml1511 <- Arima(log(TLB_ts), order=c(15,1,1))
 # TLBml1511 # AIC=-145.43 AICc=-127.43
 # resl1511 <- residuals(TLBml1511)
@@ -955,7 +1000,7 @@ absl1510 <- mean(abs(actualTFR - exp(predl1510))) # 47245.34
 ```
 
 \newpage
-```{r page-2h TLB log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2-1411 TLB log diff, echo = FALSE, warning = FALSE}
 # TLBml1411 <- Arima(log(TLB_ts), order=c(14,1,1))
 # TLBml1411 # AIC=-140.56 AICc=-125.02
 # resl1411 <- residuals(TLBml1411)
@@ -968,7 +1013,7 @@ absl1510 <- mean(abs(actualTFR - exp(predl1510))) # 47245.34
 ```
 
 \newpage
-```{r page-2i TLB log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2-1311 TLB log diff, echo = FALSE, warning = FALSE, message = FALSE}
 # TLBml1311 <- Arima(log(TLB_ts), order=c(13,1,1))
 # TLBml1311 # AIC=-141.45 AICc=-128.11
 # resl1311 <- residuals(TLBml1311)
@@ -981,14 +1026,47 @@ absl1510 <- mean(abs(actualTFR - exp(predl1510))) # 47245.34
 ```
 
 \newpage
-```{r page-2j TLB log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2-1213 TLB log diff, echo = FALSE, warning = FALSE, message = FALSE}
 TLBml1213 <- Arima(log(TLB_ts), order=c(12,1,3))
 TLBml1213 # AIC=-139.69 AICc=-124.15
 resl1213 <- residuals(TLBml1213)
+```
+
+$$
+\begin{aligned}
+&(1
++0.3816B
++0.3915B^2
++0.4801B^3
++0.1650B^4
++0.0459B^5
+-0.0622B^6 \\
+&\quad
+-0.0321B^7
+-0.1705B^8
+-0.1587B^9
+-0.0805B^{10}
++0.0368B^{11}
+-0.4897B^{12}
+)(1-B)\log(y_t) \\
+&= (1
+-0.5443B
+-0.4755B^2
+-0.9169B^3)\varepsilon_t + c
+\end{aligned}
+$$
+
+\begin{center}
+\text{Figure 28. ACF and PACF plots of residuals for ARIMA(12,1,3) fitted to TLB}
+\end{center}
+```{r page-2-1213 ACF PACF TLB log diff, echo = FALSE, warning = FALSE, message = FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
-acf(resl1213, lag.max = 50, main = "ACF of Residuals for ARIMA(12,1,3) for TLB with log transformation")
-pacf(resl1213, lag.max = 50, main = "PACF of Residuals for ARIMA(12,1,3) for TLB with log transformation")
+acf(resl1213, lag.max = 50, main = "ACF of Residuals")
+pacf(resl1213, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
+```
+
+```{r page-2-1213 forecast TLB log diff, echo = FALSE, warning = FALSE}
 arimal1213 <- forecast(TLBml1213, h = 12)
 predl1213 <- arimal1213$mean
 pred1213 <- exp(predl1213)
@@ -1002,11 +1080,11 @@ absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 \end{center}
 | Model | AIC  | AICc | MSE | MAE |   |
 |:--------:|:------:|:------:|:------:|:------:|:------:|
-| ARIMA(16,1,0) | -63.99 | -45.99 | 0.04753075 | 0.1690442 | Lowest AIC |
+| **ARIMA(16,1,0)** | **-63.99** | **-45.99** | **0.04753075** | **0.1690442** | lowest AIC |
 | ARIMA(16,1,1) | -62.39 | -42.66 | 0.04783471 | 0.1700046 |  |
 | ARIMA(15,1,1) | -60.26 | -42.26 | 0.08431368 | 0.223524 |  |
 | ARIMA(14,1,3) | -60.99 | -40.26 | 0.01899351 | 0.09964934 |  |
-| ARIMA(12,2,3) | -62.57 | -46.57 | 0.01218546 | 0.08274547 | Lowest AICc |
+| **ARIMA(12,2,3)** | **-62.57** | **-46.57** | **0.01218546** | **0.08274547** | lowest AICc |
 | ARIMA(11,2,3) | -52.91 | -39.19 | 0.05260825 | 0.1823268 |
 | ARIMA(10,2,3) | -54.69 | -43.02 | 0.05680021 | 0.1898403 |
 
@@ -1015,14 +1093,14 @@ absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 \end{center}
 | Model | AIC  | AICc | MSE | MAE |   |
 |:--------:|:------:|:------:|:------:|:------:|:------:|
-| ARIMA(13,1,3) | -136 | -118 | 0.02602064 | 0.121592 | Lowest AIC Log Transform |
+| **ARIMA(13,1,3)** | **-136** | **-118** | **0.02602064** | **0.121592** | lowest AIC Log Transform |
 | ARIMA(12,1,4) | -131.83 | -113.83 | 0.02101819 | 0.1132223 |  |
 | ARIMA(13,1,5) | -133.96 | -110.21 | 0.05826379 | 0.1840232 |  |
 | ARIMA(12,1,5) | -130.02 | -109.3 | 0.02172126 | 0.1147922 |  |
 | ARIMA(15,2,0) | -133.67 | -117.67 | 0.01869052 | 0.1056717 |  |
 | ARIMA(15,2,2) | -135.54 | -114.17 | 0.02235162 | 0.1187815 |  |
-| ARIMA(14,2,2) | -130.49 | -111.94 | 0.01087075 | 0.08352761 |  |
-| ARIMA(13,2,2) | -132.39 | -116.39 | 0.007426324 | 0.06826933 | Lowest MSE & MAE |
+| ARIMA(14,2,2) | -10.49 | -111.94 | 0.01087075 | 0.08352761 |  |
+| **ARIMA(13,2,2)** | **-132.39** | **-116.39** | **0.007426324** | **0.06826933** | lowest MSE & MAE |
 | ARIMA(12,2,2) | -127.34 | -113.62 | 0.0498791 | 0.1720094 |
 
 \begin{center}
@@ -1032,8 +1110,8 @@ absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 |:--------:|:------:|:------:|:------:|:------:|:------:|
 | ARIMA(14,1,0) | 975.33 | 988.66 | 67367429 | 6853.008 |  |
 | ARIMA(14,1,1) | 975.62 | 991.17 | 84179161 | 7769.997 |  |
-| ARIMA(13,1,1) | 974.57 | 987.9 | 82856991 | 7698.072 | lowest AICc (no log transformation) |
-| ARIMA(13,1,2) | 973.01 | 988.56 | 54382525 | 6014.802 | lowest AIC (no log transformation), MSE & MAE |
+| **ARIMA(13,1,1)** | **974.57** | **987.9** | **82856991** | **7698.072** | lowest AICc (not log transformed) |
+| **ARIMA(13,1,2)** | **973.01** | **988.56** | **54382525** | **6014.802** | lowest AIC (not log transformed), MSE & MAE |
 
 \newpage
 \begin{center}
@@ -1041,7 +1119,7 @@ absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 \end{center}
 | Model | AIC  | AICc | MSE | MAE |  |
 |:--------:|:------:|:------:|:------:|:------:|:------:|
-| ARIMA(15,1,0) | -145.56 | -130.02 | 2239721240 | 47245.34 | lowest AICc (log transformed) |
+| **ARIMA(15,1,0)** | **-145.56** | **-130.02** | **2239721240** | **47245.34** | lowest AICc (log transformed) |
 | ARIMA(15,1,1) | -145.43 | -127.43 | 2173041601 | 46542.86 |  |
 | ARIMA(14,1,1) | -140.56 | -125.02 | 2211919788 | 46958.53 |  |
 | ARIMA(13,1,1) | -141.45 | -128.11 | 2200303964 | 46836.59 |  |
