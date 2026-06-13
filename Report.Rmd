@@ -236,7 +236,7 @@ autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
   labs(title = "Figure 1. Initial Plot of Total Fertility Rate (TFR)")
 plot(diff(TFR$`Total Fertility Rate (TFR)`),
      type = 'l',
-     main = "Figure 2. Plot of Differenced Total Fertility Rate (TFR) until 2012")
+     main = "Figure 2. Plot of Differenced TFR until 2012")
 unitroot_kpss(diff(TFR$`Total Fertility Rate (TFR)`)) # still not stationary
 ```
 \newpage
@@ -254,11 +254,12 @@ BirthAndFertility |>
   labs(title = "PACF")
 ```
 \newpage
-```{r page-1-1610 TFR, echo = FALSE, warning = FALSE, message = FALSE, fig.align = 'center'}
+```{r page-1-1610 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 TFRm1610 <- Arima(TFR_ts, order=c(16,1,0))
 TFRm1610 # AIC=-63.99 AICc=-45.99
 res1610 <- residuals(TFRm1610)
 ```
+
 Fitted ARIMA(16,1,0) model for TFR:
 $$
 \begin{aligned}
@@ -285,17 +286,18 @@ $$
 &=  c+\varepsilon_t
 \end{aligned}
 $$
+
 \begin{center}
 \text{Figure 4. ACF and PACF plots of residuals for the ARIMA(16,1,0) model fitted to TFR}
 \end{center}
-```{r page-1-1610 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%'}
+```{r page-1-1610 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
 acf(res1610, lag.max = 50, main = "ACF of Residuals")
 pacf(res1610, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
 ```
 
-```{r page-1b 1st diff forecast TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-1610 forecast TFR, echo = FALSE, warning = FALSE, message = FALSE}
 arima1610 <- forecast(TFRm1610, h = 12)
 pred1610 <- arima1610$mean
 mse1610 <- mean((actualTFR - pred1610)^2) # 0.04753075
@@ -303,7 +305,7 @@ abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```
 
 \newpage
-```{r page-1-1611 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-1611 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 # TFRm1611 <- Arima(TFR_ts, order=c(16,1,1))
 # TFRm1611 # AIC=-62.39 AICc=-41.66
 # res1611 <- residuals(TFRm1611)
@@ -316,7 +318,7 @@ abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```
 
 \newpage
-```{r page-1-1511 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-1511 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 # TFRm1511 <- Arima(TFR_ts, order=c(15,1,1))
 # TFRm1511 # AIC=-60.26 AICc=-42.26
 # res1511 <- residuals(TFRm1511)
@@ -329,7 +331,7 @@ abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```
 
 \newpage
-```{r page-1-1413 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-1413 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 # TFRm1413 <- Arima(TFR_ts, order=c(14,1,3))
 # TFRm1413 # AIC=-60.99 AICc=-40.26
 # res1413 <- residuals(TFRm1413)
@@ -345,9 +347,10 @@ abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```{r page-1 2nd diff TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "100%", fig.align = 'center'}
 plot(diff(diff(TFR$`Total Fertility Rate (TFR)`)),
      type = 'l',
-     main = "Figure 5. Plot of Differenced Twice Total Fertility Rate (TFR) until 2012")
+     main = "Figure 5. Plot of Differenced Twice TFR until 2012")
 unitroot_kpss(diff(diff(TFR$`Total Fertility Rate (TFR)`))) # now stationary
 ```
+
 \newpage
 \begin{center}
 \text{Figure 6. ACF and PACF Plots for Twice Differenced Total Fertility Rate (TFR)}
@@ -364,13 +367,16 @@ BirthAndFertility |>
 ```
 
 \newpage
-```{r page-1-1220 2nd diff, echo = FALSE, warning = FALSE, message = FALSE}
+```{r page-1-1220 (initial) TFR, echo = FALSE, warning = FALSE, message = FALSE}
 TFRm1220 <- Arima(TFR_ts, order=c(12,2,0)) # not a viable model
 TFRm1220 # AIC=-57.55 AICc=-47.72
 res1220 <- residuals(TFRm1220)
 ```
-Figure 6. ACF and PACF plots of residuals for the ARIMA(12,2,0) model fitted to TFR
-```{r page-1ff_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+
+begin{center}
+\text{Figure 7. ACF and PACF plots of residuals for the initial model: ARIMA(12,2,0) fitted to TFR}
+\end{center}
+```{r page-1-1220 (initial) ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
 acf(res1220, lag.max = 50, main = "ACF of Residuals")
 pacf(res1220, lag.max = 50, main = "PACF of Residuals")
@@ -378,11 +384,12 @@ par(mfrow = c(1, 1))
 ```
 
 \newpage
-```{r page-1ggTFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-1223 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 TFRm1223 <- Arima(TFR_ts, order=c(12,2,3))
 TFRm1223 # AIC=-62.57 AICc=-46.57
 res1223 <- residuals(TFRm1223)
 ```
+
 Fitted ARIMA(12,2,3) model for TFR:
 $$
 \begin{aligned}
@@ -407,12 +414,18 @@ $$
 +0.8593B^3)\varepsilon_t + c
 \end{aligned}
 $$
-Figure 7. ACF and PACF plots of residuals for the ARIMA(12,2,3) model fitted to TFR
-```{r page-1g_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+
+\begin{center}
+\text{Figure 8. ACF and PACF plots of residuals for the ARIMA(12,2,3) model fitted to TFR}
+\end{center}
+```{r page-1-1223 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
 acf(res1223, lag.max = 50, main = "ACF of Residuals")
 pacf(res1223, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
+```
+
+```{r page-1-1223 forecast TFR, echo=FALSE, warning=FALSE, message=FALSE}
 arima1223 <- forecast(TFRm1223, h = 12)
 pred1223 <- arima1223$mean
 mse1223 <- mean((actualTFR - pred1223)^2) # 0.01218546
@@ -420,7 +433,7 @@ abs1223 <- mean(abs(actualTFR - pred1223)) # 0.08274547
 ```
 
 \newpage
-```{r page-1h TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-1123 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 # TFRm1123 <- Arima(TFR_ts, order=c(11,2,3))
 # TFRm1123 # AIC=-52.91 AICc=-39.19
 # res1123 <- residuals(TFRm1123)
@@ -433,7 +446,7 @@ abs1223 <- mean(abs(actualTFR - pred1223)) # 0.08274547
 ```
 
 \newpage
-```{r page-1i TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-1023 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 # TFRm1023 <- Arima(TFR_ts, order=c(10,2,3))
 # TFRm1023 # AIC=-54.69 AICc=-43.02
 # res1023 <- residuals(TFRm1023)
@@ -446,32 +459,42 @@ abs1223 <- mean(abs(actualTFR - pred1223)) # 0.08274547
 ```
 
 \newpage
-```{r page-1j TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1 log diff TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 plot(log(TFR$`Total Fertility Rate (TFR)`),
      type = 'l',
-     main = "Plot of Log Transformation for Total Fertility Rate (TFR) until 2012")
+     main = "Figure 9. Plot of Log Transformation for TFR until 2012")
 plot(diff(log(TFR$`Total Fertility Rate (TFR)`)),
      type = 'l',
-     main = "Plot of Differenced Log Transformation for Total Fertility Rate (TFR)")
+     main = "Figure 10. Plot of Differenced Log Transformation for TFR until 2012")
 unitroot_kpss(diff(log(TFR$`Total Fertility Rate (TFR)`))) # borderline 0.0405
-BirthAndFertility |>
-  ACF(diff(log(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
-  autoplot() +
-  labs(title = "ACF Plot for Differenced Log Transformation of Total Fertility Rate (TFR)")
-BirthAndFertility |>
-  PACF(diff(log(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
-  autoplot() +
-  labs(title = "PACF Plot for Differenced Log Transformation of Total Fertility Rate (TFR)")
 ```
 
 \newpage
-```{r page-1ggg TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+\begin{center}
+\text{Figure 11. ACF and PACF Plots for Differenced Log Transformation of Total Fertility Rate (TFR)}
+\end{center}
+```{r page-1 log diff ACF PACF TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
+BirthAndFertility |>
+  ACF(diff(log(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
+  autoplot() +
+  labs(title = "ACF")
+BirthAndFertility |>
+  PACF(diff(log(TFR$`Total Fertility Rate (TFR)`)), lag_max = 50) |>
+  autoplot() +
+  labs(title = "PACF")
+```
+
+\newpage
+```{r page-1-1310 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 TFRml1310 <- Arima(log(TFR_ts), order=c(13,1,0)) # not a viable model
 TFRml1310 # AIC=-131.8 AICc=-120.45
 resl1310 <- residuals(TFRml1310)
 ```
-Figure 8. ACF and PACF plots of residuals for the ARIMA(13,1,0) model fitted to TFR with log transformation
-```{r page-1gg_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+
+\begin{center}
+\text{Figure 12. ACF and PACF plots of residuals for the initial log transformed model: ARIMA(13,1,0) model fitted to TFR}
+\end{center}
+```{r page-1-1310 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%'}
 par(mfrow = c(1, 2))
 acf(resl1310, lag.max = 50, main = "ACF of Residuals")
 pacf(resl1310, lag.max = 50, main = "PACF of Residuals")
@@ -479,11 +502,12 @@ par(mfrow = c(1, 1))
 ```
 
 \newpage
-```{r page-1k TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-1313 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 TFRml1313 <- Arima(log(TFR_ts), order=c(13,1,3))
 TFRml1313 # AIC=-136 AICc=-118
 resl1313 <- residuals(TFRml1313)
 ```
+
 Fitted ARIMA(13,1,3) model for TFR:
 $$
 \begin{aligned}
@@ -509,12 +533,18 @@ $$
 -0.9749B^3)\varepsilon_t + c
 \end{aligned}
 $$
-Figure 9. ACF and PACF plots of residuals for the ARIMA(13,1,3) model fitted to TFR with log transformation
-```{r page-1f_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+
+\begin{center}
+\text{Figure 13. ACF and PACF plots of residuals for the ARIMA(13,1,3) model fitted to TFR with log transformation}
+\end{center}
+```{r page-1-1313 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%'}
 par(mfrow = c(1, 2))
 acf(resl1313, lag.max = 50, main = "ACF of Residuals")
 pacf(resl1313, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
+```
+
+```{r page-1-1313 forecast TFR, echo=FALSE, warning=FALSE, message=FALSE}
 arimal1313 <- forecast(TFRml1313, h = 12)
 predl1313 <- arimal1313$mean
 pred1313 <- exp(predl1313)
@@ -523,7 +553,7 @@ absl1313 <- mean(abs(actualTFR - exp(predl1313))) # 0.121592
 ```
 
 \newpage
-```{r page-1l TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-l1214 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 # TFRml1214 <- Arima(log(TFR_ts), order=c(12,1,4))
 # TFRml1214 # AIC=-131.83 AICc=-113.83
 # resl1214 <- residuals(TFRml1214)
@@ -536,7 +566,7 @@ absl1313 <- mean(abs(actualTFR - exp(predl1313))) # 0.121592
 ```
 
 \newpage
-```{r page-1m TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-l1315 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 # TFRml1315 <- Arima(log(TFR_ts), order=c(13,1,5))
 # TFRml1315 # AIC=-133.96 AICc=-110.21
 # resl1315 <- residuals(TFRml1315)
@@ -549,7 +579,7 @@ absl1313 <- mean(abs(actualTFR - exp(predl1313))) # 0.121592
 ```
 
 \newpage
-```{r page-1n TFR log diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-l1215 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 # TFRml1215 <- Arima(log(TFR_ts), order=c(12,1,5))
 # TFRml1215 # AIC=-130.02 AICc=-109.3
 # resl1215 <- residuals(TFRml1215)
@@ -562,29 +592,47 @@ absl1313 <- mean(abs(actualTFR - exp(predl1313))) # 0.121592
 ```
 
 \newpage
-```{r page-1o TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1 log 2nd diff TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "100%", fig.align = 'center'}
 plot(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))),
      type = 'l',
-     main = "Plot of Differenced Twice Log Transformation for TFR")
+     main = "Figure 14. Plot of Differenced Twice Log Transformation for TFR")
 unitroot_kpss(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))))
+```
+
+\newpage
+\begin{center}
+\text{Figure 15. ACF and PACF Plots for Twice Differenced Log Transformation of TFR}
+\end{center}
+```{r page-1 log 2nd diff ACF PACF TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 BirthAndFertility |>
   ACF(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))), lag_max = 50) |>
   autoplot() +
-  labs(title = "ACF Plot for Twice Differenced Log Transformation of TFR")
+  labs(title = "ACF")
 BirthAndFertility |>
   PACF(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))), lag_max = 50) |>
   autoplot() +
-  labs(title = "PACF Plot for Twice Differenced Log Transformation of Total Fertility Rate (TFR)")
+  labs(title = "PACF")
+```
+
+\newpage
+```{r page-1-l1520 TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "100%", fig.align = 'center'}
+
 TFRml1520 <- Arima(log(TFR_ts), order=c(15,2,0))
 TFRml1520 # AIC=-133.67 AICc=-117.67
 resl1520 <- residuals(TFRml1520)
 ```
-Figure 8. ACF and PACF plots of residuals for the ARIMA(13,1,0) model fitted to TFR with log transformation
-```{r page-1o_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+
+\begin{center}
+\text{Figure 16. ACF and PACF plots of residuals for the ARIMA(15,2,0) model fitted to TFR with log transformation}
+\end{center}
+```{r page-1-l1520 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
-acf(resl1520, lag.max = 50, main = "ACF of Residuals for ARIMA(15,2,0) for TFR with log transformation")
-pacf(resl1520, lag.max = 50, main = "PACF of Residuals for ARIMA(15,2,0) for TFR with log transformation")
+acf(resl1520, lag.max = 50, main = "ACF of Residuals")
+pacf(resl1520, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
+```
+
+```{r page-1-l1520 forecast TFR, echo=FALSE, warning=FALSE, message=FALSE}
 arimal1520 <- forecast(TFRml1520, h = 12)
 predl1520 <- arimal1520$mean
 msel1520 <- mean((actualTFR - exp(predl1520))^2) # 0.01869052
@@ -592,7 +640,7 @@ absl1520 <- mean(abs(actualTFR - exp(predl1520))) # 0.1056717
 ```
 
 \newpage
-```{r page-1p TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-l1522 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 # TFRml1522 <- Arima(log(TFR_ts), order=c(15,2,2))
 # TFRml1522 # AIC=-135.54 AICc=-114.17
 # resl1522 <- residuals(TFRml1522)
@@ -605,7 +653,7 @@ absl1520 <- mean(abs(actualTFR - exp(predl1520))) # 0.1056717
 ```
 
 \newpage
-```{r page-1q TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-l1422 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 # TFRml1422 <- Arima(log(TFR_ts), order=c(14,2,2))
 # TFRml1422 # AIC=-130.49 AICc=-111.94
 # resl1422 <- residuals(TFRml1422)
@@ -618,7 +666,7 @@ absl1520 <- mean(abs(actualTFR - exp(predl1520))) # 0.1056717
 ```
 
 \newpage
-```{r page-1r TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-l1322 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 TFRml1322 <- Arima(log(TFR_ts), order=c(13,2,2))
 TFRml1322 # AIC=-132.39 AICc=-116.39
 resl1322 <- residuals(TFRml1322)
@@ -648,12 +696,19 @@ $$
 -0.7851B^2)\varepsilon_t + c
 \end{aligned}
 $$
-Figure 10. ACF and PACF plots of residuals for the ARIMA(13,2,2) model fitted to TFR with log transformation
-```{r page-1r_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
+
+\begin{center}
+\text{Figure 17. ACF and PACF plots of residuals for the ARIMA(13,2,2) model fitted to TFR with log transformation
+}
+\end{center}
+```{r page-1-1322 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
 acf(resl1322, lag.max = 50, main = "ACF of Residuals")
 pacf(resl1322, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
+```
+
+```{r page-1-1322 forecast TFR, echo=FALSE, warning=FALSE, message=FALSE}
 arimal1322 <- forecast(TFRml1322, h = 12)
 predl1322 <- arimal1322$mean
 pred1322 <- exp(predl1322)
@@ -662,7 +717,7 @@ absl1322 <- mean(abs(actualTFR - exp(predl1322))) # 0.06826933
 ```
 
 \newpage
-```{r page-1s TFR log 2nd diff, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-1-l1222 TFR, echo = FALSE, warning = FALSE, message = FALSE}
 # TFRml1222 <- Arima(log(TFR_ts), order=c(12,2,2))
 # TFRml1222 # AIC=-127.34 AICc=-113.62
 # resl1222 <- residuals(TFRml1222)
@@ -675,38 +730,73 @@ absl1322 <- mean(abs(actualTFR - exp(predl1322))) # 0.06826933
 ```
 
 \newpage
-
-
-\newpage
-```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 autoplot(BirthAndFertility,`Total Live-Births`) +
   geom_vline(xintercept = 2012, colour = "red") +
-  labs(title = "Initial Plot of Total Live-Births")
-```
-
-```{r page-2b TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+  labs(title = "Figure 18. Initial Plot of Total Live-Births")
 plot(diff(TLB$`Total Live-Births`),
      type = 'l',
-     main = "Plot of Differenced Total Live Births (TLB) until 2012")
+     main = "Figure 19. Plot of Differenced Total Live Births (TLB) until 2012")
 unitroot_kpss(diff(TLB$`Total Live-Births`)) # stationary
-TLBACF <- BirthAndFertility |>
+```
+
+\newpage
+\begin{center}
+\text{Figure 20. ACF and PACF Plots for Differenced Total Live Births (TLB)}
+\end{center}
+```{r page-2 TLB ACF PACF, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
+BirthAndFertility |>
   ACF(diff(TLB$`Total Live-Births`), lag_max = 50) |>
   autoplot() +
-  labs(title = "ACF Plot for Differenced Total Live Births (TLB)")
-TLBPACF <- BirthAndFertility |>
+  labs(title = "ACF")
+BirthAndFertility |>
   PACF(diff(TLB$`Total Live-Births`), lag_max = 50) |>
   autoplot() +
-  labs(title = "PACF Plot for Differenced Total Live Births (TLB)")
-TLBACF + TLBPACF + 
-  patchwork::plot_annotation(
-    title = "Figure 9. ACF and PACF Plots for Differenced Total Live-Births (TLB)")
+  labs(title = "PACF")
+```
+
+\newpage
+```{r page-2-1410 TLB, echo = FALSE, warning = FALSE, message = FALSE, fig.align = 'center'}
 TLBm1410 <- Arima(TLB_ts, order=c(14,1,0))
 TLBm1410 # AIC=975.33 AICc=988.66
 resb1410 <- residuals(TLBm1410)
+```
+Fitted ARIMA(14,1,0) model for TLB:
+$$
+\begin{aligned}
+&(1
+-0.0260B
+-0.0380B^2
++0.0184B^3
++0.0555B^4
+-0.0794B^5
+-0.1459B^6 \\
+&\quad
+-0.1111B^7
+-0.1666B^8
+-0.0608B^9
++0.0696B^{10}
++0.2211B^{11}
+-0.2823B^{12}
++0.3715B^{13}
++0.2759B^{14}
+)(1-B)y_t \\
+&= c + \varepsilon_t
+\end{aligned}
+$$
+
+\begin{center}
+\text{Figure 21. ACF and PACF plots of residuals for ARIMA(14,1,0) model fitted to TLB}
+\end{center}
+```{r page-2-1410 ACF PACF TLB, echo = FALSE, warning = FALSE, message = FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
-acf(resb1410, lag.max = 50, main = "ACF of Residuals for ARIMA(14,1,0) for TLB")
-pacf(resb1410, lag.max = 50, main = "PACF of Residuals for ARIMA(14,1,0) for TLB")
+acf(resb1410, lag.max = 50, main = "ACF of Residuals")
+pacf(resb1410, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
+```
+
+\newpage
+```{r page-2-1410 forecast TLB, echo = FALSE, warning = FALSE, message = FALSE}
 arima1410 <- forecast(TLBm1410, h = 12)
 pred1410 <- arima1410$mean
 mse1410 <- mean((actualTLB - pred1410)^2) # 67367429
@@ -714,7 +804,7 @@ abs1410 <- mean(abs(actualTLB - pred1410)) # 6853.008
 ```
 
 \newpage
-```{r page-2c TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2-1411 TLB, echo = FALSE, warning = FALSE, message = FALSE}
 # TLBm1411 <- Arima(TLB_ts, order=c(14,1,1))
 # TLBm1411 # AIC=975.62 AICc=991.17
 # resb1411 <- residuals(TLBm1411)
@@ -727,14 +817,45 @@ abs1410 <- mean(abs(actualTLB - pred1410)) # 6853.008
 ```
 
 \newpage
-```{r page-2d TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2-1311 TLB, echo = FALSE, warning = FALSE, message = FALSE}
 TLBm1311 <- Arima(TLB_ts, order=c(13,1,1))
 TLBm1311 # AIC=974.57 AICc=987.9
 resb1311 <- residuals(TLBm1311)
+```
+
+Fitted ARIMA(13,1,1) model for TLB:
+$$
+\begin{aligned}
+&(1
+-0.5571B
++0.0703B^2
+-0.0264B^3
++0.0762B^4
+-0.0940B^5
+-0.1004B^6 \\
+&\quad
+-0.0542B^7
+-0.1077B^8
++0.0216B^9
++0.0853B^{10}
++0.1964B^{11}
+-0.4091B^{12}
++0.5605B^{13}
+)(1-B)y_t \\
+&= (1 + 0.5344B)\varepsilon_t + c
+\end{aligned}
+$$
+\begin{center}
+\text{Figure 22. ACF and PACF plots of residuals for ARIMA(13,1,1) model fitted to TLB}
+\end{center}
+```{r page-2-1311 ACF PACF TLB, echo = FALSE, warning = FALSE, message = FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
-acf(resb1311, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,1) for TLB")
-pacf(resb1311, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,1) for TLB")
+acf(resb1311, lag.max = 50, main = "ACF of Residuals")
+pacf(resb1311, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
+```
+
+```{r page-2-1311 forecast TLB, echo = FALSE, warning = FALSE, message = FALSE}
 arima1311 <- forecast(TLBm1311, h = 12)
 pred1311 <- arima1311$mean
 mse1311 <- mean((actualTLB - pred1311)^2) # 82856991
@@ -742,14 +863,48 @@ abs1311 <- mean(abs(actualTLB - pred1311)) # 7698.072
 ```
 
 \newpage
-```{r page-2e TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
+```{r page-2-1312 TLB, echo = FALSE, warning = FALSE, message = FALSE}
 TLBm1312 <- Arima(TLB_ts, order=c(13,1,2))
 TLBm1312 # AIC=973.01 AICc=988.56
 resb1312 <- residuals(TLBm1312)
+```
+
+Fitted ARIMA(13,1,2) model for TLB:
+$$
+\begin{aligned}
+&(1
+-0.6648B
++0.4027B^2
++0.0077B^3
++0.0835B^4
+-0.1408B^5
+-0.0861B^6 \\
+&\quad
+-0.0430B^7
+-0.1468B^8
++0.0053B^9
++0.0478B^{10}
++0.1305B^{11}
+-0.4076B^{12}
++0.6385B^{13}
+)(1-B)y_t \\
+&= (1
++0.7326B
+-0.5855B^2)\varepsilon_t + c
+\end{aligned}
+$$
+
+\begin{center}
+\text{Figure 23. ACF and PACF plots of residuals for ARIMA(13,1,2) model fitted to TLB}
+\end{center}
+```{r page-2-1312 ACF PACF TLB, echo = FALSE, warning = FALSE, message = FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
-acf(resb1312, lag.max = 50, main = "ACF of Residuals for ARIMA(13,1,2) for TLB")
-pacf(resb1312, lag.max = 50, main = "PACF of Residuals for ARIMA(13,1,2) for TLB")
+acf(resb1312, lag.max = 50, main = "ACF of Residuals")
+pacf(resb1312, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
+```
+
+```{r page-2-1312 forecast TLB, echo = FALSE, warning = FALSE, message = FALSE}
 arima1312 <- forecast(TLBm1312, h = 12)
 pred1312 <- arima1312$mean
 mse1312 <- mean((actualTLB - pred1312)^2) # 54382525
