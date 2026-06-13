@@ -4,43 +4,43 @@ author: "Thoa Thanh Thi Le"
 output: pdf_document
 ---
 
-# 1. Abstract
+# Abstract
 ```{r echo = FALSE}
 # 2/30 points
 # comprehensively and succinctly summarised research question, analysis, and key findings.
 
 # Statistical results translated into accessible and accurate description for non-scientific audience
 ```
+This report investigates whether ARIMA models can accurately forecast Singapore's total fertility rate (TFR) and total live births (TLB) while capturing short-term fluctuations. Annual data from 1960 to 2024 were obtained from the Singapore Department of Statistics and split into a training period (1960-2012) and a testing period (2013-2024). A range of ARIMA models were developed using combinations of logarithmic transformation and differencing to achieve stationarity, with model selection based on Akaike's Information Criterion (AIC), corrected AIC (AICc), and forecast accuracy measures including mean squared error (MSE) and mean absolute error (MAE). The results show that ARIMA models effectively capture long-term declining trends in both TFR and TLB but less effective in capturing short-term fluctuations. Forecast performance varied depending on model specification, with no single model performing best across all evaluation criteria. Overall, while ARIMA models are suitable for long-term forecasting, their reliance on historical data limits their ability to capture structural and external influences, reducing their reliability under changing demographic conditions. 
 
-
-# 2. Introduction
+# 1. Introduction
 ```{r echo = FALSE}
 # 4/30 points Introduction and Literature Review
 # clear, comprehensive, and highly relevant background information provided for data context
 
 # research question clearly and succinctly stated, well-motivated by EDA, strongly linked to data context (e.g. using previous studies)
 ```
-Total fertility rates (TFRs) are key population indicators that are widely monitored because they influence age structure and population growth (Wilmoth et al.2022; World Health Organisation). Globally, fertility rates have declined over recent decades (Chen et al. 2018; Shair et al. 2024; Vanella 2024). In Singapore, the total fertility rate has dropped below the replacement level required for a population to replace itself across generations (Jones & Hamid 2015; Tan, 2024; Wilmoth et al. 2022). Therefore, forecasting TFR and total live births (TLB) may provide insight into future fertility patterns and population change in Singapore. Preliminary exploratory data analysis indicated a long-term decline in TFR and TLB with periodic fluctuations, motivating the use of forecasting models capable of capturing these patterns.
+Total fertility rates (TFRs) are key population indicators that are widely monitored because they influence age structure and population growth (Wilmoth et al., 2022; World Health Organization). Globally, fertility rates have declined over recent decades (Chen et al., 2018; Shair et al., 2024; Vanella, 2024). In Singapore, the total fertility rate has dropped below the replacement level required for a population to replace itself across generations (Jones & Hamid, 2015; Tan, 2024; Wilmoth et al., 2022). Therefore, forecasting TFR and total live births (TLB) may provide insight into future fertility patterns and population change in Singapore. Preliminary exploratory data analysis indicated a long-term decline in TFR and TLB with periodic fluctuations, suggesting the use of ARIMA models.
 
-Data from 1960 to 2024 on TLB and TFR were obtained from the Singapore Department of Statistics (2023). The research question addressed in this report is: Can ARIMA models accurately forecast Singapore's TLB and TFR while capturing short-term fluctuations?
+Data from 1960 to 2024 on TLB and TFR were obtained from the Singapore Department of Statistics. (2023). The research question addressed in this report is: Can ARIMA models accurately forecast Singapore's TLB and TFR while capturing short-term fluctuations?
 
-This report is structured as follows. Part 3 describes the fertility decline in Singapore, Part 4 describes the process and workflow of obtaining viable ARIMA models, 
-
-# 3. Literature Review
-
-Around 1965, Singapore introduced policies aimed at reducing population growth, which contributed to subsequent declines in fertility rates (Chen et al. 2018; Goodkind 1996; Singh et al. 1988; Vanella 2024). Despite this long-term decline, there may be cyclical patterns in TFR and TLB. These fluctuations may be associated with cultural preferences surrounding Lunar zodiac Dragon years (1964, 1976, 1988, 2000, 2012 and 2024), which are considered especially auspicious years and have been associated with higher fertility rates and live births (Goodkind 1996; Jones & Hamid 2015). Forecasting such series therefore requires models that can capture both long-term trends and short-term variation. Among the various models for time series forecasting, ARIMA models are particularly flexible because they allow selection from a broad class of models rather than imposing a single model form on every time series (Kolambe & Arora 2024; Newbold 1983). Consequently, ARIMA models were selected as the forecasting approach for Singapore's TFR and TLB.
+This report is structured as follows. Section 2 discusses the fertility decline in Singapore. Section 3 describes the process of developing and selecting appropriate ARIMA models. Section 4 presents the forecasting results and model performance based on AIC, AICc, MSE and MAE for the chosen viable models. Section 5 discusses the findings and limitations. Section 6 concludes the report.
 
 \newpage
-# 4. Methods
+# 2. Literature Review
+Around 1965, Singapore introduced policies aimed at reducing population growth, which contributed to subsequent declines in fertility rates (Chen et al., 2018; Goodkind, 1996; Singh et al., 1988; Vanella, 2024). Despite this long-term decline, there may be periodic fluctuations in TFR and TLB. These fluctuations may be associated with cultural preferences surrounding Lunar zodiac Dragon years (1964, 1976, 1988, 2000, 2012 and 2024), which are considered especially auspicious and have been associated with temporary increases in fertility rates and live births (Goodkind, 1996; Jones & Hamid, 2015). Forecasting such series therefore requires models that can capture both long-term trends and short-term variation. Among the various models for time series forecasting, ARIMA models are particularly flexible because they allow the model structure to be selected according to the characteristics of the data rather than imposing a single model form (Kolambe & Arora, 2024; Newbold, 1983). Consequently, ARIMA models were selected as the forecasting approach for Singapore's TFR and TLB.
+
+# 3. Methods
 ```{r echo = FALSE}
 # 5/30 points
 # comprehensively described and justified modelling process and workflow in succinct manner
 
 # model(s) used are highly appropriate for research question and data with comprehensive justification
 ```
-For both TFR and TLB, an identical modelling workflow was applied. The analysis focused on the period from 1960-2012 for model fitting, with observations 2013-2024 reserved for evaluating forecast accuracy. Initial plots were used to examine the presence of trends, seasonality, and other notable patterns, which indicated a long-term decreasing trend in both series. Several transformations were considered including logarithmic transformation and first- and second-order differencing. Stationarity was assessed using the KPSS test. For each transformed series, autocorrelation (ACF) and partial autocorrelation (PACF) plots were used to find candidate ARIMA models. The candidate ARIMA models were then fitted and the residual ACF and PACF were examined to assess whether the residuals resembled white noise. Forecast accuracy was evaluated using mean square error (MSE) and mean absolute error (MAE) while model selection was guided by Akaike's Information Criterion (AIC) and the corrected Akaike's Information Criterion (AICc). This procedure was applied consistently to both series to ensure comparability of results.
+For both TFR and TLB, an identical modelling workflow was applied. The analysis focused on the period from 1960-2012 for model fitting, with years 2013-2024 reserved for evaluating forecast accuracy. Initial plots were used to examine the presence of trends, seasonality, and other notable patterns, which indicated a long-term decreasing trend in both series. Several transformations, including logarithmic transformation and first- and second-order differencing were applied to achieve stationarity. Stationarity was assessed using the KPSS test. For each transformed series, autocorrelation (ACF) and partial autocorrelation (PACF) plots were used to identify candidate ARIMA orders. Candidate ARIMA models were fitted, and residual ACF and PACF plots were examined to determine whether the residuals resembled white noise. Forecast accuracy was evaluated using mean squared error (MSE) and mean absolute error (MAE) while model selection was guided by Akaike's Information Criterion (AIC) and the corrected Akaike's Information Criterion (AICc). This procedure was applied consistently to both series to ensure comparability of results. All ACF and PACF plots, along with model outputs, are provided in the Appendix.
 
-# 5. Results
+\newpage
+# 4. Results
 ```{r echo = FALSE}
 # 5/30 points
 # flawlessly estimated relevant time series models(s) and/or forecasts in R
@@ -50,8 +50,10 @@ For both TFR and TLB, an identical modelling workflow was applied. The analysis 
 # critically interpreted and evaluated model fits with appropriate comprehensive use of diagnostics
 
 ```
+This section presents model fitting and forecast accuracy for TFR and TLB.
+
 \begin{center}
-\textbf{Table 1. TFR - no log transformation}
+\text{Table 1. TFR - no log transformation}
 \end{center}
 | Model | AIC  | AICc | MSE | MAE |
 |:--------:|:------:|:------:|:------:|:------:| 
@@ -59,15 +61,17 @@ For both TFR and TLB, an identical modelling workflow was applied. The analysis 
 | ARIMA(12,2,3) | -62.57 | -46.57 | 0.01218546 | 0.08274547 |**
 
 \begin{center}
-\textbf{Table 2. TFR - log transformed}
+\text{Table 2. TFR - log transformed}
 \end{center}
 | Model | AIC  | AICc | MSE | MAE |
 |:--------:|:------:|:------:|:------:|:------:| 
 | ARIMA(13,1,3) | -136 | -118 | 0.02602064 | 0.121592 | **
 | ARIMA(13,2,2) | -132.39 | -116.39 | 0.007426324 | 0.06826933 |**
 
+For TFR, models fitted to both non-log and log-transformed series were compared using AIC, AICc, MSE, and MAE. The ARIMA(13,2,2) model achieved the lowest forecast error and was selected as the preferred model.
+
 \begin{center}
-\textbf{Table 3. TLB - no log transformation}
+\text{Table 3. TLB - no log transformation}
 \end{center}
 | Model | AIC  | AICc | MSE | MAE |
 |:--------:|:------:|:------:|:------:|:------:| 
@@ -75,32 +79,45 @@ For both TFR and TLB, an identical modelling workflow was applied. The analysis 
 | ARIMA(13,1,2) | 973.01 | 988.56 | 54382525 | 6014.802 |**
 
 \begin{center}
-\textbf{Table 4. TLB - log transformed}
+\text{Table 4. TLB - log transformed}
 \end{center}
 | Log Transformed TLB Model | AIC  | AICc | MSE | MAE |
 |:--------:|:------:|:------:|:------:|:------:| 
 | ARIMA(15,1,0) | -145.56 | -130.02 | 2239721240 | 47245.34 |**
 | ARIMA(12,1,3) | -139.69 | -124.15 | 1752591080 | 41851.92 |**
 
-# 6. Discussion
+For TLB, the ARIMA(13,1,2) model produced the lowest forecast error and was selected as the preferred model.
+
+\newpage
+```{r, echo=FALSE}
+knitr::include_graphics("Comparison of ARIMA Forecasts for TFR.jpg")
+```
+The forecast plot for TFR indicates that the selected model follows the overall downward trend in the data.
+
+```{r, echo=FALSE}
+knitr::include_graphics("Comparison of ARIMA Forecasts for TLB.jpg")
+```
+The forecast plot for TLB indicates that the candidate models do not fully capture short-term fluctuations in the observed data.
+
+# 5. Discussion
 ```{r echo = FALSE}
 # 5/30 points
 # thoroughly integrated limitations of models and processes into statistical conclusions
 
 # comprehensively evaluated impact of model limitations on answering research question
 ```
-For TFR, the initial model, ARIMA(16,1,0) has the lowest AIC (-63.99) but its forecast accuracy was lower compared to the other models, including the log transformed models. Furthermore the KPSS test suggested the series remained stationary after first-order differencing. Hence models based on second-order differencing were considered and ARIMA(12,2,3) has the lowest AICc (-46.57) and achieved better forecast accuracy. This suggests that second-order differencing provided a better representation of the underlying series.
+The results show that model selection solely based on information criteria such as AIC and AICc does not align with forecast accuracy. Across both TFR and TLB, models with lower AIC or AICc values did not consistently produce the lowest forecast errors, highlighting the importance of evaluating models using both in-sample fit and out-of-sample performance.
 
-Among the log transformed data, ARIMA(13,1,3) produced the lowest AIC (-136) but the forecast accuracy were did not perform as well as ARIMA(13,2,2) which has the lowest AICc (-116.39) and lowest MSE (0.007426) and lowest MAE (0.06827) across all TFR models. These results suggest that applying a log transformation together with second-order differencing improved the forecast performance for the TFR series.
+For TFR, applying a log transformation combined with second-order differencing improved forecast accuracy compared to simpler specifications. This suggests that the series exhibits strong trends and variability that are better captured after transformation and differencing. However, the improved performance is accompanied by increased model complexity, which raises the possibility of overfitting.
 
-For TLB, the ARIMA(13,1,2) model has the lowest AIC (973.01) and produced lowest forecast errors than the other TLB models (MSE: 54,382,525 & MAE: 6,014.80). ARIMA(13,1,1) model has the lower AICc (987.9) but its forecast accuracy was lower.
+For TLB, first-order differencing was sufficient to remove the underlying trend, and logarithmic transformation did not improve forecast performance. This suggests that the variance of TLB is relatively stable, and additional transformations may not meaningfully improve model fit or forecast accuracy. 
 
-Among the log-transformed models, ARIMA(15,1,0) model produced the lower AIC (-145.56) and AICc (-130.02) but lower forecast accuracy. While ARIMA(12,1,3) had higher AIC and AICc values, it had a better forecast accuracy than ARIMA(15,1,0), log-transformed models resulted in considerably larger forecast errors when transformed back to the original scale.
+Despite finding candidate ARIMA models, they are limited by their reliance on historical observations and do not incorporate external variables. This limitation is particularly evident in the absence of an observable increase in the 2024 Dragon year, suggesting that cultural or policy-related effects are not captured by the model structure. Furthermore, several selected models involve relatively high-order autoregressive and moving average terms, increasing model complexity and reinforcing concerns about potential overfitting.
 
-These results suggest that first-order differencing was sufficient to account for the long-term trend in TLB, while logarithmic transformation did not improve forecast accuracy. However, the selected model contains a large number of autoregressive and moving average terms. Furthermore, ARIMA models rely solely on historical observations and do not explicitly incorporate external factors such as policies, economic status, or cultural influences. Therefore, while the model performed reasonably well for the evaluation period, forecast accuracy may decline if future birth patterns differ substantially from historical trends.
+Overall, while ARIMA models are effective at capturing long-term declining trends in TFR and TLB, their ability to account for short-term fluctuations or behavioural changes is limited, which constrains forecast reliability under changing demographic conditions.
 
-# 7. Conclusion
-
+# 6. Conclusion
+This report investigates whether ARIMA models can accurately forecast Singapore's TLB and TFR while capturing short-term fluctuations. Overall, the results indicate that ARIMA models are suitable for capturing long-term declining trends in both series, but are less effective at capturing short-term variability and structural fluctuations. Forecast performance varied depending on transformation and differencing choices, with no single model consistently optimal across information criteria and error-based measures. This highlights the importance of balancing model fit with accuracy measures when forecasting demographic time series. The reliance on historical observations limits ARIMA models' ability to incorporate external influences, which in turn may reduce reliability under changing conditions. 
 
 ```{r echo = FALSE}
 # report presentation 2/30 points
@@ -233,15 +250,15 @@ actualTLB <- BirthAndFertility |>
 ```{r page-1 1st diff TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
   geom_vline(xintercept = 2012, colour = "red") +
-  labs(title = "Figure 1. Initial Plot of Total Fertility Rate (TFR)")
+  labs(title = "Figure 3. Initial Plot of Total Fertility Rate (TFR)")
 plot(diff(TFR$`Total Fertility Rate (TFR)`),
      type = 'l',
-     main = "Figure 2. Plot of Differenced TFR until 2012")
+     main = "Figure 4. Plot of Differenced TFR until 2012")
 unitroot_kpss(diff(TFR$`Total Fertility Rate (TFR)`)) # still not stationary
 ```
 \newpage
 \begin{center}
-\text{Figure 3. ACF and PACF Plots for Differenced Total Fertility Rate (TFR)}
+\text{Figure 5. ACF and PACF Plots for Differenced Total Fertility Rate (TFR)}
 \end{center}
 ```{r page-1 1st diff ACF PACF TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 BirthAndFertility |>
@@ -288,7 +305,7 @@ $$
 $$
 
 \begin{center}
-\text{Figure 4. ACF and PACF plots of residuals for the ARIMA(16,1,0) model fitted to TFR}
+\text{Figure 6. ACF and PACF plots of residuals for the ARIMA(16,1,0) model fitted to TFR}
 \end{center}
 ```{r page-1-1610 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
@@ -347,13 +364,13 @@ abs1610 <- mean(abs(actualTFR - pred1610)) # 0.1690442
 ```{r page-1 2nd diff TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "100%", fig.align = 'center'}
 plot(diff(diff(TFR$`Total Fertility Rate (TFR)`)),
      type = 'l',
-     main = "Figure 5. Plot of Differenced Twice TFR until 2012")
+     main = "Figure 7. Plot of Differenced Twice TFR until 2012")
 unitroot_kpss(diff(diff(TFR$`Total Fertility Rate (TFR)`))) # now stationary
 ```
 
 \newpage
 \begin{center}
-\text{Figure 6. ACF and PACF Plots for Twice Differenced Total Fertility Rate (TFR)}
+\text{Figure 8. ACF and PACF Plots for Twice Differenced Total Fertility Rate (TFR)}
 \end{center}
 ```{r page-1 2nd diff ACF PACF TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 BirthAndFertility |>
@@ -373,8 +390,8 @@ TFRm1220 # AIC=-57.55 AICc=-47.72
 res1220 <- residuals(TFRm1220)
 ```
 
-begin{center}
-\text{Figure 7. ACF and PACF plots of residuals for the initial model: ARIMA(12,2,0) fitted to TFR}
+\begin{center}
+\text{Figure 9. ACF and PACF plots of residuals for the initial model ARIMA(12,2,0) fitted to TFR}
 \end{center}
 ```{r page-1-1220 (initial) ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
@@ -416,7 +433,7 @@ $$
 $$
 
 \begin{center}
-\text{Figure 8. ACF and PACF plots of residuals for the ARIMA(12,2,3) model fitted to TFR}
+\text{Figure 10. ACF and PACF plots of residuals for the ARIMA(12,2,3) model fitted to TFR}
 \end{center}
 ```{r page-1-1223 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
@@ -462,16 +479,16 @@ abs1223 <- mean(abs(actualTFR - pred1223)) # 0.08274547
 ```{r page-1 log diff TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 plot(log(TFR$`Total Fertility Rate (TFR)`),
      type = 'l',
-     main = "Figure 9. Plot of Log Transformation for TFR until 2012")
+     main = "Figure 11. Plot of Log Transformation for TFR until 2012")
 plot(diff(log(TFR$`Total Fertility Rate (TFR)`)),
      type = 'l',
-     main = "Figure 10. Plot of Differenced Log Transformation for TFR until 2012")
+     main = "Figure 12. Plot of Differenced Log Transformation for TFR until 2012")
 unitroot_kpss(diff(log(TFR$`Total Fertility Rate (TFR)`))) # borderline 0.0405
 ```
 
 \newpage
 \begin{center}
-\text{Figure 11. ACF and PACF Plots for Differenced Log Transformation of Total Fertility Rate (TFR)}
+\text{Figure 13. ACF and PACF Plots for Differenced Log Transformation of Total Fertility Rate (TFR)}
 \end{center}
 ```{r page-1 log diff ACF PACF TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 BirthAndFertility |>
@@ -492,7 +509,7 @@ resl1310 <- residuals(TFRml1310)
 ```
 
 \begin{center}
-\text{Figure 12. ACF and PACF plots of residuals for the initial log transformed model: ARIMA(13,1,0) model fitted to TFR}
+\text{Figure 14. ACF and PACF plots of residuals for the initial log transformed model: ARIMA(13,1,0) model fitted to TFR}
 \end{center}
 ```{r page-1-1310 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%'}
 par(mfrow = c(1, 2))
@@ -535,7 +552,7 @@ $$
 $$
 
 \begin{center}
-\text{Figure 13. ACF and PACF plots of residuals for the ARIMA(13,1,3) model fitted to TFR with log transformation}
+\text{Figure 15. ACF and PACF plots of residuals for the ARIMA(13,1,3) model fitted to TFR with log transformation}
 \end{center}
 ```{r page-1-1313 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%'}
 par(mfrow = c(1, 2))
@@ -595,13 +612,13 @@ absl1313 <- mean(abs(actualTFR - exp(predl1313))) # 0.121592
 ```{r page-1 log 2nd diff TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "100%", fig.align = 'center'}
 plot(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))),
      type = 'l',
-     main = "Figure 14. Plot of Differenced Twice Log Transformation for TFR")
+     main = "Figure 16. Plot of Differenced Twice Log Transformation for TFR")
 unitroot_kpss(diff(diff(log(TFR$`Total Fertility Rate (TFR)`))))
 ```
 
 \newpage
 \begin{center}
-\text{Figure 15. ACF and PACF Plots for Twice Differenced Log Transformation of TFR}
+\text{Figure 17. ACF and PACF Plots for Twice Differenced Log Transformation of TFR}
 \end{center}
 ```{r page-1 log 2nd diff ACF PACF TFR, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 BirthAndFertility |>
@@ -623,7 +640,7 @@ resl1520 <- residuals(TFRml1520)
 ```
 
 \begin{center}
-\text{Figure 16. ACF and PACF plots of residuals for the ARIMA(15,2,0) model fitted to TFR with log transformation}
+\text{Figure 18. ACF and PACF plots of residuals for the ARIMA(15,2,0) model fitted to TFR with log transformation}
 \end{center}
 ```{r page-1-l1520 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
@@ -698,7 +715,7 @@ $$
 $$
 
 \begin{center}
-\text{Figure 17. ACF and PACF plots of residuals for the ARIMA(13,2,2) model fitted to TFR with log transformation
+\text{Figure 19. ACF and PACF plots of residuals for the ARIMA(13,2,2) model fitted to TFR with log transformation
 }
 \end{center}
 ```{r page-1-1322 ACF PACF TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
@@ -733,16 +750,16 @@ absl1322 <- mean(abs(actualTFR - exp(predl1322))) # 0.06826933
 ```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 autoplot(BirthAndFertility,`Total Live-Births`) +
   geom_vline(xintercept = 2012, colour = "red") +
-  labs(title = "Figure 18. Initial Plot of Total Live-Births")
+  labs(title = "Figure 20. Initial Plot of Total Live-Births")
 plot(diff(TLB$`Total Live-Births`),
      type = 'l',
-     main = "Figure 19. Plot of Differenced Total Live Births (TLB) until 2012")
+     main = "Figure 21. Plot of Differenced Total Live Births (TLB) until 2012")
 unitroot_kpss(diff(TLB$`Total Live-Births`)) # stationary
 ```
 
 \newpage
 \begin{center}
-\text{Figure 20. ACF and PACF Plots for Differenced Total Live Births (TLB)}
+\text{Figure 22. ACF and PACF Plots for Differenced Total Live Births (TLB)}
 \end{center}
 ```{r page-2 TLB ACF PACF, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 BirthAndFertility |>
@@ -786,7 +803,7 @@ $$
 $$
 
 \begin{center}
-\text{Figure 21. ACF and PACF plots of residuals for ARIMA(14,1,0) model fitted to TLB}
+\text{Figure 23. ACF and PACF plots of residuals for ARIMA(14,1,0) model fitted to TLB}
 \end{center}
 ```{r page-2-1410 ACF PACF TLB, echo = FALSE, warning = FALSE, message = FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
@@ -846,7 +863,7 @@ $$
 \end{aligned}
 $$
 \begin{center}
-\text{Figure 22. ACF and PACF plots of residuals for ARIMA(13,1,1) model fitted to TLB}
+\text{Figure 24. ACF and PACF plots of residuals for ARIMA(13,1,1) model fitted to TLB}
 \end{center}
 ```{r page-2-1311 ACF PACF TLB, echo = FALSE, warning = FALSE, message = FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
@@ -895,7 +912,7 @@ $$
 $$
 
 \begin{center}
-\text{Figure 23. ACF and PACF plots of residuals for ARIMA(13,1,2) model fitted to TLB}
+\text{Figure 25. ACF and PACF plots of residuals for ARIMA(13,1,2) model fitted to TLB}
 \end{center}
 ```{r page-2-1312 ACF PACF TLB, echo = FALSE, warning = FALSE, message = FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
@@ -915,16 +932,16 @@ abs1312 <- mean(abs(actualTLB - pred1312)) # 6014.802
 ```{r page-2 log diff TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 plot(log(TLB$`Total Live-Births`),
      type = 'l',
-     main = "Figure 24. Plot of Log Transformation for TLB until 2012")
+     main = "Figure 26. Plot of Log Transformation for TLB until 2012")
 plot(diff(log(TLB$`Total Live-Births`)),
      type = 'l',
-     main = "Figure 25. Plot of Differenced Log Transformation for TLB until 2012")
+     main = "Figure 27. Plot of Differenced Log Transformation for TLB until 2012")
 unitroot_kpss(diff(log(TLB$`Total Live-Births`))) # stationary
 ```
 
 \newpage
 \begin{center}
-\text{Figure 26. ACF and PACF Plot for Differenced Log Transformation of Total Live-Births (TLB)}
+\text{Figure 28. ACF and PACF Plot for Differenced Log Transformation of Total Live-Births (TLB)}
 \end{center}
 ```{r page-2 log diff ACF PACF TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "85%", fig.align = 'center'}
 BirthAndFertility |>
@@ -943,6 +960,7 @@ TLBml1510 <- Arima(log(TLB_ts), order=c(15,1,0))
 TLBml1510 # AIC=-145.56 AICc=-130.02
 resl1510 <- residuals(TLBml1510)
 ```
+Fitted ARIMA(15,1,0) model for TLB:
 $$
 \begin{aligned}
 &(1
@@ -969,7 +987,7 @@ $$
 $$
 
 \begin{center}
-\text{Figure 27. ACF and PACF plots of residuals for ARIMA(15,1,0) model fitted to TLB}
+\text{Figure 29. ACF and PACF plots of residuals for ARIMA(15,1,0) model fitted to TLB}
 \end{center}
 ```{r page-2-1510 ACF PACF TLB, echo = FALSE, warning = FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
@@ -1031,7 +1049,7 @@ TLBml1213 <- Arima(log(TLB_ts), order=c(12,1,3))
 TLBml1213 # AIC=-139.69 AICc=-124.15
 resl1213 <- residuals(TLBml1213)
 ```
-
+Fitted ARIMA(12,1,3) model for TLB:
 $$
 \begin{aligned}
 &(1
@@ -1057,7 +1075,7 @@ $$
 $$
 
 \begin{center}
-\text{Figure 28. ACF and PACF plots of residuals for ARIMA(12,1,3) fitted to TLB}
+\text{Figure 30. ACF and PACF plots of residuals for ARIMA(12,1,3) fitted to TLB}
 \end{center}
 ```{r page-2-1213 ACF PACF TLB log diff, echo = FALSE, warning = FALSE, message = FALSE, fig.width=8, fig.height=4, out.width='110%', fig.align = 'center'}
 par(mfrow = c(1, 2))
@@ -1119,7 +1137,7 @@ absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 \end{center}
 | Model | AIC  | AICc | MSE | MAE |  |
 |:--------:|:------:|:------:|:------:|:------:|:------:|
-| **ARIMA(15,1,0)** | **-145.56** | **-130.02** | **2239721240** | **47245.34** | lowest AICc (log transformed) |
+| **ARIMA(15,1,0)** | **-145.56** | **-130.02** | **2239721240** | **47245.34** | lowest AIC & AICc (log transformed) |
 | ARIMA(15,1,1) | -145.43 | -127.43 | 2173041601 | 46542.86 |  |
 | ARIMA(14,1,1) | -140.56 | -125.02 | 2211919788 | 46958.53 |  |
 | ARIMA(13,1,1) | -141.45 | -128.11 | 2200303964 | 46836.59 |  |
@@ -1127,20 +1145,20 @@ absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 
 ```{r page-result plot, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
 autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
-  autolayer(pred1610, series = "ARIMA(16,1,0)") +
-  autolayer(pred1223, series = "ARIMA(12,2,3)") +
+  autolayer(pred1610, series = "ARIMA(16,1,0) - lowest AIC") +
+  autolayer(pred1223, series = "ARIMA(12,2,3) - lowest AICc") +
   autolayer(pred1313, series = "ARIMA(13,1,3)") +
-  autolayer(pred1322, series = "ARIMA(12,2,2)") +
-  labs(title = "Comparison of ARIMA Forecasts for TFR",
+  autolayer(pred1322, series = "ARIMA(12,2,2) - lowest MSE & MAE") +
+  labs(title = "Figure 1. Comparison of ARIMA Forecasts for TFR",
        x = "Year",
        y = "Total Fertility Rate (TFR)")
 
 autoplot(BirthAndFertility, `Total Live-Births`) +
-  autolayer(pred1311, series = "ARIMA(13,1,1)") +
-  autolayer(pred1312, series = "ARIMA(13,1,2)") +
-  autolayer(pred1510, series = "ARIMA(15,1,0)") +
+  autolayer(pred1311, series = "ARIMA(13,1,1) - lowest AICc") +
+  autolayer(pred1312, series = "ARIMA(13,1,2) - lowest AIC, MSE & MAE") +
+  autolayer(pred1510, series = "ARIMA(15,1,0) - lowest AIC & AICc (log)") +
   autolayer(pred1213, series = "ARIMA(12,1,3)") +
-  labs(title = "Comparison of ARIMA Forecasts for TLB",
+  labs(title = "Figure 2. Comparison of ARIMA Forecasts for TLB",
        x = "Year",
        y = "Total Live-Births (TLB)")
 ```
