@@ -375,6 +375,30 @@ TFRm1223 <- Arima(TFR_ts, order=c(12,2,3))
 TFRm1223 # AIC=-62.57 AICc=-46.57
 res1223 <- residuals(TFRm1223)
 ```
+Fitted ARIMA(12,2,3) model for TFR:
+$$
+\begin{aligned}
+&(1
++0.4622B
++0.7606B^2
++0.9273B^3
++0.8808B^4
++0.6967B^5
++0.4124B^6 \\
+&\quad
++0.2312B^7
+-0.0490B^8
+-0.1578B^9
+-0.3268B^{10}
+-0.1426B^{11}
+-0.6463B^{12}
+)(1-B)^2 y_t \\
+&= (1
+-0.1402B
++0.1411B^2
++0.8593B^3)\varepsilon_t + c
+\end{aligned}
+$$
 Figure 7. ACF and PACF plots of residuals for the ARIMA(12,2,3) model fitted to TFR
 ```{r page-1g_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
 par(mfrow = c(1, 2))
@@ -452,6 +476,31 @@ TFRml1313 <- Arima(log(TFR_ts), order=c(13,1,3))
 TFRml1313 # AIC=-136 AICc=-118
 resl1313 <- residuals(TFRml1313)
 ```
+Fitted ARIMA(13,1,3) model for TFR:
+$$
+\begin{aligned}
+&(1
+-0.2783B
++0.2434B^2
++0.2961B^3
++0.0013B^4
+-0.1400B^5
+-0.2218B^6 \\
+&\quad
+-0.1567B^7
+-0.2497B^8
+-0.0839B^9
+-0.0722B^{10}
++0.0719B^{11}
+-0.4674B^{12}
++0.5235B^{13}
+)(1-B)\log(y_t) \\
+&= (1
+-0.0903B
+-0.1376B^2
+-0.9749B^3)\varepsilon_t + c
+\end{aligned}
+$$
 Figure 9. ACF and PACF plots of residuals for the ARIMA(13,1,3) model fitted to TFR with log transformation
 ```{r page-1f_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
 par(mfrow = c(1, 2))
@@ -565,9 +614,37 @@ absl1520 <- mean(abs(actualTFR - exp(predl1520))) # 0.1056717
 TFRml1322 <- Arima(log(TFR_ts), order=c(13,2,2))
 TFRml1322 # AIC=-132.39 AICc=-116.39
 resl1322 <- residuals(TFRml1322)
+```
+
+Fitted ARIMA(13,2,2) model for TFR:
+$$
+\begin{aligned}
+&(1
+-0.6514B
++0.2412B^2
++0.0063B^3
++0.1608B^4
+-0.0605B^5
+-0.0715B^6 \\
+&\quad
+-0.0280B^7
+-0.1159B^8
++0.1105B^9
++0.0649B^{10}
++0.1966B^{11}
+-0.4240B^{12}
++0.6274B^{13}
+)(1-B)^2\log(y_t) \\
+&= (1
++1.6346B
+-0.7851B^2)\varepsilon_t + c
+\end{aligned}
+$$
+Figure 10. ACF and PACF plots of residuals for the ARIMA(13,2,2) model fitted to TFR with log transformation
+```{r page-1r_TFR, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=4, out.width='80%'}
 par(mfrow = c(1, 2))
-acf(resl1322, lag.max = 50, main = "ACF of Residuals for ARIMA(13,2,2) for TFR with log transformation")
-pacf(resl1322, lag.max = 50, main = "PACF of Residuals for ARIMA(13,2,2) for TFR with log transformation")
+acf(resl1322, lag.max = 50, main = "ACF of Residuals")
+pacf(resl1322, lag.max = 50, main = "PACF of Residuals")
 par(mfrow = c(1, 1))
 arimal1322 <- forecast(TFRml1322, h = 12)
 predl1322 <- arimal1322$mean
@@ -588,6 +665,9 @@ absl1322 <- mean(abs(actualTFR - exp(predl1322))) # 0.06826933
 # msel1222 <- mean((actualTFR - exp(predl1222))^2) # 0.0498791
 # absl1222 <- mean(abs(actualTFR - exp(predl1222))) # 0.1720094
 ```
+
+\newpage
+
 
 \newpage
 ```{r page-2 TLB, echo = FALSE, warning = FALSE, message = FALSE, out.width = "70%", fig.align = 'center'}
@@ -694,6 +774,7 @@ pacf(resl1510, lag.max = 50, main = "PACF of Residuals for ARIMA(15,1,0) for TLB
 par(mfrow = c(1, 1))
 arimal1510 <- forecast(TLBml1510, h = 12)
 predl1510 <- arimal1510$mean
+pred1510 <- exp(predl1510)
 msel1510 <- mean((actualTFR - exp(predl1510))^2) # 2239721240
 absl1510 <- mean(abs(actualTFR - exp(predl1510))) # 47245.34
 ```
@@ -747,6 +828,7 @@ pacf(resl1213, lag.max = 50, main = "PACF of Residuals for ARIMA(12,1,3) for TLB
 par(mfrow = c(1, 1))
 arimal1213 <- forecast(TLBml1213, h = 12)
 predl1213 <- arimal1213$mean
+pred1213 <- exp(predl1213)
 msel1213 <- mean((actualTFR - exp(predl1213))^2) # 1752591080
 absl1213 <- mean(abs(actualTFR - exp(predl1213))) # 41851.92
 ```
@@ -811,5 +893,14 @@ autoplot(BirthAndFertility, `Total Fertility Rate (TFR)`) +
   labs(title = "Comparison of ARIMA Forecasts for TFR",
        x = "Year",
        y = "Total Fertility Rate (TFR)")
+
+autoplot(BirthAndFertility, `Total Live-Births`) +
+  autolayer(pred1311, series = "ARIMA(13,1,1)") +
+  autolayer(pred1312, series = "ARIMA(13,1,2)") +
+  autolayer(pred1510, series = "ARIMA(15,1,0)") +
+  autolayer(pred1213, series = "ARIMA(12,1,3)") +
+  labs(title = "Comparison of ARIMA Forecasts for TLB",
+       x = "Year",
+       y = "Total Live-Births (TLB)")
 ```
 <https://github.com/twalepear/TSA.git>
